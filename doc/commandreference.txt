@@ -1,0 +1,87 @@
+COMMAND REFERENCE FOR THE ROBOBO REMOTE PROTOCOL
+
+-------------------------------MOVEMENT COMMANDS--------------------------------
+
+1.(v0.1.0)
+
+name:
+  MOVEBYDEGREES
+
+parameters:
+  wheel: "left"||"right"||"both"
+  degrees: integer (>0)
+  speed: integer (-100:100)
+
+2.(v0.1.0)
+
+name:
+  MOVEBYTIME
+
+parameters:
+wheel: "left"||"right"||"both"
+time: integer (>0)
+speed: integer (-100:100)
+
+3.(v0.1.0)
+
+name:
+  MOVETWOWHEELS
+
+parameters:
+  lspeed: integer (-100:100)
+  rspeed: integer (-100:100)
+  time: integer (>0)
+
+4.(v0.1.0)
+
+name:
+  TURNINPLACE
+
+parameters:
+  degrees: integer
+
+5.(v0.1.0)
+
+name:
+  MOVEPAN
+
+parameters:
+  pos: integer (0:360)
+  speed : integer (0:10)
+
+6.(v0.1.0)
+
+name:
+  MOVETILT
+
+parameters:
+  pos: integer (0:180)
+  speed: integer (0:10)
+
+
+----------------------------------HRI COMMANDS----------------------------------
+
+7.(v0.1.0)
+
+name:
+  TALK
+
+parameters:
+  text: string
+
+8.(v0.1.0)
+
+name:
+  CHANGEEMOTION
+
+parameters:
+  emotion: string in ['happy','laughting','sad','angry','surprised','normal']
+
+9.(v0.1.0)
+
+name:
+  LEDCOLOR
+
+parameters:
+  led: string (0:9)|'all'
+  color: string in ['white','red','blue','cyan','magenta','yellow','green','orange','on','off']

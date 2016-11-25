@@ -1,0 +1,25 @@
+STATUS REFERENCE FOR THE ROBOBO REMOTE PROTOCOL
+
+1.(v0.1.0)
+
+name:
+  IRSTATUS
+
+value:
+  ir_0: short
+  ir_1: short
+  ir_2: short
+  ir_3: short
+  ir_4: short
+  ir_5: short
+  ir_6: short
+  ir_7: short
+  ir_8: short
+
+2.(v0.1.0)
+
+name:
+  NEWCOLOR
+
+value:
+  color: string in ['red','blue','cyan','magenta','yellow','green']

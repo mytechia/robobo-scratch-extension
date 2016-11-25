@@ -26,7 +26,7 @@
     var newcolor = false;
     var lastIrChange = "";
 
-    $.getScript("https://mytechia.github.io/robobo-scratch-extension/remotelib.js", function(){
+    $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib.js", function(){
 
 
 
