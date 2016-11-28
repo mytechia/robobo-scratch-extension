@@ -386,7 +386,7 @@ Remote.prototype = {
     else if (msg.name == "GAPSTATUS"){
       console.log(msg);
       for (var key in msg.value) {
-        console.log(key+" "msg.value[key]);
+        console.log(key+" "+msg.value[key]);
           this.statusmap.set(key,Boolean(msg.value[key]));
           if(Boolean(msg.value[key])){
             (this.callbackmap.get("onGap"))(key);
