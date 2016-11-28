@@ -217,7 +217,7 @@
     };
 
     //Hat function that checks gaps
-    ext.changedFalls= function(gappos) {
+    ext.changedGaps= function(gappos) {
       if (gappos == lastGap){
         return true;
       }else {
