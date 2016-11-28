@@ -208,7 +208,7 @@
 
     //Hat function that checks falls
     ext.changedFalls= function(fallpos) {
-      if (fallpos == irname){
+      if (fallpos == lastFall){
         return true;
       }else {
         lastFall = "";
@@ -218,7 +218,7 @@
 
     //Hat function that checks gaps
     ext.changedFalls= function(gappos) {
-      if (gappos == irname){
+      if (gappos == lastGap){
         return true;
       }else {
         lastGap = "";
