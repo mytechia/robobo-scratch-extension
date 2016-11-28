@@ -18,15 +18,18 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-//Scratch extension version 0.1.0-dev
+//Scratch extension version 0.1.1-dev
 (function(ext) {
     // Cleanup function when the extension is unloaded
     var rem;
     var commandid = 0;
     var newcolor = false;
+    var newface = false;
     var lastIrChange = "";
+    var lastFall = "";
+    var lastGap = "";
 
-    $.getScript("https://mytechia.github.io/robobo-scratch-extension/remotelib-develop.js", function(){
+    $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib-develop.js", function(){
 
 
 
@@ -48,12 +51,27 @@
     ext.onIrChanged = function (ir) {
       lastIrChange = ir;
     }
+
+    ext.onFall = function (fall) {
+      lastFall = fall;
+    }
+
+    ext.onGap = function (gap) {
+      lastGap = gap;
+    }
+
+    ext.onNewFace = function () {
+      newface = true;
+    }
     //Connection Block
     ext.connectToRobobo = function(ip) {
         rem = new Remote(ip);
         rem.connect(ip);
         rem.registerCallback("onNewColor",ext.onNewColor);
         rem.registerCallback("onIrChanged",ext.onIrChanged);
+        rem.registerCallback("onNewFace",ext.onNewFace);
+        rem.registerCallback("onFall",ext.onFall);
+        rem.registerCallback("onGap",ext.onGap);
 
     };
 
@@ -82,14 +100,24 @@
       rem.moveWheelsSeparated(lSpeed,rSpeed,time);
     };
 
-    //Pan movement function
+    //Pan movement function (absolute)
     ext.movePanRobobo = function(degrees, speed){
       rem.movePan(degrees,speed);
     };
 
-    //Tilt movement function
+    //Pan movement function (relative)
+    ext.movePanRoboboDegree =function (degrees,speed) {
+      rem.movePanByDegrees(degrees,speed);
+    };
+
+    //Tilt movement function (absolute)
     ext.moveTiltRobobo = function(degrees,speed){
       rem.moveTilt(degrees,speed);
+    };
+
+    //Tilt movement function (relative)
+    ext.moveTiltRoboboDegree =function (degrees,speed) {
+      rem.moveTiltByDegrees(degrees,speed);
     };
 
     //Function  to change the displayed emotion
@@ -147,6 +175,67 @@
       return value;
     };
 
+    //Reporter function to get the battery level
+    ext.readBatteryLevel = function () {
+      var value = 0;
+      value = rem.checkBatt();
+      return value;
+    };
+
+    //Reporter function to get the detected face coordinates
+    ext.readFaceCoord = function (axis) {
+      var value = 0;
+      value = rem.getFaceCoord(axis);
+      return value;
+    };
+
+    //Reporter function to get the detected face distance
+    ext.readFaceDist= function () {
+      var value = 0;
+      value = rem.getFaceDist();
+      return value;
+    };
+
+    //Hat function that checks for new faces
+    ext.newFace = function() {
+      if (newface){
+        newface = false;
+        return true;
+      }else {
+        return false;
+      }
+    };
+
+    //Hat function that checks falls
+    ext.changedFalls= function(fallpos) {
+      if (fallpos == irname){
+        return true;
+      }else {
+        lastFall = "";
+        return false;
+      }
+    };
+
+    //Hat function that checks gaps
+    ext.changedFalls= function(gappos) {
+      if (gappos == irname){
+        return true;
+      }else {
+        lastGap = "";
+        return false;
+      }
+    };
+
+    //Reporter function that checks falls
+    ext.readFall = function (fall) {
+      return rem.checkFall(fall);
+    };
+
+    //Reporter function that checks gaps
+    ext.readGap = function (gap) {
+      return rem.checkFall(gap);
+    };
+
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
@@ -157,13 +246,26 @@
           [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],
           [' ', 'move pan to %s at speed %s','movePanRobobo','180','5'],
           [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
+          [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
+          [' ', 'move tilt %s degrees at speed %s','moveTiltRoboboDegree','5','5'],//v
           [' ', 'change emotion to %m.emotions','changeEmotion','normal'],
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
           [' ', 'set led %m.leds %m.status','changeLedStatus','all', 'off'],
           ['r', 'read IR %m.ir value','readIrValue','1'],
+          ['r', 'read battery level','readBatteryLevel'],//v
           ['r', 'read color detected','readCol'],
+          ['r', 'read face distance','readFaceDist'],//v
+          ['r', 'read face position at %m.axis axis','readFaceCoord','x'],//v
+          ['r', 'read tap position at %m.axis axis','readTapCoord','x'],//
+          ['r', 'read fall at %m.falls','readFall'],//v
+          ['r', 'read gap at %m.gaps','readGap'],//v
           ['h', 'when color is detected','newCol'],
+          ['h', 'when face is detected','newFace'],//v
           ['h', 'when ir %m.ir changed','changedIr'],
+          ['h', 'when battery level is low','lowBatt'],//
+          ['h', 'when tap detected','newTap'],//
+          ['h', 'when fall is detected at %m.falls','changedFalls'],//v
+          ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
 
         ],
         menus: {
@@ -175,6 +277,9 @@
           status: ['on','off'],
           leds: ['1','2','3','4','5','6','7','8','9','all'],
           ir: ['1','2','3','4','5','6','7','8','9'],
+          falls: ['Fall1','Fall2','Fall3','Fall4'],
+          gaps: ['Gap1','Gap2','Gap3','Gap4'],
+          axis: ['x','y'],
         },
     };
 

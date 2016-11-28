@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-//Remote library version 0.1.0-dev
+//Remote library version 0.1.1-dev
 //Constructor of the remote control object
 function Remote(ip){
   this.ip = ip;
@@ -161,6 +161,17 @@ Remote.prototype = {
     //END OF MOVEPAN FUNCTION
   },
 
+  movePanByDegrees (degrees, speed) {
+    var actual = this.statusmap.get("panPos");
+    if (actual==undefined){
+      actual = 180;
+    }
+    var newpos = actual + parseInt(degrees)
+    this.statusmap.set("panPos",newpos);
+    this.moveTilt(newpos, speed);
+    //END OF MOVEPANBYDEGREES FUNCTION
+  },
+
   moveTilt: function (pos, vel) {
     var message = JSON.stringify({
         "name": "MOVETILT",
@@ -173,6 +184,17 @@ Remote.prototype = {
     this.sendMessage(message)
     //END OF MOVETILT FUNCTION
   },
+
+  moveTiltByDegrees (degrees, speed) {
+    var actual = this.statusmap.get("tiltPos");
+    if (actual==undefined){
+      actual = 90;
+    }
+    var newpos = actual + parseInt(degrees)
+    this.statusmap.set("tiltPos",newpos);
+    this.moveTilt(newpos, speed);
+    //END OF MOVETILTBYDEGREES FUNCTION
+  }
 
   //ENDMOVEMENT
 
@@ -246,18 +268,44 @@ Remote.prototype = {
     //END OF MIRARIR FUNCTION
   },
 
+  checkBatt : function () {
+    return this.statusmap.get("batterylevel");
+    //END OF CHECKBATT FUNCTION
+  },
+
+  checkFall : function (fall) {
+    return this.statusmap.get(fall);
+    //END OF CHECKFALL FUNCTION
+  },
+
+  checkGap : function (gap) {
+    return this.statusmap.get(gap);
+    //END OF CHECKFALL FUNCTION
+  },
+
+
   //ENDSENSING
 
   //VISION
-
-  colorDetected : function (callback) {
-    callback();
-  },
 
   getColor : function () {
     return this.statusmap.get("color");
     //END OF GETCOLOR FUNCTION
   },
+
+  getFaceCoord :function(axis) {
+    if (axis="x") {
+      return this.statusmap.get("facex");
+
+    }else{
+      return this.statusmap.get("facey");
+    }
+    //END OF GETFACECOORD FUNCTION
+  }
+
+  getFaceDist : function () {
+    return this.statusmap.get("facedist");
+  }
 
   //ENDVISION
 
@@ -278,7 +326,7 @@ Remote.prototype = {
       console.log(this.statusmap.get("color"));
     }
 
-    if (msg.name == "IRSTATUS"){
+    else if (msg.name == "IRSTATUS"){
 
       for (var key in msg.value) {
         //console.log(key);
@@ -309,6 +357,43 @@ Remote.prototype = {
 
       }
       this.firstime = false;
+    }
+
+    else if (msg.name == "BATTLEV") {
+      this.statusmap.set("batterylevel",parseInt(msg.value["level"]));
+    }
+
+    else if (msg.name == "NEWFACE") {
+      (this.callbackmap.get("onNewFace"))();
+      this.statusmap.set("facex",parseInt(msg.value["coordx"]));
+      this.statusmap.set("facey",parseInt(msg.value["coordy"]));
+      this.statusmap.set("facedist",parseInt(msg.value["distance"]));
+    }
+
+    else if (msg.name == "FALLSTATUS"){
+
+      for (var key in msg.value) {
+        //console.log(key);
+          this.statusmap.set(key,Boolean(msg.value[key]));
+          if(Boolean(msg.value[key])){
+            (this.callbackmap.get("onFall"))(key);
+          }
+
+      }
+
+    }
+
+    else if (msg.name == "GAPSTATUS"){
+
+      for (var key in msg.value) {
+        //console.log(key);
+          this.statusmap.set(key,Boolean(msg.value[key]));
+          if(Boolean(msg.value[key])){
+            (this.callbackmap.get("onGap"))(key);
+          }
+
+      }
+
     }
     //END MANAGESTATUS FUNCTION
   },
