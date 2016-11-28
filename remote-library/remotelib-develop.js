@@ -194,7 +194,7 @@ Remote.prototype = {
     this.statusmap.set("tiltPos",newpos);
     this.moveTilt(newpos, speed);
     //END OF MOVETILTBYDEGREES FUNCTION
-  }
+  },
 
   //ENDMOVEMENT
 
@@ -301,11 +301,11 @@ Remote.prototype = {
       return this.statusmap.get("facey");
     }
     //END OF GETFACECOORD FUNCTION
-  }
+  },
 
   getFaceDist : function () {
     return this.statusmap.get("facedist");
-  }
+  },
 
   //ENDVISION
 
