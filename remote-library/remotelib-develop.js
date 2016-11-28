@@ -375,7 +375,8 @@ Remote.prototype = {
       for (var key in msg.value) {
         //console.log(key);
           this.statusmap.set(key,(msg.value[key] == "true"));
-          if((msg.value[key] == "true")){
+          if(this.statusmap.get(key)){
+            console.log("OnFall");
             (this.callbackmap.get("onFall"))(key);
           }
 
@@ -387,8 +388,9 @@ Remote.prototype = {
       //console.log(msg);
       for (var key in msg.value) {
         console.log(key+" "+msg.value[key]+" "+(msg.value[key] == "true"));
-          this.statusmap.set(key,(msg.value[key] === "true"));
-          if((msg.value[key] == "true")){
+          this.statusmap.set(key,(msg.value[key] == "true"));
+          if((this.statusmap.get(key))){
+            console.log("OnGap");
             (this.callbackmap.get("onGap"))(key);
           }
 
