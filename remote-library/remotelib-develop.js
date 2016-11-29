@@ -294,7 +294,7 @@ Remote.prototype = {
   },
 
   getFaceCoord :function(axis) {
-    if (axis="x") {
+    if (axis=="x") {
       return this.statusmap.get("facex");
 
     }else{
@@ -304,7 +304,7 @@ Remote.prototype = {
   },
 
   getTapCoord :function(axis) {
-    if (axis="x") {
+    if (axis=="x") {
       return this.statusmap.get("tapx");
 
     }else{

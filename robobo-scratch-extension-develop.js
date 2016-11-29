@@ -249,7 +249,7 @@
     };
 
     //Hat function that checks the battery
-    ext.lowBatt= function(gappos) {
+    ext.lowBatt = function(gappos) {
       if (lowbattery){
         return true;
       }else {
@@ -258,8 +258,8 @@
     };
 
     //Hat function that checks taps
-    ext.newTap= function(gappos) {
-      if (tap){
+    ext.newTap = function(gappos) {
+      if (tap==true){
         tap = false
         return true;
       }else {
