@@ -64,3 +64,12 @@ value:
   Gap2: boolean
   Gap3: boolean
   Gap4: boolean
+
+7.(v0.1.1)
+
+name:
+  TAP
+
+value:
+  coordx: integer (>0)
+  coordy: integer (>0)

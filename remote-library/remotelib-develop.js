@@ -303,6 +303,16 @@ Remote.prototype = {
     //END OF GETFACECOORD FUNCTION
   },
 
+  getTapCoord :function(axis) {
+    if (axis="x") {
+      return this.statusmap.get("tapx");
+
+    }else{
+      return this.statusmap.get("tapy");
+    }
+    //END OF GETFACECOORD FUNCTION
+  },
+
   getFaceDist : function () {
     return this.statusmap.get("facedist");
   },
@@ -361,13 +371,16 @@ Remote.prototype = {
 
     else if (msg.name == "BATTLEV") {
       this.statusmap.set("batterylevel",parseInt(msg.value["level"]));
+      if (parseInt(msg.value["level"])<20){
+        this.callbackmap.get("onLowBatt")();
+      }
     }
 
     else if (msg.name == "NEWFACE") {
-      (this.callbackmap.get("onNewFace"))();
       this.statusmap.set("facex",parseInt(msg.value["coordx"]));
       this.statusmap.set("facey",parseInt(msg.value["coordy"]));
       this.statusmap.set("facedist",parseInt(msg.value["distance"]));
+      (this.callbackmap.get("onNewFace"))();
     }
 
     else if (msg.name == "FALLSTATUS"){
@@ -379,9 +392,7 @@ Remote.prototype = {
             console.log("OnFall");
             (this.callbackmap.get("onFall"))(key);
           }
-
       }
-
     }
 
     else if (msg.name == "GAPSTATUS"){
@@ -396,6 +407,13 @@ Remote.prototype = {
 
       }
 
+    }
+
+    else if (msg.name == "TAP") {
+
+      this.statusmap.set("tapx",parseInt(msg.value["coordx"]));
+      this.statusmap.set("tapy",parseInt(msg.value["coordy"]));
+      (this.callbackmap.get("onNewTap"))();
     }
     //END MANAGESTATUS FUNCTION
   },
