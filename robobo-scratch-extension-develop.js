@@ -28,6 +28,7 @@
     var lastIrChange = "";
     var lastFall = "";
     var lastGap = "";
+    var lowbattery = false;
 
     $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib-develop.js", function(){
 
@@ -63,6 +64,10 @@
     ext.onNewFace = function () {
       newface = true;
     }
+
+    ext.onLowBatt = function () {
+      lowbattery = true;
+    }
     //Connection Block
     ext.connectToRobobo = function(ip) {
         rem = new Remote(ip);
@@ -72,6 +77,7 @@
         rem.registerCallback("onNewFace",ext.onNewFace);
         rem.registerCallback("onFall",ext.onFall);
         rem.registerCallback("onGap",ext.onGap);
+        rem.registerCallback("onLowBatt",ext.onLowBatt);
 
     };
 
@@ -236,6 +242,18 @@
       return rem.checkFall(gap);
     };
 
+    //Hat function that checks the battery
+    ext.lowBatt= function(gappos) {
+      if (lowbattery){
+        return true;
+      }else {
+        return false;
+      }
+    };
+
+
+
+
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
@@ -262,7 +280,7 @@
           ['h', 'when color is detected','newCol'],
           ['h', 'when face is detected','newFace'],//v
           ['h', 'when ir %m.ir changed','changedIr'],
-          ['h', 'when battery level is low','lowBatt'],//
+          ['h', 'when battery level is low','lowBatt'],//v
           ['h', 'when tap detected','newTap'],//
           ['h', 'when fall is detected at %m.falls','changedFalls'],//v
           ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
