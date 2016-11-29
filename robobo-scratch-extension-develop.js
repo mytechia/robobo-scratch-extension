@@ -297,7 +297,7 @@
           ['r', 'read color detected','readCol'],
           ['r', 'read face distance','readFaceDist'],//v
           ['r', 'read face position at %m.axis axis','readFaceCoord','x'],//v
-          ['r', 'read tap position at %m.axis axis','readTapCoord','x'],//
+          ['r', 'read tap position at %m.axis axis','readTapCoord','x'],//v
           ['r', 'read fall at %m.falls','readFall'],//v
           ['r', 'read gap at %m.gaps','readGap'],//v
           ['h', 'when color is detected','newCol'],

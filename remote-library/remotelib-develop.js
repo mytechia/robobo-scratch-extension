@@ -398,10 +398,10 @@ Remote.prototype = {
     else if (msg.name == "GAPSTATUS"){
       //console.log(msg);
       for (var key in msg.value) {
-        console.log(key+" "+msg.value[key]+" "+(msg.value[key] == "true"));
+        //console.log(key+" "+msg.value[key]+" "+(msg.value[key] == "true"));
           this.statusmap.set(key,(msg.value[key] == "true"));
           if((this.statusmap.get(key))){
-            console.log("OnGap");
+            //console.log("OnGap");
             (this.callbackmap.get("onGap"))(key);
           }
 
@@ -410,7 +410,7 @@ Remote.prototype = {
     }
 
     else if (msg.name == "TAP") {
-
+      console.log(msg);
       this.statusmap.set("tapx",parseInt(msg.value["coordx"]));
       this.statusmap.set("tapy",parseInt(msg.value["coordy"]));
       (this.callbackmap.get("onNewTap"))();
