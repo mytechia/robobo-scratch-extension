@@ -196,8 +196,8 @@ Remote.prototype = {
     if (actual==undefined){
       actual = 90;
     }
-    console.log(newpos);
     var newpos = parseInt(actual) + parseInt(degrees)
+    console.log(newpos);
     this.statusmap.set("tiltPos",newpos);
     this.moveTilt(newpos, speed);
     //END OF MOVETILTBYDEGREES FUNCTION
