@@ -30,6 +30,7 @@
     var lastGap = "";
     var lowbattery = false;
     var tap = false;
+    var clap = false;
 
     $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib-develop.js", function(){
 
@@ -73,6 +74,10 @@
     ext.onNewTap = function () {
       tap = true;
     }
+
+    ext.onNewClap = function () {
+      clap = true;
+    }
     //Connection Block
     ext.connectToRobobo = function(ip) {
         rem = new Remote(ip);
@@ -84,6 +89,7 @@
         rem.registerCallback("onGap",ext.onGap);
         rem.registerCallback("onLowBatt",ext.onLowBatt);
         rem.registerCallback("onNewTap",ext.onNewTap)
+        rem.registerCallback("onNewClap",ext.onNewClap)
 
     };
 
@@ -267,6 +273,17 @@
       }
     };
 
+    //Hat function that checks taps
+    ext.newClap = function(gappos) {
+      if (clap==true){
+        clap = false
+        return true;
+      }else {
+        return false;
+      }
+    };
+
+
     //Reporter function to get the detected face coordinates
     ext.readTapCoord = function (axis) {
       var value = 0;
@@ -312,6 +329,7 @@
           ['h', 'when ir %m.ir changed','changedIr'],
           ['h', 'when battery level is low','lowBatt'],//v
           ['h', 'when tap detected','newTap'],//v
+          ['h', 'when clap detected','newClap'],//v
           ['h', 'when fall is detected at %m.falls','changedFalls'],//v
           ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
 

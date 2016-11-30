@@ -422,6 +422,11 @@ Remote.prototype = {
       this.statusmap.set("tapy",parseInt(msg.value["coordy"]));
       (this.callbackmap.get("onNewTap"))();
     }
+
+    else if (msg.name == "CLAP") {
+
+      (this.callbackmap.get("onNewClap"))();
+    }
     //END MANAGESTATUS FUNCTION
   },
 

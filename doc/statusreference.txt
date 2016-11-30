@@ -73,3 +73,11 @@ name:
 value:
   coordx: integer (>0)
   coordy: integer (>0)
+
+8.(v0.1.2)
+
+name:
+  CLAP
+
+value:
+  none
