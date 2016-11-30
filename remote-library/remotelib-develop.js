@@ -163,6 +163,7 @@ Remote.prototype = {
   },
 
   movePanByDegrees (degrees, speed) {
+    console.log("movePanByDegrees");
     var actual = this.statusmap.get("panPos");
     if (actual==undefined){
       actual = 180;
@@ -188,6 +189,7 @@ Remote.prototype = {
   },
 
   moveTiltByDegrees (degrees, speed) {
+    console.log("moveTiltByDegrees");
     var actual = this.statusmap.get("tiltPos");
     if (actual==undefined){
       actual = 90;
