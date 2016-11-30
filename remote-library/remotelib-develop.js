@@ -168,10 +168,10 @@ Remote.prototype = {
     if (actual==undefined){
       actual = 180;
     }
-    var newpos = actual + parseInt(degrees)
+    var newpos = parseInt(actual) + parseInt(degrees)
     console.log(newpos);
 
-    this.statusmap.set("panPos",newpos);
+    this.statusmap.set("panPos",parseInt((newpos));
     this.movePan(newpos, speed);
     //END OF MOVEPANBYDEGREES FUNCTION
   },
@@ -185,7 +185,7 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.statusmap.set("tiltPos",pos);
+    this.statusmap.set("tiltPos",parseInt(pos));
     this.sendMessage(message)
     //END OF MOVETILT FUNCTION
   },
@@ -197,7 +197,7 @@ Remote.prototype = {
       actual = 90;
     }
     console.log(newpos);
-    var newpos = actual + parseInt(degrees)
+    var newpos = parseInt(actual) + parseInt(degrees)
     this.statusmap.set("tiltPos",newpos);
     this.moveTilt(newpos, speed);
     //END OF MOVETILTBYDEGREES FUNCTION
