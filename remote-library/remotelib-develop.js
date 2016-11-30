@@ -171,7 +171,7 @@ Remote.prototype = {
     var newpos = parseInt(actual) + parseInt(degrees)
     console.log(newpos);
 
-    this.statusmap.set("panPos",parseInt((newpos));
+    this.statusmap.set("panPos",parseInt(newpos));
     this.movePan(newpos, speed);
     //END OF MOVEPANBYDEGREES FUNCTION
   },
