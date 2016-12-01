@@ -253,7 +253,7 @@ Remote.prototype = {
     });
     this.sendMessage(message)
     //END OF CHANGECOLOR FUNCTION
-  }
+  },
 
   //ENDHRI
 
