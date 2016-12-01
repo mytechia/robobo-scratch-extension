@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-//Scratch extension version 0.1.1-dev
+//Scratch extension version 0.1.2-dev
 (function(ext) {
     // Cleanup function when the extension is unloaded
     var rem;
@@ -320,7 +320,7 @@
           [' ', 'change emotion to %m.emotions','changeEmotion','normal'],
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
           [' ', 'set led %m.leds %m.status','changeLedStatus','all', 'off'],
-          [' ', 'play %.m.sounds sound','playSound', 'rimshot'],
+          [' ', 'play %m.sounds sound','playSound', 'rimshot'],
           ['r', 'read IR %m.ir value','readIrValue','1'],
           ['r', 'read ROB battery level','readBatteryLevel'],//v
           ['r', 'read OBO battery level','readOboBatteryLevel'],//v
