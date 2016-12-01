@@ -29,6 +29,7 @@
     var lastFall = "";
     var lastGap = "";
     var lowbattery = false;
+    var lowobobattery = false;
     var tap = false;
     var clap = false;
 
@@ -71,6 +72,10 @@
       lowbattery = true;
     }
 
+    ext.onLowOboBatt = function () {
+      lowobobattery = true;
+    }
+
     ext.onNewTap = function () {
       tap = true;
     }
@@ -88,6 +93,7 @@
         rem.registerCallback("onFall",ext.onFall);
         rem.registerCallback("onGap",ext.onGap);
         rem.registerCallback("onLowBatt",ext.onLowBatt);
+        rem.registerCallback("onLowOboBatt",ext.onLowOboBatt);
         rem.registerCallback("onNewTap",ext.onNewTap)
         rem.registerCallback("onNewClap",ext.onNewClap)
 
@@ -193,10 +199,17 @@
       return value;
     };
 
-    //Reporter function to get the battery level
+    //Reporter function to get the ROB battery level
     ext.readBatteryLevel = function () {
       var value = 0;
       value = rem.checkBatt();
+      return value;
+    };
+
+    //Reporter function to get the OBO battery level
+    ext.readOboBatteryLevel = function () {
+      var value = 0;
+      value = rem.checkOboBatt();
       return value;
     };
 
@@ -254,9 +267,18 @@
       return rem.checkFall(gap);
     };
 
-    //Hat function that checks the battery
-    ext.lowBatt = function(gappos) {
+    //Hat function that checks ROB the battery
+    ext.lowBatt = function() {
       if (lowbattery){
+        return true;
+      }else {
+        return false;
+      }
+    };
+
+    //Hat function that checks the OBO battery
+    ext.lowOboBatt = function() {
+      if (lowobobattery){
         return true;
       }else {
         return false;

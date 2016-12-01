@@ -292,6 +292,11 @@ Remote.prototype = {
     //END OF CHECKBATT FUNCTION
   },
 
+  checkOboBatt : function () {
+    return this.statusmap.get("obobatterylevel");
+    //END OF CHECKBATT FUNCTION
+  },
+
   checkFall : function (fall) {
     return this.statusmap.get(fall);
     //END OF CHECKFALL FUNCTION
@@ -392,6 +397,13 @@ Remote.prototype = {
       this.statusmap.set("batterylevel",parseInt(msg.value["level"]));
       if (parseInt(msg.value["level"])<20){
         this.callbackmap.get("onLowBatt")();
+      }
+    }
+
+    else if (msg.name == "OBOBATTLEV") {
+      this.statusmap.set("obobatterylevel",parseInt(msg.value["level"]));
+      if (parseInt(msg.value["level"])<20){
+        this.callbackmap.get("onLowOboBatt")();
       }
     }
 

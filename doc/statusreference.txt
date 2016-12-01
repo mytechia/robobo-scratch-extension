@@ -81,3 +81,11 @@ name:
 
 value:
   none
+
+9.(v0.1.2)
+
+name:
+  OBOBATTLEV
+
+value:
+  level: integer (0:100)
