@@ -245,7 +245,7 @@ Remote.prototype = {
 
   playEmotionSound : function (sound) {
     var message = JSON.stringify({
-        "name": "LEDCOLOR",
+        "name": "SOUND",
         "parameters": {
             sound:sound
         },
