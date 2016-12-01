@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-//Scratch extension version 0.1.1
+//Scratch extension version 0.1.2
 (function(ext) {
     // Cleanup function when the extension is unloaded
     var rem;
@@ -29,7 +29,9 @@
     var lastFall = "";
     var lastGap = "";
     var lowbattery = false;
+    var lowobobattery = false;
     var tap = false;
+    var clap = false;
 
     $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib.js", function(){
 
@@ -70,8 +72,16 @@
       lowbattery = true;
     }
 
+    ext.onLowOboBatt = function () {
+      lowobobattery = true;
+    }
+
     ext.onNewTap = function () {
       tap = true;
+    }
+
+    ext.onNewClap = function () {
+      clap = true;
     }
     //Connection Block
     ext.connectToRobobo = function(ip) {
@@ -83,7 +93,9 @@
         rem.registerCallback("onFall",ext.onFall);
         rem.registerCallback("onGap",ext.onGap);
         rem.registerCallback("onLowBatt",ext.onLowBatt);
+        rem.registerCallback("onLowOboBatt",ext.onLowOboBatt);
         rem.registerCallback("onNewTap",ext.onNewTap)
+        rem.registerCallback("onNewClap",ext.onNewClap)
 
     };
 
@@ -187,10 +199,17 @@
       return value;
     };
 
-    //Reporter function to get the battery level
+    //Reporter function to get the ROB battery level
     ext.readBatteryLevel = function () {
       var value = 0;
       value = rem.checkBatt();
+      return value;
+    };
+
+    //Reporter function to get the OBO battery level
+    ext.readOboBatteryLevel = function () {
+      var value = 0;
+      value = rem.checkOboBatt();
       return value;
     };
 
@@ -248,9 +267,18 @@
       return rem.checkFall(gap);
     };
 
-    //Hat function that checks the battery
-    ext.lowBatt = function(gappos) {
+    //Hat function that checks ROB the battery
+    ext.lowBatt = function() {
       if (lowbattery){
+        return true;
+      }else {
+        return false;
+      }
+    };
+
+    //Hat function that checks the OBO battery
+    ext.lowOboBatt = function() {
+      if (lowobobattery){
         return true;
       }else {
         return false;
@@ -267,6 +295,17 @@
       }
     };
 
+    //Hat function that checks taps
+    ext.newClap = function(gappos) {
+      if (clap==true){
+        clap = false
+        return true;
+      }else {
+        return false;
+      }
+    };
+
+
     //Reporter function to get the detected face coordinates
     ext.readTapCoord = function (axis) {
       var value = 0;
@@ -278,6 +317,10 @@
       ext.movePanRobobo(0,0);
       ext.moveTiltRobobo(0,0);
       ext.moveRoboboWheels(0,0,1);
+    }
+
+    ext.playSound = function (sound) {
+      rem.playEmotionSound(sound)
     }
 
 
@@ -299,8 +342,10 @@
           [' ', 'change emotion to %m.emotions','changeEmotion','normal'],
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
           [' ', 'set led %m.leds %m.status','changeLedStatus','all', 'off'],
+          [' ', 'play %m.sounds sound','playSound', 'rimshot'],
           ['r', 'read IR %m.ir value','readIrValue','1'],
-          ['r', 'read battery level','readBatteryLevel'],//v
+          ['r', 'read ROB battery level','readBatteryLevel'],//v
+          ['r', 'read OBO battery level','readOboBatteryLevel'],//v
           ['r', 'read color detected','readCol'],
           ['r', 'read face distance','readFaceDist'],//v
           ['r', 'read face position at %m.axis axis','readFaceCoord','x'],//v
@@ -310,8 +355,10 @@
           ['h', 'when color is detected','newCol'],
           ['h', 'when face is detected','newFace'],//v
           ['h', 'when ir %m.ir changed','changedIr'],
-          ['h', 'when battery level is low','lowBatt'],//v
+          ['h', 'when ROB battery level is low','lowBatt'],//v
+          ['h', 'when OBO battery level is low','lowBatt'],//v
           ['h', 'when tap detected','newTap'],//v
+          ['h', 'when clap detected','newClap'],//v
           ['h', 'when fall is detected at %m.falls','changedFalls'],//v
           ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
 
@@ -328,6 +375,7 @@
           falls: ['Fall1','Fall2','Fall3','Fall4'],
           gaps: ['Gap1','Gap2','Gap3','Gap4'],
           axis: ['x','y'],
+          sounds: ['alert','claps','booooo','laugh','alarm','rimshot'],
         },
     };
 

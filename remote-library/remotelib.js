@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-//Remote library version 0.1.1
+//Remote library version 0.1.2
 //Constructor of the remote control object
 function Remote(ip){
   this.ip = ip;
@@ -243,6 +243,18 @@ Remote.prototype = {
     //END OF CHANGECOLOR FUNCTION
   },
 
+  playEmotionSound : function (sound) {
+    var message = JSON.stringify({
+        "name": "SOUND",
+        "parameters": {
+            sound:sound
+        },
+        "id": this.commandid
+    });
+    this.sendMessage(message)
+    //END OF CHANGECOLOR FUNCTION
+  },
+
   //ENDHRI
 
   //SENSING
@@ -277,6 +289,11 @@ Remote.prototype = {
 
   checkBatt : function () {
     return this.statusmap.get("batterylevel");
+    //END OF CHECKBATT FUNCTION
+  },
+
+  checkOboBatt : function () {
+    return this.statusmap.get("obobatterylevel");
     //END OF CHECKBATT FUNCTION
   },
 
@@ -383,6 +400,13 @@ Remote.prototype = {
       }
     }
 
+    else if (msg.name == "OBOBATTLEV") {
+      this.statusmap.set("obobatterylevel",parseInt(msg.value["level"]));
+      if (parseInt(msg.value["level"])<20){
+        this.callbackmap.get("onLowOboBatt")();
+      }
+    }
+
     else if (msg.name == "NEWFACE") {
       this.statusmap.set("facex",parseInt(msg.value["coordx"]));
       this.statusmap.set("facey",parseInt(msg.value["coordy"]));
@@ -421,6 +445,11 @@ Remote.prototype = {
       this.statusmap.set("tapx",parseInt(msg.value["coordx"]));
       this.statusmap.set("tapy",parseInt(msg.value["coordy"]));
       (this.callbackmap.get("onNewTap"))();
+    }
+
+    else if (msg.name == "CLAP") {
+
+      (this.callbackmap.get("onNewClap"))();
     }
     //END MANAGESTATUS FUNCTION
   },
