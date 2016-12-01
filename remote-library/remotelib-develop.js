@@ -243,6 +243,18 @@ Remote.prototype = {
     //END OF CHANGECOLOR FUNCTION
   },
 
+  playEmotionSound : function (sound) {
+    var message = JSON.stringify({
+        "name": "LEDCOLOR",
+        "parameters": {
+            sound:sound
+        },
+        "id": this.commandid
+    });
+    this.sendMessage(message)
+    //END OF CHANGECOLOR FUNCTION
+  }
+
   //ENDHRI
 
   //SENSING

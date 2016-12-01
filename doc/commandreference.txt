@@ -85,3 +85,11 @@ name:
 parameters:
   led: string (0:9)|'all'
   color: string in ['white','red','blue','cyan','magenta','yellow','green','orange','on','off']
+
+10.(v0.1.2)
+
+name:
+  SOUND
+
+parameters:
+  sound: string in ['alert','claps','booooo','laugh','alarm','rimshot']

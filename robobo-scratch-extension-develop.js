@@ -297,6 +297,10 @@
       ext.moveRoboboWheels(0,0,1);
     }
 
+    ext.playSound = function (sound) {
+      rem.playEmotionSound(sound)
+    }
+
 
 
 
@@ -316,8 +320,10 @@
           [' ', 'change emotion to %m.emotions','changeEmotion','normal'],
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
           [' ', 'set led %m.leds %m.status','changeLedStatus','all', 'off'],
+          [' ', 'play %.m.sounds sound','playSound', 'rimshot'],
           ['r', 'read IR %m.ir value','readIrValue','1'],
-          ['r', 'read battery level','readBatteryLevel'],//v
+          ['r', 'read ROB battery level','readBatteryLevel'],//v
+          ['r', 'read OBO battery level','readOboBatteryLevel'],//v
           ['r', 'read color detected','readCol'],
           ['r', 'read face distance','readFaceDist'],//v
           ['r', 'read face position at %m.axis axis','readFaceCoord','x'],//v
@@ -327,7 +333,8 @@
           ['h', 'when color is detected','newCol'],
           ['h', 'when face is detected','newFace'],//v
           ['h', 'when ir %m.ir changed','changedIr'],
-          ['h', 'when battery level is low','lowBatt'],//v
+          ['h', 'when ROB battery level is low','lowBatt'],//v
+          ['h', 'when OBO battery level is low','lowBatt'],//v
           ['h', 'when tap detected','newTap'],//v
           ['h', 'when clap detected','newClap'],//v
           ['h', 'when fall is detected at %m.falls','changedFalls'],//v
@@ -346,6 +353,7 @@
           falls: ['Fall1','Fall2','Fall3','Fall4'],
           gaps: ['Gap1','Gap2','Gap3','Gap4'],
           axis: ['x','y'],
+          sounds: ['alert','claps','booooo','laugh','alarm','rimshot'],
         },
     };
 
