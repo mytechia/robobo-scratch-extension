@@ -169,6 +169,12 @@ Remote.prototype = {
       actual = 180;
     }
     var newpos = parseInt(actual) + parseInt(degrees)
+    if (newpos > 339){
+      newpos = 339;
+    }
+    if (newpos < 27){
+      newpos = 27;
+    }
     console.log(newpos);
 
     this.statusmap.set("panPos",parseInt(newpos));
@@ -197,6 +203,12 @@ Remote.prototype = {
       actual = 90;
     }
     var newpos = parseInt(actual) + parseInt(degrees)
+    if (newpos > 109){
+      newpos = 109
+    }
+    if (newpos < 26){
+      newpos = 26
+    }
     console.log(newpos);
     this.statusmap.set("tiltPos",newpos);
     this.moveTilt(newpos, speed);
