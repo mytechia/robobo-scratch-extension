@@ -32,6 +32,7 @@
     var lowobobattery = false;
     var tap = false;
     var clap = false;
+    var brightnessChange = true;
 
     $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib-develop.js", function(){
 
@@ -83,6 +84,10 @@
     ext.onNewClap = function () {
       clap = true;
     }
+
+    ext.onBrightnessChanged = function () {
+      brightnessChange = true;
+    }
     //Connection Block
     ext.connectToRobobo = function(ip) {
         rem = new Remote(ip);
@@ -94,8 +99,11 @@
         rem.registerCallback("onGap",ext.onGap);
         rem.registerCallback("onLowBatt",ext.onLowBatt);
         rem.registerCallback("onLowOboBatt",ext.onLowOboBatt);
-        rem.registerCallback("onNewTap",ext.onNewTap)
-        rem.registerCallback("onNewClap",ext.onNewClap)
+        rem.registerCallback("onNewTap",ext.onNewTap);
+        rem.registerCallback("onNewClap",ext.onNewClap);
+        rem.registerCallback("onBrightnessChanged",ext.onBrightnessChanged);
+
+
 
     };
 
@@ -227,6 +235,13 @@
       return value;
     };
 
+    //Reporter function to get the ROB battery level
+    ext.readBrightnessLevel = function () {
+      var value = 0;
+      value = rem.getBrightness();
+      return value;
+    };
+
     //Hat function that checks for new faces
     ext.newFace = function() {
       if (newface){
@@ -319,6 +334,16 @@
       ext.moveRoboboWheels(0,0,1);
     }
 
+    //Hat function that tracks brightness changes
+    ext.changedBrightness = function() {
+      if (brightnessChanged){
+        brightnessChanged = false;
+        return true;
+      }else {
+        return false;
+      }
+    };
+
     ext.playSound = function (sound) {
       rem.playEmotionSound(sound)
     }
@@ -352,6 +377,7 @@
           ['r', 'read tap position at %m.axis axis','readTapCoord','x'],//v
           ['r', 'read fall at %m.falls','readFall'],//v
           ['r', 'read gap at %m.gaps','readGap'],//v
+          ['r', 'read brightness','readBrightnessLevel'],//v
           ['h', 'when color is detected','newCol'],
           ['h', 'when face is detected','newFace'],//v
           ['h', 'when ir %m.ir changed','changedIr'],
@@ -361,6 +387,7 @@
           ['h', 'when clap detected','newClap'],//v
           ['h', 'when fall is detected at %m.falls','changedFalls'],//v
           ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
+          ['h', 'when a brightness change is detected','changedBrightness'],//v
 
         ],
         menus: {

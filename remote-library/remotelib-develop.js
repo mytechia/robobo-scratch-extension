@@ -319,6 +319,10 @@ Remote.prototype = {
     //END OF CHECKFALL FUNCTION
   },
 
+  getBrightness : function () {
+    return this.statusmap.get("brightness");
+  },
+
 
   //ENDSENSING
 
@@ -462,6 +466,16 @@ Remote.prototype = {
     else if (msg.name == "CLAP") {
 
       (this.callbackmap.get("onNewClap"))();
+    }
+
+    else if (msg.name == "BRIGHTNESS") {
+      this.statusmap.set("brightness",parseInt(msg.value["level"]));
+
+    }
+
+    else if (msg.name == "BRIGHTNESSCHANGED") {
+
+      (this.callbackmap.get("onBrightnessChanged"))();
     }
     //END MANAGESTATUS FUNCTION
   },
