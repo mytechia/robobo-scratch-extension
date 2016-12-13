@@ -336,8 +336,8 @@
 
     //Hat function that tracks brightness changes
     ext.changedBrightness = function() {
-      if (brightnessChanged){
-        brightnessChanged = false;
+      if (brightnessChange){
+        brightnessChange = false;
         return true;
       }else {
         return false;
