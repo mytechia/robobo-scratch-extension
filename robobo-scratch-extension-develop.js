@@ -398,7 +398,7 @@
         ],
         menus: {
           motorDirection: ['forward', 'backward'],
-          motorDirectionBis: ['forward', 'backward'],
+          motorDirectionBis: ['forward', 'backward','off'],
           wheels: ['right', 'left','both'],
           mtype: ['seconds','degrees'],
           emotions: ['happy','laughting','sad','angry','surprised','normal'],
