@@ -329,6 +329,11 @@ Remote.prototype = {
     //END OF CHECKFALL FUNCTION
   },
 
+  checkFlingAngle : function () {
+    return this.statusmap.get("flingangle");
+    //END OF CHECKFLING ANGLE
+  },
+
   checkGap : function (gap) {
     return this.statusmap.get(gap);
     //END OF CHECKFALL FUNCTION
@@ -476,6 +481,15 @@ Remote.prototype = {
       this.statusmap.set("tapx",parseInt(msg.value["coordx"]));
       this.statusmap.set("tapy",parseInt(msg.value["coordy"]));
       (this.callbackmap.get("onNewTap"))();
+    }
+
+    else if (msg.name == "FLING") {
+      console.log(msg);
+      this.statusmap.set("flingangle",parseInt(msg.value["angle"]));
+      this.statusmap.set("flingtime",parseInt(msg.value["time"]));
+      this.statusmap.set("flingdistance",parseInt(msg.value["distance"]));
+
+      (this.callbackmap.get("onNewFling"))();
     }
 
     else if (msg.name == "CLAP") {
