@@ -138,7 +138,7 @@ Remote.prototype = {
 
   motorsOn: function(lMotor,rMotor,speed) {
     var message = JSON.stringify({
-        "name": "motorsOn",
+        "name": "MOTORSON",
         "parameters": {
             lmotor: lMotor,
             rmotor: rMotor,
