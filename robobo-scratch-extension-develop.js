@@ -20,7 +20,6 @@
  ******************************************************************************/
 //Scratch extension version 0.1.2-dev
 (function(ext) {
-    // Cleanup function when the extension is unloaded
     var rem;
     var commandid = 0;
     var newcolor = false;
@@ -33,13 +32,12 @@
     var tap = false;
     var clap = false;
     var brightnessChange = false;
+    var fling = false;
 
-    $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib-develop.js", function(){
+    $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib-develop.js", function(){});
 
 
-
-    });
-
+    // Cleanup function when the extension is unloaded
     ext._shutdown = function() {};
 
     // Status reporting code
@@ -56,35 +54,39 @@
     ext.onIrChanged = function (ir) {
       lastIrChange = ir;
     }
-
+    //Callback for falls
     ext.onFall = function (fall) {
       lastFall = fall;
     }
-
+    //Callback for gaps
     ext.onGap = function (gap) {
       lastGap = gap;
     }
-
+    //Callback for faces
     ext.onNewFace = function () {
       newface = true;
     }
-
+    //Callback for low battery level on the rob
     ext.onLowBatt = function () {
       lowbattery = true;
     }
-
+    //Callback for low battery level on the obo
     ext.onLowOboBatt = function () {
       lowobobattery = true;
     }
-
+    //Callback for taps
     ext.onNewTap = function () {
       tap = true;
     }
-
+    //Callback for flings
+    ext.onNewFling = function () {
+      fling = true;
+    }
+    //Callback for taps
     ext.onNewClap = function () {
       clap = true;
     }
-
+    //Callback for brightness
     ext.onBrightnessChanged = function () {
       brightnessChange = true;
     }
@@ -102,6 +104,7 @@
         rem.registerCallback("onNewTap",ext.onNewTap);
         rem.registerCallback("onNewClap",ext.onNewClap);
         rem.registerCallback("onBrightnessChanged",ext.onBrightnessChanged);
+        rem.registerCallback("onNewFling",ext.onNewFling);
 
 
 
@@ -277,6 +280,11 @@
       return rem.checkFall(fall);
     };
 
+    //Reporter function that checks falls
+    ext.readFlingAngle = function () {
+      return rem.checkFlingAngle();
+    };
+
     //Reporter function that checks gaps
     ext.readGap = function (gap) {
       return rem.checkFall(gap);
@@ -301,7 +309,7 @@
     };
 
     //Hat function that checks taps
-    ext.newTap = function(gappos) {
+    ext.newTap = function() {
       if (tap==true){
         tap = false
         return true;
@@ -311,7 +319,18 @@
     };
 
     //Hat function that checks taps
-    ext.newClap = function(gappos) {
+    ext.newFling = function() {
+      if (fling==true){
+        fling = false
+        return true;
+      }else {
+        return false;
+      }
+    };
+
+
+    //Hat function that checks taps
+    ext.newClap = function() {
       if (clap==true){
         clap = false
         return true;
@@ -379,6 +398,7 @@
           ['r', 'read OBO battery level','readOboBatteryLevel'],//v
           ['r', 'read color detected','readCol'],
           ['r', 'read face distance','readFaceDist'],//v
+          ['r', 'read fling angle','readFlingAngle'],//v
           ['r', 'read face position at %m.axis axis','readFaceCoord','x'],//v
           ['r', 'read tap position at %m.axis axis','readTapCoord','x'],//v
           ['r', 'read fall at %m.falls','readFall'],//v
@@ -390,6 +410,7 @@
           ['h', 'when ROB battery level is low','lowBatt'],//v
           ['h', 'when OBO battery level is low','lowBatt'],//v
           ['h', 'when tap detected','newTap'],//v
+          ['h', 'when fling detected','newFling'],//v
           ['h', 'when clap detected','newClap'],//v
           ['h', 'when fall is detected at %m.falls','changedFalls'],//v
           ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
