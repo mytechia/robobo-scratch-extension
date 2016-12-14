@@ -346,6 +346,14 @@
       value = rem.getTapCoord(axis);
       return value;
     };
+
+    //Reporter function to get the orientation in one axis
+    ext.readOrientation = function (axis) {
+      var value = 0;
+      value = rem.getOrientation(axis);
+      return value;
+    };
+
     //Emergency stop
     ext.stop = function () {
       ext.movePanRobobo(0,0);
@@ -401,6 +409,8 @@
           ['r', 'read fling angle','readFlingAngle'],//v
           ['r', 'read face position at %m.axis axis','readFaceCoord','x'],//v
           ['r', 'read tap position at %m.axis axis','readTapCoord','x'],//v
+          ['r', 'read orientation at %m.orientation axis','readOrientation','x'],//v
+
           ['r', 'read fall at %m.falls','readFall'],//v
           ['r', 'read gap at %m.gaps','readGap'],//v
           ['r', 'read brightness','readBrightnessLevel'],//v
@@ -422,6 +432,7 @@
           motorDirectionBis: ['forward', 'backward','off'],
           wheels: ['right', 'left','both'],
           mtype: ['seconds','degrees'],
+          orientation: ['yaw','pitch','roll'],
           emotions: ['happy','laughting','sad','angry','surprised','normal'],
           colors: ['white','red','blue','cyan','magenta','yellow','green','orange'],
           status: ['on','off'],

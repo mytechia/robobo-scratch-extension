@@ -506,6 +506,13 @@ Remote.prototype = {
 
       (this.callbackmap.get("onBrightnessChanged"))();
     }
+
+    else if (msg.name == "ORIENTATION") {
+      console.log(msg);
+      this.statusmap.set("yaw",parseInt(msg.value["yaw"]));
+      this.statusmap.set("pitch",parseInt(msg.value["pitch"]));
+      this.statusmap.set("roll",parseInt(msg.value["roll"]));
+    }
     //END MANAGESTATUS FUNCTION
   },
 
