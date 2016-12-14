@@ -104,7 +104,7 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF MOVEDEGREE FUNCTION
   },
 
@@ -118,7 +118,7 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF MOVETIME FUNCTION
   },
 
@@ -132,9 +132,24 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF MOVETWOWHEELS FUNCTION
   },
+
+  motorsOn: function(lMotor,rMotor,speed) {
+    var message = JSON.stringify({
+        "name": "motorsOn",
+        "parameters": {
+            lmotor: lMotor,
+            rmotor: rMotor,
+            speed:speed
+        },
+        "id": this.commandid
+    });
+    this.sendMessage(message);
+    //END OF MOTORSON FUNCTION
+  },
+
 
   turnInPlace: function(degrees) {
     var message = JSON.stringify({
@@ -144,7 +159,7 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF TURNINPLACE FUNCTION
   },
 
@@ -158,7 +173,7 @@ Remote.prototype = {
         "id": this.commandid
     });
     this.statusmap.set("panPos",pos);
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF MOVEPAN FUNCTION
   },
 
@@ -192,7 +207,7 @@ Remote.prototype = {
         "id": this.commandid
     });
     this.statusmap.set("tiltPos",parseInt(pos));
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF MOVETILT FUNCTION
   },
 
@@ -204,10 +219,10 @@ Remote.prototype = {
     }
     var newpos = parseInt(actual) + parseInt(degrees)
     if (newpos > 109){
-      newpos = 109
+      newpos = 109;
     }
     if (newpos < 26){
-      newpos = 26
+      newpos = 26;
     }
     console.log(newpos);
     this.statusmap.set("tiltPos",newpos);
@@ -226,7 +241,7 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF TALK FUNCTION
   },
 
@@ -238,7 +253,7 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF CHANGEEMOTION FUNCTION
   },
 
@@ -251,7 +266,7 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF CHANGECOLOR FUNCTION
   },
 
@@ -263,7 +278,7 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF CHANGECOLOR FUNCTION
   },
 
@@ -276,7 +291,7 @@ Remote.prototype = {
         "parameters": {},
         "id": this.commandid
     });
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF GETLIGHTBRIGHTNESS FUNCTION
   },
 

@@ -32,7 +32,7 @@
     var lowobobattery = false;
     var tap = false;
     var clap = false;
-    var brightnessChange = true;
+    var brightnessChange = false;
 
     $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib-develop.js", function(){
 
@@ -345,7 +345,12 @@
     };
 
     ext.playSound = function (sound) {
-      rem.playEmotionSound(sound)
+      rem.playEmotionSound(sound);
+    }
+
+
+    ext.setMotorsOn = function (lmotor, rmotor, speed) {
+      rem.motorsOn(lmotor,rmotor, speed);
     }
 
 
@@ -360,6 +365,7 @@
           [' ', 'say %s','talkRobobo','hello world'],
           [' ', 'move wheel %m.wheels by %s %m.mtype at speed %s','moveRobobo','both','1','seconds','50'],
           [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],
+          [' ', 'set left motor to %m.motorDirectionBis and right motor to %m.motorDirectionBis at speed %s','setMotorsOn','forward','forward','100'],
           [' ', 'move pan to %s at speed %s','movePanRobobo','180','5'],
           [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
           [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
@@ -392,6 +398,7 @@
         ],
         menus: {
           motorDirection: ['forward', 'backward'],
+          motorDirectionBis: ['forward', 'backward'],
           wheels: ['right', 'left','both'],
           mtype: ['seconds','degrees'],
           emotions: ['happy','laughting','sad','angry','surprised','normal'],

@@ -58,6 +58,16 @@ parameters:
   pos: integer (0:180)
   speed: integer (0:10)
 
+11.(v0.1.3)
+
+name:
+  MOTORSON
+
+parameters:
+  lmotor: string in ['forward','backward','off']
+  rmotor: string in ['forward','backward','off']
+  speed: integer
+
 
 ----------------------------------HRI COMMANDS----------------------------------
 
