@@ -373,6 +373,19 @@ Remote.prototype = {
     //END OF GETFACECOORD FUNCTION
   },
 
+  getOrientation :function(axis) {
+    if (axis=="yaw") {
+      return this.statusmap.get("yaw");
+
+    }else if (axis=="pitch") {
+      return this.statusmap.get("pitch");
+
+    }else{
+      return this.statusmap.get("roll");
+    }
+    //END OF GETORIENTATION FUNCTION
+  },
+
   getFaceDist : function () {
     return this.statusmap.get("facedist");
   },
