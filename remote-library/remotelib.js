@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-//Remote library version 0.1.2
+//Remote library version 0.1.3-SNAPSHOT
 //Constructor of the remote control object
 function Remote(ip){
   this.ip = ip;
@@ -104,7 +104,7 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF MOVEDEGREE FUNCTION
   },
 
@@ -118,7 +118,7 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF MOVETIME FUNCTION
   },
 
@@ -132,9 +132,24 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF MOVETWOWHEELS FUNCTION
   },
+
+  motorsOn: function(lMotor,rMotor,speed) {
+    var message = JSON.stringify({
+        "name": "MOTORSON",
+        "parameters": {
+            lmotor: lMotor,
+            rmotor: rMotor,
+            speed:speed
+        },
+        "id": this.commandid
+    });
+    this.sendMessage(message);
+    //END OF MOTORSON FUNCTION
+  },
+
 
   turnInPlace: function(degrees) {
     var message = JSON.stringify({
@@ -144,7 +159,7 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF TURNINPLACE FUNCTION
   },
 
@@ -158,7 +173,7 @@ Remote.prototype = {
         "id": this.commandid
     });
     this.statusmap.set("panPos",pos);
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF MOVEPAN FUNCTION
   },
 
@@ -192,7 +207,7 @@ Remote.prototype = {
         "id": this.commandid
     });
     this.statusmap.set("tiltPos",parseInt(pos));
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF MOVETILT FUNCTION
   },
 
@@ -204,10 +219,10 @@ Remote.prototype = {
     }
     var newpos = parseInt(actual) + parseInt(degrees)
     if (newpos > 109){
-      newpos = 109
+      newpos = 109;
     }
     if (newpos < 26){
-      newpos = 26
+      newpos = 26;
     }
     console.log(newpos);
     this.statusmap.set("tiltPos",newpos);
@@ -226,7 +241,7 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF TALK FUNCTION
   },
 
@@ -238,7 +253,7 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF CHANGEEMOTION FUNCTION
   },
 
@@ -251,7 +266,7 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF CHANGECOLOR FUNCTION
   },
 
@@ -263,7 +278,7 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF CHANGECOLOR FUNCTION
   },
 
@@ -276,7 +291,7 @@ Remote.prototype = {
         "parameters": {},
         "id": this.commandid
     });
-    this.sendMessage(message)
+    this.sendMessage(message);
     //END OF GETLIGHTBRIGHTNESS FUNCTION
   },
 
@@ -314,9 +329,18 @@ Remote.prototype = {
     //END OF CHECKFALL FUNCTION
   },
 
+  checkFlingAngle : function () {
+    return this.statusmap.get("flingangle");
+    //END OF CHECKFLING ANGLE
+  },
+
   checkGap : function (gap) {
     return this.statusmap.get(gap);
     //END OF CHECKFALL FUNCTION
+  },
+
+  getBrightness : function () {
+    return this.statusmap.get("brightness");
   },
 
 
@@ -347,6 +371,19 @@ Remote.prototype = {
       return this.statusmap.get("tapy");
     }
     //END OF GETFACECOORD FUNCTION
+  },
+
+  getOrientation :function(axis) {
+    if (axis=="yaw") {
+      return this.statusmap.get("yaw");
+
+    }else if (axis=="pitch") {
+      return this.statusmap.get("pitch");
+
+    }else{
+      return this.statusmap.get("roll");
+    }
+    //END OF GETORIENTATION FUNCTION
   },
 
   getFaceDist : function () {
@@ -459,9 +496,35 @@ Remote.prototype = {
       (this.callbackmap.get("onNewTap"))();
     }
 
+    else if (msg.name == "FLING") {
+      console.log(msg);
+      this.statusmap.set("flingangle",parseInt(msg.value["angle"]));
+      this.statusmap.set("flingtime",parseInt(msg.value["time"]));
+      this.statusmap.set("flingdistance",parseInt(msg.value["distance"]));
+
+      (this.callbackmap.get("onNewFling"))();
+    }
+
     else if (msg.name == "CLAP") {
 
       (this.callbackmap.get("onNewClap"))();
+    }
+
+    else if (msg.name == "BRIGHTNESS") {
+      this.statusmap.set("brightness",parseInt(msg.value["level"]));
+
+    }
+
+    else if (msg.name == "BRIGHTNESSCHANGED") {
+
+      (this.callbackmap.get("onBrightnessChanged"))();
+    }
+
+    else if (msg.name == "ORIENTATION") {
+      console.log(msg);
+      this.statusmap.set("yaw",parseInt(msg.value["yaw"]));
+      this.statusmap.set("pitch",parseInt(msg.value["pitch"]));
+      this.statusmap.set("roll",parseInt(msg.value["roll"]));
     }
     //END MANAGESTATUS FUNCTION
   },

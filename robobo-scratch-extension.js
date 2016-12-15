@@ -18,9 +18,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-//Scratch extension version 0.1.2
+//Scratch extension version 0.1.3-SNAPSHOT
 (function(ext) {
-    // Cleanup function when the extension is unloaded
     var rem;
     var commandid = 0;
     var newcolor = false;
@@ -32,13 +31,13 @@
     var lowobobattery = false;
     var tap = false;
     var clap = false;
+    var brightnessChange = false;
+    var fling = false;
 
-    $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib.js", function(){
+    $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib-develop.js", function(){});
 
 
-
-    });
-
+    // Cleanup function when the extension is unloaded
     ext._shutdown = function() {};
 
     // Status reporting code
@@ -55,33 +54,41 @@
     ext.onIrChanged = function (ir) {
       lastIrChange = ir;
     }
-
+    //Callback for falls
     ext.onFall = function (fall) {
       lastFall = fall;
     }
-
+    //Callback for gaps
     ext.onGap = function (gap) {
       lastGap = gap;
     }
-
+    //Callback for faces
     ext.onNewFace = function () {
       newface = true;
     }
-
+    //Callback for low battery level on the rob
     ext.onLowBatt = function () {
       lowbattery = true;
     }
-
+    //Callback for low battery level on the obo
     ext.onLowOboBatt = function () {
       lowobobattery = true;
     }
-
+    //Callback for taps
     ext.onNewTap = function () {
       tap = true;
     }
-
+    //Callback for flings
+    ext.onNewFling = function () {
+      fling = true;
+    }
+    //Callback for taps
     ext.onNewClap = function () {
       clap = true;
+    }
+    //Callback for brightness
+    ext.onBrightnessChanged = function () {
+      brightnessChange = true;
     }
     //Connection Block
     ext.connectToRobobo = function(ip) {
@@ -94,8 +101,12 @@
         rem.registerCallback("onGap",ext.onGap);
         rem.registerCallback("onLowBatt",ext.onLowBatt);
         rem.registerCallback("onLowOboBatt",ext.onLowOboBatt);
-        rem.registerCallback("onNewTap",ext.onNewTap)
-        rem.registerCallback("onNewClap",ext.onNewClap)
+        rem.registerCallback("onNewTap",ext.onNewTap);
+        rem.registerCallback("onNewClap",ext.onNewClap);
+        rem.registerCallback("onBrightnessChanged",ext.onBrightnessChanged);
+        rem.registerCallback("onNewFling",ext.onNewFling);
+
+
 
     };
 
@@ -227,6 +238,13 @@
       return value;
     };
 
+    //Reporter function to get the ROB battery level
+    ext.readBrightnessLevel = function () {
+      var value = 0;
+      value = rem.getBrightness();
+      return value;
+    };
+
     //Hat function that checks for new faces
     ext.newFace = function() {
       if (newface){
@@ -262,6 +280,11 @@
       return rem.checkFall(fall);
     };
 
+    //Reporter function that checks falls
+    ext.readFlingAngle = function () {
+      return rem.checkFlingAngle();
+    };
+
     //Reporter function that checks gaps
     ext.readGap = function (gap) {
       return rem.checkFall(gap);
@@ -286,7 +309,7 @@
     };
 
     //Hat function that checks taps
-    ext.newTap = function(gappos) {
+    ext.newTap = function() {
       if (tap==true){
         tap = false
         return true;
@@ -296,7 +319,18 @@
     };
 
     //Hat function that checks taps
-    ext.newClap = function(gappos) {
+    ext.newFling = function() {
+      if (fling==true){
+        fling = false
+        return true;
+      }else {
+        return false;
+      }
+    };
+
+
+    //Hat function that checks taps
+    ext.newClap = function() {
       if (clap==true){
         clap = false
         return true;
@@ -312,6 +346,14 @@
       value = rem.getTapCoord(axis);
       return value;
     };
+
+    //Reporter function to get the orientation in one axis
+    ext.readOrientation = function (axis) {
+      var value = 0;
+      value = rem.getOrientation(axis);
+      return value;
+    };
+
     //Emergency stop
     ext.stop = function () {
       ext.movePanRobobo(0,0);
@@ -319,8 +361,23 @@
       ext.moveRoboboWheels(0,0,1);
     }
 
+    //Hat function that tracks brightness changes
+    ext.changedBrightness = function() {
+      if (brightnessChange){
+        brightnessChange = false;
+        return true;
+      }else {
+        return false;
+      }
+    };
+
     ext.playSound = function (sound) {
-      rem.playEmotionSound(sound)
+      rem.playEmotionSound(sound);
+    }
+
+
+    ext.setMotorsOn = function (lmotor, rmotor, speed) {
+      rem.motorsOn(lmotor,rmotor, speed);
     }
 
 
@@ -335,6 +392,7 @@
           [' ', 'say %s','talkRobobo','hello world'],
           [' ', 'move wheel %m.wheels by %s %m.mtype at speed %s','moveRobobo','both','1','seconds','50'],
           [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],
+          [' ', 'set left motor to %m.motorDirectionBis and right motor to %m.motorDirectionBis at speed %s','setMotorsOn','forward','forward','100'],
           [' ', 'move pan to %s at speed %s','movePanRobobo','180','5'],
           [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
           [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
@@ -348,25 +406,32 @@
           ['r', 'read OBO battery level','readOboBatteryLevel'],//v
           ['r', 'read color detected','readCol'],
           ['r', 'read face distance','readFaceDist'],//v
+          ['r', 'read fling angle','readFlingAngle'],//v
           ['r', 'read face position at %m.axis axis','readFaceCoord','x'],//v
           ['r', 'read tap position at %m.axis axis','readTapCoord','x'],//v
+          ['r', 'read orientation at %m.orientation axis','readOrientation','yaw'],//v
           ['r', 'read fall at %m.falls','readFall'],//v
           ['r', 'read gap at %m.gaps','readGap'],//v
+          ['r', 'read brightness','readBrightnessLevel'],//v
           ['h', 'when color is detected','newCol'],
           ['h', 'when face is detected','newFace'],//v
           ['h', 'when ir %m.ir changed','changedIr'],
           ['h', 'when ROB battery level is low','lowBatt'],//v
           ['h', 'when OBO battery level is low','lowBatt'],//v
           ['h', 'when tap detected','newTap'],//v
+          ['h', 'when fling detected','newFling'],//v
           ['h', 'when clap detected','newClap'],//v
           ['h', 'when fall is detected at %m.falls','changedFalls'],//v
           ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
+          ['h', 'when a brightness change is detected','changedBrightness'],//v
 
         ],
         menus: {
           motorDirection: ['forward', 'backward'],
+          motorDirectionBis: ['forward', 'backward','off'],
           wheels: ['right', 'left','both'],
           mtype: ['seconds','degrees'],
+          orientation: ['yaw','pitch','roll'],
           emotions: ['happy','laughting','sad','angry','surprised','normal'],
           colors: ['white','red','blue','cyan','magenta','yellow','green','orange'],
           status: ['on','off'],
