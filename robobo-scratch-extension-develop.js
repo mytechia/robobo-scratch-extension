@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-//Scratch extension version 0.1.2-dev
+//Scratch extension version 0.1.3-dev
 (function(ext) {
     var rem;
     var commandid = 0;
@@ -409,8 +409,7 @@
           ['r', 'read fling angle','readFlingAngle'],//v
           ['r', 'read face position at %m.axis axis','readFaceCoord','x'],//v
           ['r', 'read tap position at %m.axis axis','readTapCoord','x'],//v
-          ['r', 'read orientation at %m.orientation axis','readOrientation','x'],//v
-
+          ['r', 'read orientation at %m.orientation axis','readOrientation','yaw'],//v
           ['r', 'read fall at %m.falls','readFall'],//v
           ['r', 'read gap at %m.gaps','readGap'],//v
           ['r', 'read brightness','readBrightnessLevel'],//v
