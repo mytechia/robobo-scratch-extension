@@ -550,7 +550,7 @@ Remote.prototype = {
 
     else if (msg.name == "ACCELCHANGED") {
 
-      (this.callbackmap.get("ononAccelChanged"))();
+      (this.callbackmap.get("onAccelChanged"))();
     }
     //END MANAGESTATUS FUNCTION
   },

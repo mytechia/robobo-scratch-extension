@@ -435,7 +435,7 @@
           ['r', 'read face position at %m.axis axis','readFaceCoord','x'],//v
           ['r', 'read tap position at %m.axis axis','readTapCoord','x'],//v
           ['r', 'read orientation at %m.orientation axis','readOrientation','yaw'],//v
-          ['r', 'read acceleration at %m.axis axis','readAcceleration','x'],//v
+          ['r', 'read acceleration at %m.axis3d axis','readAcceleration','x'],//v
           ['r', 'read fall at %m.falls','readFall'],//v
           ['r', 'read gap at %m.gaps','readGap'],//v
           ['r', 'read brightness','readBrightnessLevel'],//v
@@ -467,6 +467,7 @@
           falls: ['Fall1','Fall2','Fall3','Fall4'],
           gaps: ['Gap1','Gap2','Gap3','Gap4'],
           axis: ['x','y'],
+          axis3d: ['x','y','z'],
           sounds: ['alert','claps','booooo','laugh','alarm','rimshot'],
         },
     };
