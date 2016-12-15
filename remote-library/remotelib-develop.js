@@ -386,6 +386,19 @@ Remote.prototype = {
     //END OF GETORIENTATION FUNCTION
   },
 
+  getAcceleration :function(axis) {
+    if (axis=="x") {
+      return this.statusmap.get("xaccel");
+
+    }else if (axis=="y") {
+      return this.statusmap.get("yaccel");
+
+    }else{
+      return this.statusmap.get("zaccel");
+    }
+    //END OF GETORIENTATION FUNCTION
+  },
+
   getFaceDist : function () {
     return this.statusmap.get("facedist");
   },
@@ -497,7 +510,7 @@ Remote.prototype = {
     }
 
     else if (msg.name == "FLING") {
-      console.log(msg);
+
       this.statusmap.set("flingangle",parseInt(msg.value["angle"]));
       this.statusmap.set("flingtime",parseInt(msg.value["time"]));
       this.statusmap.set("flingdistance",parseInt(msg.value["distance"]));
@@ -521,10 +534,23 @@ Remote.prototype = {
     }
 
     else if (msg.name == "ORIENTATION") {
-      console.log(msg);
+
       this.statusmap.set("yaw",parseInt(msg.value["yaw"]));
       this.statusmap.set("pitch",parseInt(msg.value["pitch"]));
       this.statusmap.set("roll",parseInt(msg.value["roll"]));
+    }
+
+    else if (msg.name == "ACCELERATION") {
+      console.log(msg);
+      this.statusmap.set("xaccel",parseInt(msg.value["xaccel"]));
+      this.statusmap.set("yaccel",parseInt(msg.value["yaccel"]));
+      this.statusmap.set("zaccel",parseInt(msg.value["zaccel"]));
+
+    }
+
+    else if (msg.name == "ACCELCHANGED") {
+
+      (this.callbackmap.get("ononAccelChanged"))();
     }
     //END MANAGESTATUS FUNCTION
   },

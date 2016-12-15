@@ -33,6 +33,7 @@
     var clap = false;
     var brightnessChange = false;
     var fling = false;
+    var accelchange = false;
 
     $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib-develop.js", function(){});
 
@@ -90,6 +91,11 @@
     ext.onBrightnessChanged = function () {
       brightnessChange = true;
     }
+
+    //Callback for acceleration
+    ext.onAccelChanged = function () {
+      accelchange = true;
+    }
     //Connection Block
     ext.connectToRobobo = function(ip) {
         rem = new Remote(ip);
@@ -105,6 +111,7 @@
         rem.registerCallback("onNewClap",ext.onNewClap);
         rem.registerCallback("onBrightnessChanged",ext.onBrightnessChanged);
         rem.registerCallback("onNewFling",ext.onNewFling);
+        rem.registerCallback("onAccelChanged", ext.onAccelChanged);
 
 
 
@@ -339,6 +346,16 @@
       }
     };
 
+    //Hat function that checks acceleration changes
+    ext.newAcceleration = function() {
+      if (accelchange==true){
+        accelchange = false
+        return true;
+      }else {
+        return false;
+      }
+    };
+
 
     //Reporter function to get the detected face coordinates
     ext.readTapCoord = function (axis) {
@@ -353,6 +370,14 @@
       value = rem.getOrientation(axis);
       return value;
     };
+    //Reporter function to get the orientation in one axis
+    ext.readAcceleration = function (axis) {
+      var value = 0;
+      value = rem.getAcceleration(axis);
+      return value;
+    };
+
+
 
     //Emergency stop
     ext.stop = function () {
@@ -410,6 +435,7 @@
           ['r', 'read face position at %m.axis axis','readFaceCoord','x'],//v
           ['r', 'read tap position at %m.axis axis','readTapCoord','x'],//v
           ['r', 'read orientation at %m.orientation axis','readOrientation','yaw'],//v
+          ['r', 'read acceleration at %m.axis axis','readAcceleration','x'],//v
           ['r', 'read fall at %m.falls','readFall'],//v
           ['r', 'read gap at %m.gaps','readGap'],//v
           ['r', 'read brightness','readBrightnessLevel'],//v
@@ -420,6 +446,7 @@
           ['h', 'when OBO battery level is low','lowBatt'],//v
           ['h', 'when tap detected','newTap'],//v
           ['h', 'when fling detected','newFling'],//v
+          ['h', 'when acceleration detected','newAcceleration'],//v
           ['h', 'when clap detected','newClap'],//v
           ['h', 'when fall is detected at %m.falls','changedFalls'],//v
           ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
