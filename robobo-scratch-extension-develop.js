@@ -34,6 +34,8 @@
     var brightnessChange = false;
     var fling = false;
     var accelchange = false;
+    var obstacle_pos = 0;
+    var obstacle = false;
 
     $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib-develop.js", function(){});
 
@@ -96,6 +98,12 @@
     ext.onAccelChanged = function () {
       accelchange = true;
     }
+
+    //Callback for acceleration
+    ext.onObstacle = function (sensor) {
+      obstacle = true;
+      obstacle_pos = sensor;
+    }
     //Connection Block
     ext.connectToRobobo = function(ip) {
         rem = new Remote(ip);
@@ -112,6 +120,8 @@
         rem.registerCallback("onBrightnessChanged",ext.onBrightnessChanged);
         rem.registerCallback("onNewFling",ext.onNewFling);
         rem.registerCallback("onAccelChanged", ext.onAccelChanged);
+        rem.registerCallback("onObstacle", ext.onObstacle);
+
 
 
 
@@ -420,6 +430,16 @@
       }
     };
 
+    //Hat function that tracks obstacles
+    ext.detectedObstacle = function() {
+      if (obstacle){
+        obstacle = false;
+        return true;
+      }else {
+        return false;
+      }
+    };
+
     ext.playSound = function (sound) {
       rem.playEmotionSound(sound);
     }
@@ -475,6 +495,8 @@
           ['h', 'when fall is detected at %m.falls','changedFalls'],//v
           ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
           ['h', 'when a brightness change is detected','changedBrightness'],//v
+          ['h', 'when obstacle is detected','detectedObstacle'],//v
+
 
         ],
         menus: {
