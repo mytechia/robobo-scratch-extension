@@ -104,9 +104,9 @@
 
     }
     //Connection Block
-    ext.connectToRobobo = function(ip,password) {
+    ext.connectToRobobo = function(ip) {
         rem = new Remote(ip);
-        rem.connect(password);
+        rem.connect();
         rem.registerCallback("onNewColor",ext.onNewColor);
         rem.registerCallback("onIrChanged",ext.onIrChanged);
         rem.registerCallback("onNewFace",ext.onNewFace);
@@ -129,6 +129,12 @@
     //Close connection
     ext.disconnect = function () {
       rem.closeConnection();
+    }
+
+
+    //Close connection
+    ext.authenticate = function (password) {
+      rem.sendMessage("PASSWORD: "+password);
     }
 
     //Speech production function
@@ -461,9 +467,10 @@
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
-          [' ', 'connect ROBOBO at %s with password %s','connectToRobobo','192.168.0.110','passwd'],
+          [' ', 'connect ROBOBO at %s ','connectToRobobo','192.168.0.110'],
           [' ', 'close connection','disconnect'],
-          [' ', 'stop','stop'],
+          [' ', 'authenticate with password %s','authenticate','passwd'],
+          [' ', 'stop','authenticate'],
           [' ', 'say %s','talkRobobo','hello world'],
           [' ', 'move wheel %m.wheels by %s %m.mtype at speed %s','moveRobobo','both','1','seconds','50'],
           [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],
