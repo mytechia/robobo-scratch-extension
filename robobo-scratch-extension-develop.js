@@ -129,6 +129,7 @@
 
     //Movement function
     ext.moveRobobo = function(wheel,quantity,mtype,speed){
+      console.log('moveRobobo by '+mtype);
       if (mtype=='degrees'){
         rem.moveWheelsByDegree(wheel,quantity,speed);
       }else if (mytpe=='seconds') {
