@@ -139,8 +139,8 @@
       }else if (mtype=='centimeters'){
         console.log('moveRobobo by '+mtype);
         //TODO Medir ruedas y hacer una conversión grados/centimetros
-        console.log('Quantity:'+round((quantity+1.1)/0.5503));
-        rem.moveWheelsByDegree(round((quantity+1.1)/0.5503));
+        console.log('Quantity:'+round((parseInt(quantity)+1.1)/0.5503));
+        rem.moveWheelsByDegree(round((parseInt(quantity)+1.1)/0.5503));
       }
 
     };
