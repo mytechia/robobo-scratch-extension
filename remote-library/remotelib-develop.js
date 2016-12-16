@@ -439,7 +439,7 @@ Remote.prototype = {
           }else{
             var now = parseInt(msg.value[key]);
             if (parseInt(msg.value[key])>100) {
-              this.laststatusmap.set("obstacle",parseInt(key.slice(-1)));
+              this.statusmap.set("obstacle",parseInt(key.slice(-1)));
 
               this.callbackmap.get("onObstacle")();
             }
