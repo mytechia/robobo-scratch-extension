@@ -45,12 +45,12 @@ Remote.prototype = {
     this.callbackmap.set(name,callback);
     //END OF REGISTERCALLBACK FUNCTION
   },
-  connect :function(password) {
+  connect :function() {
     this.ws = new WebSocket("ws://"+this.ip+":"+this.port);
 
     this.ws.onopen = function() {
       console.log("Connection Stablished");
-      this.ws.send("PASSWORD "+password)
+
 
     }
 
