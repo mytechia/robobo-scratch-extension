@@ -142,7 +142,7 @@
         console.log('Quantity:'+ Math.round(
           (
             (
-              (parseInt(quantity)+1.1)/0.5503
+              (parseInt(quantity*10)+1.1)/0.5503
             )
           )
         )
@@ -150,7 +150,7 @@
         rem.moveWheelsByDegree(wheel,Math.round(
           (
             (
-              (parseInt(quantity)+1.1)/0.5503
+              (parseInt(quantity*10)+1.1)/0.5503
             )
           )
         ),speed
