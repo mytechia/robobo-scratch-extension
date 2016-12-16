@@ -104,9 +104,9 @@
 
     }
     //Connection Block
-    ext.connectToRobobo = function(ip) {
+    ext.connectToRobobo = function(ip,password) {
         rem = new Remote(ip);
-        rem.connect(ip);
+        rem.connect(password);
         rem.registerCallback("onNewColor",ext.onNewColor);
         rem.registerCallback("onIrChanged",ext.onIrChanged);
         rem.registerCallback("onNewFace",ext.onNewFace);
@@ -461,7 +461,7 @@
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
-          [' ', 'connect ROBOBO at %s','connectToRobobo','192.168.0.110'],
+          [' ', 'connect ROBOBO at %s with password %s','connectToRobobo','192.168.0.110','passwd'],
           [' ', 'close connection','disconnect'],
           [' ', 'stop','stop'],
           [' ', 'say %s','talkRobobo','hello world'],
