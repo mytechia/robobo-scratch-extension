@@ -411,6 +411,11 @@
       return value;
     };
 
+    //Reporter function to get the orientation in one axis
+    ext.readObstacle = function () {
+      return obstacle_pos;
+    };
+
 
 
     //Emergency stop
@@ -475,6 +480,7 @@
           ['r', 'read OBO battery level','readOboBatteryLevel'],//v
           ['r', 'read color detected','readCol'],
           ['r', 'read face distance','readFaceDist'],//v
+          ['r', 'read obstacle','readObstacle'],//v
           ['r', 'read fling angle','readFlingAngle'],//v
           ['r', 'read face position at %m.axis axis','readFaceCoord','x'],//v
           ['r', 'read tap position at %m.axis axis','readTapCoord','x'],//v
