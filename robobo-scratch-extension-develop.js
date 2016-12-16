@@ -147,13 +147,13 @@
           )
         )
       );
-        rem.moveWheelsByDegree(Math.round(
+        rem.moveWheelsByDegree(wheel,Math.round(
           (
             (
               (parseInt(quantity)+1.1)/0.5503
             )
           )
-        )
+        ),speed
       );
       }
 
