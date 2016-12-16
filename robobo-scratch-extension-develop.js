@@ -131,11 +131,16 @@
     ext.moveRobobo = function(wheel,quantity,mtype,speed){
       if (mtype=='degrees'){
         rem.moveWheelsByDegree(wheel,quantity,speed);
-      }else {
+      }else if (mytpe=='seconds') {
         rem.moveWheelsByTime(wheel,quantity,speed);
+      }else{
+        //TODO Medir ruedas y hacer una conversión grados/centimetros
+        rem.moveWheelsByDegree(round((quantity+1.1)/0.5503));
       }
 
     };
+
+
 
     //Two wheels movement function
     ext.moveRoboboWheels = function(lSpeed,rSpeed,time){
@@ -457,7 +462,7 @@
           motorDirection: ['forward', 'backward'],
           motorDirectionBis: ['forward', 'backward','off'],
           wheels: ['right', 'left','both'],
-          mtype: ['seconds','degrees'],
+          mtype: ['seconds','degrees','centimeters'],
           orientation: ['yaw','pitch','roll'],
           emotions: ['happy','laughting','sad','angry','surprised','normal'],
           colors: ['white','red','blue','cyan','magenta','yellow','green','orange'],
