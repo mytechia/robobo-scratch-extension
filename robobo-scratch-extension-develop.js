@@ -132,16 +132,13 @@
       console.log('moveRobobo by '+mtype);
       if (mtype=='degrees'){
         rem.moveWheelsByDegree(wheel,quantity,speed);
+      }else if (mtype=='seconds') {
+        rem.moveWheelsByTime(wheel,quantity,speed);
       }else{
-
-        if (mytpe=='seconds') {
-          rem.moveWheelsByTime(wheel,quantity,speed);
-        }else{
-          //TODO Medir ruedas y hacer una conversión grados/centimetros
-          console.log('Quantity:'+round((quantity+1.1)/0.5503));
-          rem.moveWheelsByDegree(round((quantity+1.1)/0.5503));
-        }
-      }
+        //TODO Medir ruedas y hacer una conversión grados/centimetros
+        console.log('Quantity:'+round((quantity+1.1)/0.5503));
+        rem.moveWheelsByDegree(round((quantity+1.1)/0.5503));
+      }}
 
     };
 
