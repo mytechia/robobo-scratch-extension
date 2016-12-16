@@ -503,7 +503,7 @@ Remote.prototype = {
     }
 
     else if (msg.name == "TAP") {
-      console.log(msg);
+      //console.log(msg);
       this.statusmap.set("tapx",parseInt(msg.value["coordx"]));
       this.statusmap.set("tapy",parseInt(msg.value["coordy"]));
       (this.callbackmap.get("onNewTap"))();
@@ -541,7 +541,7 @@ Remote.prototype = {
     }
 
     else if (msg.name == "ACCELERATION") {
-      console.log(msg);
+      //console.log(msg);
       this.statusmap.set("xaccel",parseInt(msg.value["xaccel"]));
       this.statusmap.set("yaccel",parseInt(msg.value["yaccel"]));
       this.statusmap.set("zaccel",parseInt(msg.value["zaccel"]));
