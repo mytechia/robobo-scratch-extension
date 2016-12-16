@@ -403,6 +403,10 @@ Remote.prototype = {
     return this.statusmap.get("facedist");
   },
 
+  getObstacle : function () {
+    return this.statusmap.get("obstacle");
+  },
+
   //ENDVISION
 
 
@@ -435,7 +439,9 @@ Remote.prototype = {
           }else{
             var now = parseInt(msg.value[key]);
             if (parseInt(msg.value[key])>100) {
-              this.callbackmap.get("onObstacle")(parseInt(key.slice(-1)));
+              this.laststatusmap.set("obstacle",parseInt(key.slice(-1)));
+
+              this.callbackmap.get("onObstacle")();
             }
             var then = this.laststatusmap.get(key);
             //console.log(key+" now: "+now);

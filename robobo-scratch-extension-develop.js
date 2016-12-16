@@ -34,7 +34,6 @@
     var brightnessChange = false;
     var fling = false;
     var accelchange = false;
-    var obstacle_pos = 0;
     var obstacle = false;
 
     $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib-develop.js", function(){});
@@ -100,9 +99,9 @@
     }
 
     //Callback for acceleration
-    ext.onObstacle = function (sensor) {
+    ext.onObstacle = function () {
       obstacle = true;
-      obstacle_pos = sensor;
+
     }
     //Connection Block
     ext.connectToRobobo = function(ip) {
@@ -413,7 +412,9 @@
 
     //Reporter function to get the orientation in one axis
     ext.readObstacle = function () {
-      return obstacle_pos;
+      var value = 0;
+      value = rem.getObstacle();
+      return value;
     };
 
 
