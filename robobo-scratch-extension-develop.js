@@ -469,8 +469,8 @@
         blocks: [
           [' ', 'connect ROBOBO at %s ','connectToRobobo','192.168.0.110'],
           [' ', 'close connection','disconnect'],
+          [' ', 'stop','stop'],
           [' ', 'authenticate with password %s','authenticate','passwd'],
-          [' ', 'stop','authenticate'],
           [' ', 'say %s','talkRobobo','hello world'],
           [' ', 'move wheel %m.wheels by %s %m.mtype at speed %s','moveRobobo','both','1','seconds','50'],
           [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],
