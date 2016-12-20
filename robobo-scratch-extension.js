@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-//Scratch extension version 0.1.3-SNAPSHOT
+//Scratch extension version 0.1.3
 (function(ext) {
     var rem;
     var commandid = 0;
@@ -33,6 +33,8 @@
     var clap = false;
     var brightnessChange = false;
     var fling = false;
+    var accelchange = false;
+    var obstacle = false;
 
     $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib-develop.js", function(){});
 
@@ -90,10 +92,21 @@
     ext.onBrightnessChanged = function () {
       brightnessChange = true;
     }
+
+    //Callback for acceleration
+    ext.onAccelChanged = function () {
+      accelchange = true;
+    }
+
+    //Callback for acceleration
+    ext.onObstacle = function () {
+      obstacle = true;
+
+    }
     //Connection Block
     ext.connectToRobobo = function(ip) {
         rem = new Remote(ip);
-        rem.connect(ip);
+        rem.connect();
         rem.registerCallback("onNewColor",ext.onNewColor);
         rem.registerCallback("onIrChanged",ext.onIrChanged);
         rem.registerCallback("onNewFace",ext.onNewFace);
@@ -105,6 +118,9 @@
         rem.registerCallback("onNewClap",ext.onNewClap);
         rem.registerCallback("onBrightnessChanged",ext.onBrightnessChanged);
         rem.registerCallback("onNewFling",ext.onNewFling);
+        rem.registerCallback("onAccelChanged", ext.onAccelChanged);
+        rem.registerCallback("onObstacle", ext.onObstacle);
+
 
 
 
@@ -115,6 +131,12 @@
       rem.closeConnection();
     }
 
+
+    //Close connection
+    ext.authenticate = function (password) {
+      rem.sendMessage("PASSWORD: "+password);
+    }
+
     //Speech production function
     ext.talkRobobo = function(text){
         rem.talk(text);
@@ -122,13 +144,37 @@
 
     //Movement function
     ext.moveRobobo = function(wheel,quantity,mtype,speed){
+
       if (mtype=='degrees'){
+        console.log('moveRobobo by '+mtype);
         rem.moveWheelsByDegree(wheel,quantity,speed);
-      }else {
+      }else if (mtype=='seconds') {
+        console.log('moveRobobo by '+mtype);
         rem.moveWheelsByTime(wheel,quantity,speed);
+      }else if (mtype=='centimeters'){
+        console.log('moveRobobo by '+mtype);
+        //TODO Medir ruedas y hacer una conversión grados/centimetros
+        console.log('Quantity:'+ Math.round(
+          (
+            (
+              (parseInt(quantity*10)+1.1)/0.5503
+            )
+          )
+        )
+      );
+        rem.moveWheelsByDegree(wheel,Math.round(
+          (
+            (
+              (parseInt(quantity*10)+1.1)/0.5503
+            )
+          )
+        ),speed
+      );
       }
 
     };
+
+
 
     //Two wheels movement function
     ext.moveRoboboWheels = function(lSpeed,rSpeed,time){
@@ -339,6 +385,16 @@
       }
     };
 
+    //Hat function that checks acceleration changes
+    ext.newAcceleration = function() {
+      if (accelchange==true){
+        accelchange = false
+        return true;
+      }else {
+        return false;
+      }
+    };
+
 
     //Reporter function to get the detected face coordinates
     ext.readTapCoord = function (axis) {
@@ -353,6 +409,21 @@
       value = rem.getOrientation(axis);
       return value;
     };
+    //Reporter function to get the orientation in one axis
+    ext.readAcceleration = function (axis) {
+      var value = 0;
+      value = rem.getAcceleration(axis);
+      return value;
+    };
+
+    //Reporter function to get the orientation in one axis
+    ext.readObstacle = function () {
+      var value = 0;
+      value = rem.getObstacle();
+      return value;
+    };
+
+
 
     //Emergency stop
     ext.stop = function () {
@@ -365,6 +436,16 @@
     ext.changedBrightness = function() {
       if (brightnessChange){
         brightnessChange = false;
+        return true;
+      }else {
+        return false;
+      }
+    };
+
+    //Hat function that tracks obstacles
+    ext.detectedObstacle = function() {
+      if (obstacle){
+        obstacle = false;
         return true;
       }else {
         return false;
@@ -386,9 +467,10 @@
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
-          [' ', 'connect ROBOBO at %s','connectToRobobo','192.168.0.110'],
+          [' ', 'connect ROBOBO at %s ','connectToRobobo','192.168.0.110'],
           [' ', 'close connection','disconnect'],
           [' ', 'stop','stop'],
+          [' ', 'authenticate with password %s','authenticate','passwd'],
           [' ', 'say %s','talkRobobo','hello world'],
           [' ', 'move wheel %m.wheels by %s %m.mtype at speed %s','moveRobobo','both','1','seconds','50'],
           [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],
@@ -406,10 +488,12 @@
           ['r', 'read OBO battery level','readOboBatteryLevel'],//v
           ['r', 'read color detected','readCol'],
           ['r', 'read face distance','readFaceDist'],//v
+          ['r', 'read obstacle','readObstacle'],//v
           ['r', 'read fling angle','readFlingAngle'],//v
           ['r', 'read face position at %m.axis axis','readFaceCoord','x'],//v
           ['r', 'read tap position at %m.axis axis','readTapCoord','x'],//v
           ['r', 'read orientation at %m.orientation axis','readOrientation','yaw'],//v
+          ['r', 'read acceleration at %m.axis3d axis','readAcceleration','x'],//v
           ['r', 'read fall at %m.falls','readFall'],//v
           ['r', 'read gap at %m.gaps','readGap'],//v
           ['r', 'read brightness','readBrightnessLevel'],//v
@@ -420,17 +504,20 @@
           ['h', 'when OBO battery level is low','lowBatt'],//v
           ['h', 'when tap detected','newTap'],//v
           ['h', 'when fling detected','newFling'],//v
+          ['h', 'when acceleration detected','newAcceleration'],//v
           ['h', 'when clap detected','newClap'],//v
           ['h', 'when fall is detected at %m.falls','changedFalls'],//v
           ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
           ['h', 'when a brightness change is detected','changedBrightness'],//v
+          ['h', 'when obstacle is detected','detectedObstacle'],//v
+
 
         ],
         menus: {
           motorDirection: ['forward', 'backward'],
           motorDirectionBis: ['forward', 'backward','off'],
           wheels: ['right', 'left','both'],
-          mtype: ['seconds','degrees'],
+          mtype: ['seconds','degrees','centimeters'],
           orientation: ['yaw','pitch','roll'],
           emotions: ['happy','laughting','sad','angry','surprised','normal'],
           colors: ['white','red','blue','cyan','magenta','yellow','green','orange'],
@@ -440,6 +527,7 @@
           falls: ['Fall1','Fall2','Fall3','Fall4'],
           gaps: ['Gap1','Gap2','Gap3','Gap4'],
           axis: ['x','y'],
+          axis3d: ['x','y','z'],
           sounds: ['alert','claps','booooo','laugh','alarm','rimshot'],
         },
     };

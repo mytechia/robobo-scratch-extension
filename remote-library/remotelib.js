@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-//Remote library version 0.1.3-SNAPSHOT
+//Remote library version 0.1.3
 //Constructor of the remote control object
 function Remote(ip){
   this.ip = ip;
@@ -50,6 +50,7 @@ Remote.prototype = {
 
     this.ws.onopen = function() {
       console.log("Connection Stablished");
+
 
     }
 
@@ -386,8 +387,25 @@ Remote.prototype = {
     //END OF GETORIENTATION FUNCTION
   },
 
+  getAcceleration :function(axis) {
+    if (axis=="x") {
+      return this.statusmap.get("xaccel");
+
+    }else if (axis=="y") {
+      return this.statusmap.get("yaccel");
+
+    }else{
+      return this.statusmap.get("zaccel");
+    }
+    //END OF GETORIENTATION FUNCTION
+  },
+
   getFaceDist : function () {
     return this.statusmap.get("facedist");
+  },
+
+  getObstacle : function () {
+    return this.statusmap.get("obstacle");
   },
 
   //ENDVISION
@@ -421,6 +439,11 @@ Remote.prototype = {
             this.laststatusmap.set(key,parseInt(msg.value[key]));
           }else{
             var now = parseInt(msg.value[key]);
+            if (parseInt(msg.value[key])>130) {
+              this.statusmap.set("obstacle",parseInt(key.slice(-1)));
+
+              this.callbackmap.get("onObstacle")();
+            }
             var then = this.laststatusmap.get(key);
             //console.log(key+" now: "+now);
             //console.log(key+" then: "+then);
@@ -490,14 +513,14 @@ Remote.prototype = {
     }
 
     else if (msg.name == "TAP") {
-      console.log(msg);
+      //console.log(msg);
       this.statusmap.set("tapx",parseInt(msg.value["coordx"]));
       this.statusmap.set("tapy",parseInt(msg.value["coordy"]));
       (this.callbackmap.get("onNewTap"))();
     }
 
     else if (msg.name == "FLING") {
-      console.log(msg);
+
       this.statusmap.set("flingangle",parseInt(msg.value["angle"]));
       this.statusmap.set("flingtime",parseInt(msg.value["time"]));
       this.statusmap.set("flingdistance",parseInt(msg.value["distance"]));
@@ -521,10 +544,23 @@ Remote.prototype = {
     }
 
     else if (msg.name == "ORIENTATION") {
-      console.log(msg);
+
       this.statusmap.set("yaw",parseInt(msg.value["yaw"]));
       this.statusmap.set("pitch",parseInt(msg.value["pitch"]));
       this.statusmap.set("roll",parseInt(msg.value["roll"]));
+    }
+
+    else if (msg.name == "ACCELERATION") {
+      //console.log(msg);
+      this.statusmap.set("xaccel",parseInt(msg.value["xaccel"]));
+      this.statusmap.set("yaccel",parseInt(msg.value["yaccel"]));
+      this.statusmap.set("zaccel",parseInt(msg.value["zaccel"]));
+
+    }
+
+    else if (msg.name == "ACCELCHANGED") {
+
+      (this.callbackmap.get("onAccelChanged"))();
     }
     //END MANAGESTATUS FUNCTION
   },
