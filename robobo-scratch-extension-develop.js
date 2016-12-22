@@ -153,11 +153,12 @@
         rem.moveWheelsByTime(wheel,quantity,speed);
       }else if (mtype=='centimeters'){
         console.log('moveRobobo by '+mtype);
-        //TODO Medir ruedas y hacer una conversión grados/centimetros
+
         console.log('Quantity:'+ Math.round(
           (
             (
-              (parseInt(quantity*10)+1.1)/0.5503
+
+               ((parseInt(quantity)*10)-(0.2745*parseInt(speed))-0.6127)/0.54
             )
           )
         )
@@ -165,7 +166,8 @@
         rem.moveWheelsByDegree(wheel,Math.round(
           (
             (
-              (parseInt(quantity*10)+1.1)/0.5503
+              //(parseInt(quantity*10)+1.1)/0.5503
+             ((parseInt(quantity)*10)-(0.2745*parseInt(speed))-0.6127)/0.54
             )
           )
         ),speed
