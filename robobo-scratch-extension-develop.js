@@ -511,7 +511,7 @@
           ['r', 'read acceleration at %m.axis3d axis','readAcceleration','x'],//v
           ['r', 'read fall at %m.falls','readFall'],//v
           ['r', 'read gap at %m.gaps','readGap'],//v
-          ['r', 'read clap countter','readClap'],//v
+          ['r', 'read clap counter','readClap'],//v
           ['r', 'read brightness','readBrightnessLevel'],//v
           ['h', 'when color is detected','newCol'],
           ['h', 'when face is detected','newFace'],//v
