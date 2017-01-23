@@ -404,11 +404,12 @@ Remote.prototype = {
     if (channel=="red") {
       return this.statusmap.get("colorr");
 
-    }else if (axis=="green") {
+    }else if (channel=="green") {
       return this.statusmap.get("colorg");
 
-    }else{
-      return this.statusmap.get("colorb");
+    }if (channel=="blue") {
+      return this.statusmap.get("colorg");
+
     }
     //END OF GETMEASUREDCOLOR FUNCTION
   },
