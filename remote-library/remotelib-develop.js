@@ -401,10 +401,10 @@ Remote.prototype = {
   },
 
   getMeasuredColor:function(channel) {
-    if (channel=="r") {
+    if (channel=="red") {
       return this.statusmap.get("colorr");
 
-    }else if (axis=="g") {
+    }else if (axis=="green") {
       return this.statusmap.get("colorg");
 
     }else{
