@@ -585,7 +585,7 @@ Remote.prototype = {
     }
 
     else {
-      console.log(Lost status+ msg.name);
+      console.log('Lost status'+ msg.name);
     }
     //END MANAGESTATUS FUNCTION
   },
