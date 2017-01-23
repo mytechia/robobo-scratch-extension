@@ -35,8 +35,9 @@
     var fling = false;
     var accelchange = false;
     var obstacle = false;
+    var clapnumber = 0;
 
-    $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib-develop.js", function(){});
+    $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib.js", function(){});
 
 
     // Cleanup function when the extension is unloaded
@@ -87,6 +88,7 @@
     //Callback for taps
     ext.onNewClap = function () {
       clap = true;
+      clapnumber = clapnumber + 1;
     }
     //Callback for brightness
     ext.onBrightnessChanged = function () {
@@ -153,11 +155,12 @@
         rem.moveWheelsByTime(wheel,quantity,speed);
       }else if (mtype=='centimeters'){
         console.log('moveRobobo by '+mtype);
-        //TODO Medir ruedas y hacer una conversión grados/centimetros
+
         console.log('Quantity:'+ Math.round(
           (
             (
-              (parseInt(quantity*10)+1.1)/0.5503
+
+               ((parseInt(quantity)*10)-(0.2745*parseInt(speed))-0.6127)/0.54
             )
           )
         )
@@ -165,7 +168,8 @@
         rem.moveWheelsByDegree(wheel,Math.round(
           (
             (
-              (parseInt(quantity*10)+1.1)/0.5503
+              //(parseInt(quantity*10)+1.1)/0.5503
+             ((parseInt(quantity)*10)-(0.2745*parseInt(speed))-0.6127)/0.54
             )
           )
         ),speed
@@ -462,6 +466,16 @@
     }
 
 
+    ext.readClap = function () {
+      var value = 0;
+      value = clapnumber;
+      return value;
+    };
+
+    ext.resetClap = function () {
+      clapnumber = 0;
+    }
+
 
 
     // Block and block menu descriptions
@@ -483,6 +497,7 @@
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
           [' ', 'set led %m.leds %m.status','changeLedStatus','all', 'off'],
           [' ', 'play %m.sounds sound','playSound', 'rimshot'],
+          [' ', 'reset clap counter','resetClap'],
           ['r', 'read IR %m.ir value','readIrValue','1'],
           ['r', 'read ROB battery level','readBatteryLevel'],//v
           ['r', 'read OBO battery level','readOboBatteryLevel'],//v
@@ -496,6 +511,7 @@
           ['r', 'read acceleration at %m.axis3d axis','readAcceleration','x'],//v
           ['r', 'read fall at %m.falls','readFall'],//v
           ['r', 'read gap at %m.gaps','readGap'],//v
+          ['r', 'read clap counter','readClap'],//v
           ['r', 'read brightness','readBrightnessLevel'],//v
           ['h', 'when color is detected','newCol'],
           ['h', 'when face is detected','newFace'],//v
