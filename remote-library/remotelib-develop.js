@@ -408,7 +408,7 @@ Remote.prototype = {
       return this.statusmap.get("colorg");
 
     }if (channel=="blue") {
-      return this.statusmap.get("colorg");
+      return this.statusmap.get("colorb");
 
     }
     //END OF GETMEASUREDCOLOR FUNCTION
