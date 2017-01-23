@@ -400,6 +400,19 @@ Remote.prototype = {
     //END OF GETORIENTATION FUNCTION
   },
 
+  getMeasuredColor:function(channel) {
+    if (channel=="r") {
+      return this.statusmap.get("colorr");
+
+    }else if (axis=="g") {
+      return this.statusmap.get("colorg");
+
+    }else{
+      return this.statusmap.get("colorb");
+    }
+    //END OF GETMEASUREDCOLOR FUNCTION
+  },
+
   getFaceDist : function () {
     return this.statusmap.get("facedist");
   },
@@ -555,6 +568,14 @@ Remote.prototype = {
       this.statusmap.set("xaccel",parseInt(msg.value["xaccel"]));
       this.statusmap.set("yaccel",parseInt(msg.value["yaccel"]));
       this.statusmap.set("zaccel",parseInt(msg.value["zaccel"]));
+
+    }
+
+    else if (msg.name == "COLORMEASURED") {
+      //console.log(msg);
+      this.statusmap.set("colorr",parseInt(msg.value["R"]));
+      this.statusmap.set("colorg",parseInt(msg.value["G"]));
+      this.statusmap.set("colorb",parseInt(msg.value["B"]));
 
     }
 

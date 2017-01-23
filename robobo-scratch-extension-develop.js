@@ -421,6 +421,13 @@
     };
 
     //Reporter function to get the orientation in one axis
+    ext.readMeasuredColor= function (channel) {
+      var value = 0;
+      value = rem.getMeasuredColor(channel);
+      return value;
+    };
+
+    //Reporter function to get the orientation in one axis
     ext.readObstacle = function () {
       var value = 0;
       value = rem.getObstacle();
@@ -513,6 +520,7 @@
           ['r', 'read gap at %m.gaps','readGap'],//v
           ['r', 'read clap counter','readClap'],//v
           ['r', 'read brightness','readBrightnessLevel'],//v
+          ['r', 'read color at %m.colorchan channel','readMeasuredColor'],//v
           ['h', 'when color is detected','newCol'],
           ['h', 'when face is detected','newFace'],//v
           ['h', 'when ir %m.ir changed','changedIr'],
@@ -545,6 +553,7 @@
           axis: ['x','y'],
           axis3d: ['x','y','z'],
           sounds: ['alert','claps','booooo','laugh','alarm','rimshot'],
+          colorchan: ['red','green','blue'],
         },
     };
 
