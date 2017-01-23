@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-//Remote library version 0.1.2
+//Remote library version 0.1.2.1
 //Constructor of the remote control object
 function Remote(ip){
   this.ip = ip;
@@ -400,6 +400,20 @@ Remote.prototype = {
     //END OF GETORIENTATION FUNCTION
   },
 
+  getMeasuredColor:function(channel) {
+    if (channel=="red") {
+      return this.statusmap.get("colorr");
+
+    }else if (channel=="green") {
+      return this.statusmap.get("colorg");
+
+    }if (channel=="blue") {
+      return this.statusmap.get("colorb");
+
+    }
+    //END OF GETMEASUREDCOLOR FUNCTION
+  },
+
   getFaceDist : function () {
     return this.statusmap.get("facedist");
   },
@@ -558,9 +572,21 @@ Remote.prototype = {
 
     }
 
+    else if (msg.name == "COLORMEASURED") {
+      console.log(msg);
+      this.statusmap.set("colorr",parseInt(msg.value["R"]));
+      this.statusmap.set("colorg",parseInt(msg.value["G"]));
+      this.statusmap.set("colorb",parseInt(msg.value["B"]));
+
+    }
+
     else if (msg.name == "ACCELCHANGED") {
 
       (this.callbackmap.get("onAccelChanged"))();
+    }
+
+    else {
+      console.log('Lost status'+ msg.name);
     }
     //END MANAGESTATUS FUNCTION
   },
