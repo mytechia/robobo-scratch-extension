@@ -46,13 +46,10 @@ Remote.prototype = {
     //END OF REGISTERCALLBACK FUNCTION
   },
   connect :function() {
-    if (this.ws == undefined){
+    if (this.ws != undefined){
+      this.ws.close();
+    }
     this.ws = new WebSocket("ws://"+this.ip+":"+this.port);
-  }else{
-    this.ws.close();
-    console.log("Closing previous connection");
-    this.ws = new WebSocket("ws://"+this.ip+":"+this.port);
-  }
 
     this.ws.onopen = function() {
       console.log("Connection Stablished");
@@ -68,18 +65,13 @@ Remote.prototype = {
 
     this.ws.onclose = function() {
       console.log("Connection Closed");
-      if (this.ws != undefined){
-        ws.close();
-      }
-      this.ws = undefined;
     }
 
     //END OF CONNECT FUNCTION
   },
 
   closeConnection: function() {
-    this.ws.close();
-    this.ws = undefined;
+    this.ws.close()
     //END OF CLOSECONNECTION METHOD
   },
 
