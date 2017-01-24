@@ -65,6 +65,7 @@ Remote.prototype = {
     }.bind(this));
 
     this.ws.onclose = function() {
+      this.ws.close();
       console.log("Connection Closed");
     }
 
