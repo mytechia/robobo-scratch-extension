@@ -592,11 +592,11 @@ Remote.prototype = {
 
     else if (msg.name == "DIE") {
       console.log("Die message");
-      closeConnection();
+      this.closeConnection();
     }
 
     else {
-      console.log('Lost status'+ msg.name);
+      console.log('Lost status '+ msg.name);
     }
     //END MANAGESTATUS FUNCTION
   },
