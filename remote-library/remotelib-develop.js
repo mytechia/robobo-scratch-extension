@@ -50,6 +50,7 @@ Remote.prototype = {
     this.ws = new WebSocket("ws://"+this.ip+":"+this.port);
   }else{
     this.ws.close();
+    console.log("Closing previous connection");
     this.ws = new WebSocket("ws://"+this.ip+":"+this.port);
   }
 
@@ -67,13 +68,16 @@ Remote.prototype = {
 
     this.ws.onclose = function() {
       console.log("Connection Closed");
+      this.ws.close();
+      this.ws = undefined;
     }
 
     //END OF CONNECT FUNCTION
   },
 
   closeConnection: function() {
-    this.ws.close()
+    this.ws.close();
+    this.ws = undefined;
     //END OF CLOSECONNECTION METHOD
   },
 
