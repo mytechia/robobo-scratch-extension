@@ -46,7 +46,12 @@ Remote.prototype = {
     //END OF REGISTERCALLBACK FUNCTION
   },
   connect :function() {
+    if (this.ws == undefined){
     this.ws = new WebSocket("ws://"+this.ip+":"+this.port);
+  }else{
+    this.ws.close();
+    this.ws = new WebSocket("ws://"+this.ip+":"+this.port);
+  }
 
     this.ws.onopen = function() {
       console.log("Connection Stablished");
