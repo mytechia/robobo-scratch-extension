@@ -65,7 +65,7 @@ Remote.prototype = {
     }.bind(this));
 
     this.ws.onclose = function() {
-      
+
       console.log("Connection Closed");
     }
 
@@ -588,6 +588,11 @@ Remote.prototype = {
     else if (msg.name == "ACCELCHANGED") {
 
       (this.callbackmap.get("onAccelChanged"))();
+    }
+
+    else if (msg.name == "DIE") {
+      console.log("Die message");
+      closeConnection();
     }
 
     else {
