@@ -47,6 +47,7 @@ Remote.prototype = {
   },
   connect :function() {
     if (this.ws != undefined){
+      console.log("Closing previous connection");
       this.ws.close();
     }
     this.ws = new WebSocket("ws://"+this.ip+":"+this.port);
