@@ -107,6 +107,9 @@
     }
     //Connection Block
     ext.connectToRobobo = function(ip) {
+        if (rem != undefined){
+          rem.closeConnection();
+        }
         rem = new Remote(ip);
         rem.connect();
         rem.registerCallback("onNewColor",ext.onNewColor);
