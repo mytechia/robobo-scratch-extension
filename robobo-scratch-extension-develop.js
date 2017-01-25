@@ -108,6 +108,7 @@
     //Connection Block
     ext.connectToRobobo = function(ip) {
         if (rem != undefined){
+          console.log("Closing previous connection");
           rem.closeConnection();
         }
         rem = new Remote(ip);
