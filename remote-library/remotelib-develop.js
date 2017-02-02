@@ -178,7 +178,9 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.statusmap.set("panPos",pos);
+    if (vel > 0){
+      this.statusmap.set("panPos",pos);
+    }
     this.sendMessage(message);
     //END OF MOVEPAN FUNCTION
   },
@@ -212,7 +214,9 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.statusmap.set("tiltPos",parseInt(pos));
+    if (vel > 0){
+      this.statusmap.set("tiltPos",parseInt(pos));
+    }
     this.sendMessage(message);
     //END OF MOVETILT FUNCTION
   },

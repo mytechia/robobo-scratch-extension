@@ -442,8 +442,8 @@
 
     //Emergency stop
     ext.stop = function () {
-      ext.movePanRobobo(0,0);
-      ext.moveTiltRobobo(0,0);
+      ext.movePanRobobo(180,0);
+      ext.moveTiltRobobo(90,0);
       ext.moveRoboboWheels(0,0,1);
     }
 
