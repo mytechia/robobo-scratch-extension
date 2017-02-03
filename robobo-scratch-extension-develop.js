@@ -312,15 +312,7 @@
       return value;
     };
 
-    //Hat function that checks for new faces
-    ext.newFace = function() {
-      if (newface){
-        newface = false;
-        return true;
-      }else {
-        return false;
-      }
-    };
+
 
     //Hat function that checks for new facesd
     ext.lostFace = function() {
@@ -343,6 +335,15 @@
       }
     };
 
+    //Hat function that checks for new faces
+    ext.newFace = function() {
+      if (newface){
+        newface = false;
+        return true;
+      }else {
+        return false;
+      }
+    };
     //Hat function that checks gaps
     ext.changedGaps= function(gappos) {
       if (gappos == lastGap){
