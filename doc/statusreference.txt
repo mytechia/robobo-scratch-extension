@@ -155,3 +155,21 @@ value:
   R: integer 0-255
   G: integer 0-255
   B: integer 0-255
+
+17.(v0.1.3.2)
+
+name:
+  LOSTFACE
+
+value:
+  none
+
+18.(v0.1.3.2)
+
+name:
+  FOUNDFACE
+
+value:
+  coordx: integer (>0)
+  coordy: integer (>0)
+  distance: integer (>0)
