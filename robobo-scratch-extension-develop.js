@@ -129,7 +129,7 @@
 
         setTimeout(function(){
 
-          authenticate(passwd);
+          ext.authenticate(passwd);
 
         }, 500);
 
