@@ -24,6 +24,8 @@
     var commandid = 0;
     var newcolor = false;
     var newface = false;
+    var lostface = false;
+
     var lastIrChange = "";
     var lastFall = "";
     var lastGap = "";
@@ -68,6 +70,10 @@
     //Callback for faces
     ext.onNewFace = function () {
       newface = true;
+    }
+    //Callback for faces
+    ext.onFaceLost = function () {
+      lostface = true;
     }
     //Callback for low battery level on the rob
     ext.onLowBatt = function () {
@@ -116,6 +122,7 @@
         rem.registerCallback("onNewColor",ext.onNewColor);
         rem.registerCallback("onIrChanged",ext.onIrChanged);
         rem.registerCallback("onNewFace",ext.onNewFace);
+        rem.registerCallback("onLostFace",ext.onFaceLost);
         rem.registerCallback("onFall",ext.onFall);
         rem.registerCallback("onGap",ext.onGap);
         rem.registerCallback("onLowBatt",ext.onLowBatt);
@@ -314,6 +321,17 @@
         return false;
       }
     };
+
+    //Hat function that checks for new facesd
+    ext.lostFace = function() {
+      if (lostface){
+        lostface = false;
+        return true;
+      }else {
+        return false;
+      }
+    };
+
 
     //Hat function that checks falls
     ext.changedFalls= function(fallpos) {
@@ -520,6 +538,8 @@
           ['r', 'read OBO battery level','readOboBatteryLevel'],//v
 
           ['r', 'read face distance','readFaceDist'],//v
+          ['r', 'read error','readError'],//v
+
           ['r', 'read obstacle at sensor %m.ir','readObstacle'],//v
           ['r', 'read fling angle','readFlingAngle'],//v
           ['r', 'read face position at %m.axis axis','readFaceCoord','x'],//v
@@ -533,6 +553,10 @@
           ['r', 'read color at %m.colorchan channel','readMeasuredColor'],//v
 
           ['h', 'when face is detected','newFace'],//v
+          ['h', 'when face is lost','lostFace'],//v
+
+          ['h', 'On error','onError'],//v
+
 
           ['h', 'when ROB battery level is low','lowBatt'],//v
           ['h', 'when OBO battery level is low','lowBatt'],//v

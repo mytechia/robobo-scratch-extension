@@ -509,7 +509,7 @@ Remote.prototype = {
       this.statusmap.set("facex",parseInt(msg.value["coordx"]));
       this.statusmap.set("facey",parseInt(msg.value["coordy"]));
       this.statusmap.set("facedist",parseInt(msg.value["distance"]));
-      (this.callbackmap.get("onNewFace"))();
+
     }
 
     else if (msg.name == "FALLSTATUS"){
@@ -601,6 +601,17 @@ Remote.prototype = {
       console.log("Die message");
       this.closeConnection();
     }
+
+    else if (msg.name == "FOUNDFACE") {
+      console.log("FOUNDFACE");
+      (this.callbackmap.get("onNewFace"))();
+    }
+
+    else if (msg.name == "LOSTFACE") {
+      console.log("LOSTFACE");
+      (this.callbackmap.get("onLostFace"))();
+    }
+
 
     else {
       console.log('Lost status '+ msg.name);
