@@ -60,7 +60,7 @@ Remote.prototype = {
 
     this.ws.onerror = function (error) {
       console.log('WebSocket Error ' + error);
-      fireError(error);
+      this.fireErrorTest(error);
     }
 
     this.ws.addEventListener('message', function(evt) {
@@ -87,6 +87,13 @@ Remote.prototype = {
     this.ws.send(message);
 
     //END OF SENDMESSAGE FUNCTION
+  },
+
+  fireErrorTest: function (err) {
+    console.log("ERROR "+ err);
+    this.statusmap.set("error",err);
+
+    (this.callbackmap.get("onError"))();
   },
 
   handleMessage: function(message) {
@@ -443,12 +450,7 @@ Remote.prototype = {
     //END OF GETCOLOR FUNCTION
   },
 
-  fireError : function (err) {
-    console.log("ERROR "+ err);
-    this.statusmap.set("error",err);
 
-    (this.callbackmap.get("onError"))();
-  },
 
 
   manageStatus : function (msg) {
