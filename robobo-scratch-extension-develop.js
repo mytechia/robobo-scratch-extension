@@ -519,7 +519,7 @@
       clapnumber = 0;
     }
 
-    //Hat function that checks for new facesd
+    //Hat function that checks for errors
     ext.errorFun = function() {
       if (error){
         error = false;
@@ -527,6 +527,12 @@
       }else {
         return false;
       }
+    };
+
+    ext.readError = function () {
+      var value = 0;
+      value = ext.getError();
+      return value;
     };
 
 
@@ -572,7 +578,7 @@
           ['h', 'when face is detected','newFaceFun'],//v
           ['h', 'when face is lost','lostFace'],//v
 
-          ['h', 'On error','errorFun'],//v
+          ['h', 'on error','errorFun'],//v
 
 
           ['h', 'when ROB battery level is low','lowBatt'],//v
