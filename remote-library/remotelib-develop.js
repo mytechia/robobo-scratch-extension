@@ -418,7 +418,7 @@ Remote.prototype = {
   },
 
   checkMeasuredColor:function(channel) {
-    console.log("CheckColor");
+    
     if (channel=="red") {
       return this.statusmap.get("colorr");
 
