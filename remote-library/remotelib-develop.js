@@ -58,12 +58,6 @@ Remote.prototype = {
 
     }
 
-    this.ws.onerror = function (error) {
-
-      this.fireError('WebSocket Error');
-
-
-    }.bind(this);
 
     this.ws.addEventListener('message', function(evt) {
       var received_msg = evt.data;
