@@ -336,7 +336,7 @@
     };
 
     //Hat function that checks for new faces
-    ext.newFaceTest = function() {
+    ext.newFaceFun = function() {
       if (newface){
         newface = false;
         return true;
@@ -553,7 +553,7 @@
           ['r', 'read brightness','readBrightnessLevel'],//v
           ['r', 'read color at %m.colorchan channel','readMeasuredColor'],//v
 
-          ['h', 'when face is detected','newFaceTest'],//v
+          ['h', 'when face is detected','newFaceFun'],//v
           ['h', 'when face is lost','lostFace'],//v
 
           ['h', 'On error','onError'],//v
