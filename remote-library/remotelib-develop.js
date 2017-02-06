@@ -59,8 +59,8 @@ Remote.prototype = {
     }
 
     this.ws.onerror = function (error) {
-      console.log('WebSocket Error ' + error.type);
-      this.fireErrorTest('WebSocket Error');
+
+      this.fireError('WebSocket Error');
 
 
     }.bind(this);
@@ -91,7 +91,7 @@ Remote.prototype = {
     //END OF SENDMESSAGE FUNCTION
   },
 
-  fireErrorTest: function (err) {
+  fireError: function (err) {
     console.log("ERROR "+ err);
     this.statusmap.set("error",err);
 
