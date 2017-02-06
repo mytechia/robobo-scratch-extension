@@ -456,12 +456,7 @@
       return value;
     };
 
-    //Reporter function to get the orientation in one axis
-    ext.readMeasuredColor = function (channel) {
-      var value = 0;
-      value = rem.getMeasuredColor(channel);
-      return value;
-    };
+
 
     //Reporter function to get the orientation in one axis
     ext.readObstacle = function (ir) {
@@ -535,6 +530,12 @@
       return value;
     };
 
+    //Reporter function to get the orientation in one axis
+    ext.readMeasuredColor = function (channel) {
+      var value = 0;
+      value = rem.getMeasuredColor(channel);
+      return value;
+    };
 
     // Block and block menu descriptions
     var descriptor = {
