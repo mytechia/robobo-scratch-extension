@@ -25,6 +25,7 @@
     var newcolor = false;
     var newface = false;
     var lostface = false;
+    var error = false;
 
     var lastIrChange = "";
     var lastFall = "";
@@ -111,6 +112,10 @@
       obstacle = true;
 
     }
+
+    ext.onError = function () {
+      error = true;
+    }
     //Connection Block
     ext.connectToRobobo = function(ip,passwd) {
         if (rem != undefined){
@@ -133,6 +138,8 @@
         rem.registerCallback("onNewFling",ext.onNewFling);
         rem.registerCallback("onAccelChanged", ext.onAccelChanged);
         rem.registerCallback("onObstacle", ext.onObstacle);
+        rem.registerCallback("onError", ext.onError);
+
 
         setTimeout(function(){
 
@@ -512,6 +519,15 @@
       clapnumber = 0;
     }
 
+    //Hat function that checks for new facesd
+    ext.errorFun = function() {
+      if (error){
+        error = false;
+        return true;
+      }else {
+        return false;
+      }
+    };
 
 
     // Block and block menu descriptions
@@ -556,7 +572,7 @@
           ['h', 'when face is detected','newFaceFun'],//v
           ['h', 'when face is lost','lostFace'],//v
 
-          ['h', 'On error','onError'],//v
+          ['h', 'On error','errorFun'],//v
 
 
           ['h', 'when ROB battery level is low','lowBatt'],//v

@@ -433,6 +433,18 @@ Remote.prototype = {
 
   //ENDVISION
 
+  getError : function () {
+    return this.statusmap.get("error");
+    //END OF GETCOLOR FUNCTION
+  },
+
+  fireError : function (err) {
+    console.log("ERROR "+ err);
+    this.statusmap.set("error",err);
+
+    (this.callbackmap.get("onError"))();
+  },
+
 
   manageStatus : function (msg) {
 
@@ -612,6 +624,12 @@ Remote.prototype = {
       (this.callbackmap.get("onLostFace"))();
     }
 
+    else if (msg.name == "ONERROR") {
+      console.log("ERROR "+ msg.value['error']);
+      this.statusmap.set("error",msg.value['error']);
+
+      (this.callbackmap.get("onError"))();
+    }
 
     else {
       console.log('Lost status '+ msg.name);
