@@ -60,9 +60,10 @@ Remote.prototype = {
 
     this.ws.onerror = function (error) {
       console.log('WebSocket Error ' + error.type);
+      this.fireErrorTest('WebSocket Error');
 
 
-    }
+    }.bind(this);
 
     this.ws.addEventListener('message', function(evt) {
       var received_msg = evt.data;
@@ -71,9 +72,7 @@ Remote.prototype = {
     }.bind(this));
 
     this.ws.onclose = function() {
-      this.statusmap.set("error","WebSocket closed");
 
-      (this.callbackmap.get("onError"))();
       console.log("Connection Closed");
     }
 
