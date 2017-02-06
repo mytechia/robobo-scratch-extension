@@ -601,7 +601,7 @@ Remote.prototype = {
     }
 
     else if (msg.name == "COLORMEASURED") {
-      //console.log(msg);
+      console.log(msg);
       this.statusmap.set("colorr",parseInt(msg.value["R"]));
       this.statusmap.set("colorg",parseInt(msg.value["G"]));
       this.statusmap.set("colorb",parseInt(msg.value["B"]));
