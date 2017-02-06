@@ -457,7 +457,7 @@
     };
 
     //Reporter function to get the orientation in one axis
-    ext.readMeasuredColor= function (channel) {
+    ext.readMeasuredColor = function (channel) {
       var value = 0;
       value = rem.getMeasuredColor(channel);
       return value;
@@ -477,7 +477,7 @@
       ext.movePanRobobo(180,0);
       ext.moveTiltRobobo(90,0);
       ext.moveRoboboWheels(0,0,1);
-    }
+    };
 
     //Hat function that tracks brightness changes
     ext.changedBrightness = function() {
@@ -501,12 +501,12 @@
 
     ext.playSound = function (sound) {
       rem.playEmotionSound(sound);
-    }
+    };
 
 
     ext.setMotorsOn = function (lmotor, rmotor, speed) {
       rem.motorsOn(lmotor,rmotor, speed);
-    }
+    };
 
 
     ext.readClap = function () {
@@ -517,7 +517,7 @@
 
     ext.resetClap = function () {
       clapnumber = 0;
-    }
+    };
 
     //Hat function that checks for errors
     ext.errorFun = function() {
