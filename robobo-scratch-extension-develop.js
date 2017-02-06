@@ -529,7 +529,7 @@
       }
     };
 
-    ext.readError = function () {
+    ext.readErrorFun = function () {
       var value = 0;
       value = ext.getError();
       return value;
@@ -561,7 +561,7 @@
           ['r', 'read OBO battery level','readOboBatteryLevel'],//v
 
           ['r', 'read face distance','readFaceDist'],//v
-          ['r', 'read error','readError'],//v
+          ['r', 'read error','readErrorFun'],//v
 
           ['r', 'read obstacle at sensor %m.ir','readObstacle'],//v
           ['r', 'read fling angle','readFlingAngle'],//v
