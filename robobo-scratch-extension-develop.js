@@ -533,7 +533,7 @@
     //Reporter function to get the orientation in one axis
     ext.measureColor = function (channel) {
       var value = 0;
-      value = rem.getMeasuredColor(channel);
+      value = rem.checkMeasuredColor(channel);
       return value;
     };
 
