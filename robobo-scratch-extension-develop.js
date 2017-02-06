@@ -531,7 +531,7 @@
     };
 
     //Reporter function to get the orientation in one axis
-    ext.readMeasuredColor = function (channel) {
+    ext.measureColor = function (channel) {
       var value = 0;
       value = rem.getMeasuredColor(channel);
       return value;
@@ -574,7 +574,7 @@
           ['r', 'read gap at %m.gaps','readGap'],//v
           ['r', 'read clap counter','readClap'],//v
           ['r', 'read brightness','readBrightnessLevel'],//v
-          ['r', 'read color at %m.colorchan channel','readMeasuredColor'],//v
+          ['r', 'read color at %m.colorchan channel','measureColor'],//v
 
           ['h', 'when face is detected','newFaceFun'],//v
           ['h', 'when face is lost','lostFace'],//v
