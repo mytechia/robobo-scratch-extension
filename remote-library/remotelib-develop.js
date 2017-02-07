@@ -528,8 +528,8 @@ Remote.prototype = {
     else if (msg.name == "NEWFACE") {
       this.statusmap.set("facex",parseInt(msg.value["coordx"]));
       this.statusmap.set("facey",parseInt(msg.value["coordy"]));
-      console.log(msg.value["distance"]);
-      if (parseInt(msg.value["distance"])>50){
+
+      if (parseInt(msg.value["distance"])>45){
         this.statusmap.set("facedist","close");
       }else if (parseInt(msg.value["distance"])<20){
         this.statusmap.set("facedist","far");
