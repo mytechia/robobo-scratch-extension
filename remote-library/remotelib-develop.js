@@ -529,11 +529,11 @@ Remote.prototype = {
       this.statusmap.set("facex",parseInt(msg.value["coordx"]));
       this.statusmap.set("facey",parseInt(msg.value["coordy"]));
       if (parseInt(msg.value["distance"])>100){
-        this.statusmap.set("facedist","near");
-      }else if (parseInt(msg.value["distance"])>15){
-        this.statusmap.set("facedist","mid");
-      } else {
+        this.statusmap.set("facedist","close");
+      }else if (parseInt(msg.value["distance"])<10){
         this.statusmap.set("facedist","far");
+      } else {
+        this.statusmap.set("facedist","mid");
       }
 
 
