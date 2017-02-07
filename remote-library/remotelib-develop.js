@@ -528,9 +528,9 @@ Remote.prototype = {
     else if (msg.name == "NEWFACE") {
       this.statusmap.set("facex",parseInt(msg.value["coordx"]));
       this.statusmap.set("facey",parseInt(msg.value["coordy"]));
-      if (parseInt(msg.value["distance"])>100){
+      if (parseInt(msg.value["distance"])>50){
         this.statusmap.set("facedist","close");
-      }else if (parseInt(msg.value["distance"])<10){
+      }else if (parseInt(msg.value["distance"])<20){
         this.statusmap.set("facedist","far");
       } else {
         this.statusmap.set("facedist","mid");
