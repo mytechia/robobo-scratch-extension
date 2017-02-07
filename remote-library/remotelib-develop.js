@@ -70,6 +70,10 @@ Remote.prototype = {
       console.log("Connection Closed");
     }
 
+    this.ws.onerror = function(error){
+      alert("Websocket Error");
+    }
+
     //END OF CONNECT FUNCTION
   },
 
@@ -524,7 +528,14 @@ Remote.prototype = {
     else if (msg.name == "NEWFACE") {
       this.statusmap.set("facex",parseInt(msg.value["coordx"]));
       this.statusmap.set("facey",parseInt(msg.value["coordy"]));
-      this.statusmap.set("facedist",parseInt(msg.value["distance"]));
+      if (parseInt(msg.value["distance"])>100){
+        this.statusmap.set("facedist","near");
+      }else if (parseInt(msg.value["distance"])>15){
+        this.statusmap.set("facedist","mid");
+      } else {
+        this.statusmap.set("facedist","far");
+      }
+
 
     }
 
