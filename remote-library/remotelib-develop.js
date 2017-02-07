@@ -601,7 +601,7 @@ Remote.prototype = {
     }
 
     else if (msg.name == "MEASUREDCOLOR") {
-      console.log(msg);
+      //console.log(msg);
       this.statusmap.set("colorr",parseInt(msg.value["R"]));
       this.statusmap.set("colorg",parseInt(msg.value["G"]));
       this.statusmap.set("colorb",parseInt(msg.value["B"]));
@@ -619,12 +619,12 @@ Remote.prototype = {
     }
 
     else if (msg.name == "FOUNDFACE") {
-      console.log("FOUNDFACE");
+      //console.log("FOUNDFACE");
       (this.callbackmap.get("onNewFace"))();
     }
 
     else if (msg.name == "LOSTFACE") {
-      console.log("LOSTFACE");
+      //console.log("LOSTFACE");
       (this.callbackmap.get("onLostFace"))();
     }
 
