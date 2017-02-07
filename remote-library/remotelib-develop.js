@@ -418,7 +418,7 @@ Remote.prototype = {
   },
 
   checkMeasuredColor:function(channel) {
-    
+
     if (channel=="red") {
       return this.statusmap.get("colorr");
 
@@ -600,7 +600,7 @@ Remote.prototype = {
 
     }
 
-    else if (msg.name == "COLORMEASURED") {
+    else if (msg.name == "MEASUREDCOLOR") {
       console.log(msg);
       this.statusmap.set("colorr",parseInt(msg.value["R"]));
       this.statusmap.set("colorg",parseInt(msg.value["G"]));
