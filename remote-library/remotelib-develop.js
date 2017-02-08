@@ -646,6 +646,10 @@ Remote.prototype = {
 
       (this.callbackmap.get("onError"))();
     }
+    else if (msg.name == "ONPHRASE") {
+
+      (this.callbackmap.get("onPhrase"))(msg.value['text']);
+    }
 
     else {
       console.log('Lost status '+ msg.name);

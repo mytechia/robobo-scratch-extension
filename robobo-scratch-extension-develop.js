@@ -26,6 +26,7 @@
     var newface = false;
     var lostface = false;
     var error = false;
+    var voice = false;
 
     var lastIrChange = "";
     var lastFall = "";
@@ -39,6 +40,7 @@
     var accelchange = false;
     var obstacle = false;
     var clapnumber = 0;
+    var lastphrase = '';
 
     $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib-develop.js", function(){});
 
@@ -116,6 +118,11 @@
     ext.onError = function () {
       error = true;
     }
+
+    ext.onVoice = function (text) {
+      voice = true;
+      lastphrase = text;
+    }
     //Connection Block
     ext.connectToRobobo = function(ip,passwd) {
         if (rem != undefined){
@@ -139,6 +146,8 @@
         rem.registerCallback("onAccelChanged", ext.onAccelChanged);
         rem.registerCallback("onObstacle", ext.onObstacle);
         rem.registerCallback("onError", ext.onError);
+        rem.registerCallback("onPhrase", ext.onVoice);
+
 
 
         setTimeout(function(){
@@ -530,6 +539,26 @@
       return value;
     };
 
+    ext.readPhrase = function () {
+
+      return lastphrase;
+    };
+
+    ext.resetPhrase = function () {
+
+      lastphrase = '';
+    };
+
+    ext.detectedVoice = function() {
+      if (voice){
+        voice = false;
+        return true;
+      }else {
+        return false;
+      }
+    };
+
+
     //Reporter function to get the orientation in one axis
     ext.measureColor = function (channel) {
       var value = 0;
@@ -557,6 +586,8 @@
           [' ', 'set led %m.leds %m.status','changeLedStatus','all', 'off'],
           [' ', 'play %m.sounds sound','playSound', 'rimshot'],
           [' ', 'reset clap counter','resetClap'],
+          [' ', 'reset last phrase','resetPhrase'],//v
+
 
           ['r', 'read ROB battery level','readBatteryLevel'],//v
           ['r', 'read OBO battery level','readOboBatteryLevel'],//v
@@ -575,6 +606,8 @@
           ['r', 'read clap counter','readClap'],//v
           ['r', 'read brightness','readBrightnessLevel'],//v
           ['r', 'read color at %m.colorchan channel','measureColor'],//v
+          ['r', 'read last phrase','readPhrase'],//v
+
 
           ['h', 'when face is detected','newFaceFun'],//v
           ['h', 'when face is lost','lostFace'],//v
@@ -592,6 +625,8 @@
           ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
           ['h', 'when a brightness change is detected','changedBrightness'],//v
           ['h', 'when obstacle is detected','detectedObstacle'],//v
+          ['h', 'when voice is detected','detectedVoice'],//v
+
 
 
         ],
