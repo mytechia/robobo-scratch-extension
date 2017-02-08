@@ -647,7 +647,7 @@ Remote.prototype = {
       (this.callbackmap.get("onError"))();
     }
     else if (msg.name == "ONPHRASE") {
-
+      console.log('ONPHRASE '+msg.value['text']);
       (this.callbackmap.get("onPhrase"))(msg.value['text']);
     }
 

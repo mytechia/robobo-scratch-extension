@@ -120,6 +120,7 @@
     }
 
     ext.onVoice = function (text) {
+      console.log('onVoice');
       voice = true;
       lastphrase = text;
     }
