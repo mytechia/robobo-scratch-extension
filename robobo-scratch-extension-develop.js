@@ -155,7 +155,7 @@
 
           ext.authenticate(passwd);
 
-        }, 500);
+        }, 1000);
 
 
 
@@ -587,7 +587,7 @@
           [' ', 'set led %m.leds %m.status','changeLedStatus','all', 'off'],
           [' ', 'play %m.sounds sound','playSound', 'rimshot'],
           [' ', 'reset clap counter','resetClap'],
-          [' ', 'reset last phrase','resetPhrase'],//v
+          [' ', 'reset last voice order','resetPhrase'],//v
 
 
           ['r', 'read ROB battery level','readBatteryLevel'],//v
@@ -607,7 +607,7 @@
           ['r', 'read clap counter','readClap'],//v
           ['r', 'read brightness','readBrightnessLevel'],//v
           ['r', 'read color at %m.colorchan channel','measureColor'],//v
-          ['r', 'read last phrase','readPhrase'],//v
+          ['r', 'read last voice order','readPhrase'],//v
 
 
           ['h', 'when face is detected','newFaceFun'],//v
@@ -626,7 +626,7 @@
           ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
           ['h', 'when a brightness change is detected','changedBrightness'],//v
           ['h', 'when obstacle is detected','detectedObstacle'],//v
-          ['h', 'when voice is detected','detectedVoice'],//v
+          ['h', 'when voice order detected','detectedVoice'],//v
 
 
 

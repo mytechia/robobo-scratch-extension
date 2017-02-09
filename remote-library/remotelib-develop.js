@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-//Remote library version 0.1.2-dev
+//Remote library version 0.1.3-dev
 //Constructor of the remote control object
 function Remote(ip){
   this.ip = ip;
