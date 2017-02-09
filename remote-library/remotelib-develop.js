@@ -51,6 +51,7 @@ Remote.prototype = {
     if (this.ws != undefined){
       console.log("Closing previous connection");
       this.ws.close();
+      this.reconnecting = true;
     }
     this.ws = new WebSocket("ws://"+this.ip+":"+this.port);
 
