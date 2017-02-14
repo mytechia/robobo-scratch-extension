@@ -145,7 +145,7 @@ Remote.prototype = {
 
   isConnected : function() {
     return this.connectionState == Remote.ConnectionStateEnum.CONNECTED;
-  }
+  },
 
   closeConnection: function(reconnect) {
     if (reconnect) {
