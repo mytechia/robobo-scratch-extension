@@ -109,11 +109,11 @@ Remote.prototype = {
         this.reconnecting = false;
       }
       console.log("Connection Closed");
-    }
+    }.bind(this);
 
     this.ws.onerror = function(error){
       alert("Websocket Error");
-    }
+    };
 
     //END OF CONNECT FUNCTION
   },
