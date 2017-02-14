@@ -555,6 +555,10 @@
       return value;
     };
 
+    ext.roboboStarted = function() {
+      return rem.isConnected();
+    };
+
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
@@ -615,6 +619,8 @@
           ['h', 'when a brightness change is detected','changedBrightness'],//v
           ['h', 'when obstacle is detected','detectedObstacle'],//v
           ['h', 'when voice order detected','detectedVoice'],//v
+
+          ['h', 'when robobo started','roboboStarted']
 
 
 
