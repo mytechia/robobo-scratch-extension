@@ -124,8 +124,23 @@ Remote.prototype = {
       alert("Websocket Error");
     }.bind(this);
 
+    var waitTime = new Date().getTime()+1000;
+    while(this.connectionState == Remote.ConnectionStateEnum.DISCONECTED
+          && waitTime > (new Date()).getTime()) {
+      sleep(50);
+      console.log("Waiting");
+    }
 
     //END OF CONNECT FUNCTION
+  },
+
+  sleep : function(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+      if ((new Date().getTime() - start) > milliseconds){
+        break;
+      }
+    }
   },
 
   closeConnection: function(reconnect) {
