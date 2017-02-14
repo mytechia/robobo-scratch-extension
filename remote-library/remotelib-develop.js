@@ -133,7 +133,13 @@ Remote.prototype = {
   waitForConnection : function() {
 
     var startTime = new Date().getTime();
-    while((startTime+300) < (new Date().getTime())) {}
+    while(true) {
+      var currentTime = new Date().getTime();
+      if (startTime+500 < currentTime) {
+        this.connectionState = Remote.ConnectionStateEnum.DISCONNECTED;
+        break;
+      }
+    }
 
   },
 

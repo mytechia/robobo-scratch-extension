@@ -132,7 +132,8 @@
 
         }
         rem = new Remote(ip,passwd);
-        var startTime = new Date().getTime();
+        this.started = false;
+
         rem.connect();
         rem.registerCallback("onNewColor",ext.onNewColor);
         rem.registerCallback("onIrChanged",ext.onIrChanged);
@@ -151,8 +152,6 @@
         rem.registerCallback("onError", ext.onError);
         rem.registerCallback("onPhrase", ext.onVoice);
         rem.waitForConnection();
-        var currentTime = new Date().getTime();
-        console.log("Time elapsed: "+(currentTime-startTime));
 
     };
 
@@ -555,9 +554,6 @@
       return value;
     };
 
-    ext.roboboStarted = function() {
-      return rem.isConnected();
-    };
 
     // Block and block menu descriptions
     var descriptor = {
@@ -619,8 +615,6 @@
           ['h', 'when a brightness change is detected','changedBrightness'],//v
           ['h', 'when obstacle is detected','detectedObstacle'],//v
           ['h', 'when voice order detected','detectedVoice'],//v
-
-          ['h', 'robobo started','roboboStarted']
 
 
 
