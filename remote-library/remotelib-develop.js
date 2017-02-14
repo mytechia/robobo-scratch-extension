@@ -35,8 +35,6 @@ function Remote(ip,passwd){
   this.callbackmap = new Map();
   //First execution mark
   this.firstime = true;
-  //Reconnect flag
-  this.reconnecting = false;
   //Connection state
   this.connectionState = Remote.ConnectionStateEnum.DISCONECTED;
   //Connection password
@@ -125,14 +123,6 @@ Remote.prototype = {
       this.connectionState = Remote.ConnectionStateEnum.DISCONECTED;
       alert("Websocket Error");
     }.bind(this);
-
-    setTimeout(function(){
-        this.connectionState = Remote.ConnectionStateEnum.DISCONECTED;
-    }.bind(this), 1000);
-
-    while(this.connectionState == Remote.ConnectionStateEnum.CONNECTING) {
-      console.log("Waiting!");
-    }
 
     //END OF CONNECT FUNCTION
   },

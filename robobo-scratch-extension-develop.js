@@ -150,16 +150,9 @@
         rem.registerCallback("onError", ext.onError);
         rem.registerCallback("onPhrase", ext.onVoice);
 
-
-
-        //setTimeout(function(){
-
-          //ext.authenticate(passwd);
-
-        //}, 1000);
-
-
-
+        while(rem.connectionState == Remote.ConnectionState.CONNECTING) {
+          console.log("Wait!");
+        }
 
     };
 
