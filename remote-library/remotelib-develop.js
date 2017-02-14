@@ -131,10 +131,10 @@ Remote.prototype = {
 
   waitForConnection : function() {
 
-    var waitTime = new Date().getTime()+1000;
+    var startTime = new Date().getTime();
     while(this.connectionState == Remote.ConnectionStateEnum.CONNECTING) {
-      var newDate = new Date().getTime();
-      if (waitTime < newDate) break;
+      var currentTime = new Date().getTime();
+      if (startTime+1000 < currentTime) break;
       sleep(50);
       console.log("Waiting");
     }
