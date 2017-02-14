@@ -50,7 +50,7 @@ Remote.prototype = {
   connect :function() {
     if (this.ws != undefined){
       console.log("Closing previous connection");
-      this.reconnecting = true;
+
       this.ws.close();
 
     }
