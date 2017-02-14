@@ -128,7 +128,7 @@ Remote.prototype = {
 
     setTimeout(function(){
         this.connectionState = Remote.ConnectionStateEnum.DISCONECTED;
-    }, 1000).bind(this);
+    }.bind(this), 1000);
 
     while(this.connectionState == Remote.ConnectionStateEnum.CONNECTING) {
       console.log("Waiting!");
