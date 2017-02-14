@@ -126,8 +126,12 @@ Remote.prototype = {
       alert("Websocket Error");
     };
 
-    while(!this.connectionState == Remote.ConnectionStateEnum.CONNECTED) {
+    setTimeout(function(){
+        this.connectionState = Remote.ConnectionStateEnum.DISCONECTED;
+    }, 1000);
 
+    while(this.connectionState == Remote.ConnectionStateEnum.CONNECTING) {
+      //wait
     }
 
     //END OF CONNECT FUNCTION
