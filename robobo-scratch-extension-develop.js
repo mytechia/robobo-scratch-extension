@@ -168,12 +168,6 @@
       rem.closeConnection(false);
     }
 
-
-    //Close connection
-    ext.authenticate = function (password) {
-      rem.sendMessage("PASSWORD: "+password);
-    }
-
     //Speech production function
     ext.talkRobobo = function(text){
         rem.talk(text);
