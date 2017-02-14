@@ -20,7 +20,7 @@
  ******************************************************************************/
 //Remote library version 0.1.3-dev
 //Constructor of the remote control object
-function Remote(ip,reconnecting){
+function Remote(ip,passwd){
   this.ip = ip;
   this.port = 40404;
   //WebSocket to stablish the connection
@@ -36,7 +36,8 @@ function Remote(ip,reconnecting){
   //First execution mark
   this.firstime = true;
   //Reconnect flag
-  this.reconnecting = reconnecting;
+  this.reconnecting = false;
+  this.password = passwd;
 //END OF REMOTE OBJECT
 };
 
@@ -58,7 +59,7 @@ Remote.prototype = {
 
     this.ws.onopen = function() {
       console.log("Connection Stablished");
-
+      this.authenticate(this.password);
 
     }
 
@@ -117,8 +118,9 @@ Remote.prototype = {
     //END OF CONNECT FUNCTION
   },
 
-  closeConnection: function() {
-    this.ws.close()
+  closeConnection: function(reconnect) {
+    this.reconnecting = reconnect;
+    this.ws.close();
     //END OF CLOSECONNECTION METHOD
   },
 
@@ -667,7 +669,7 @@ Remote.prototype = {
 
     else if (msg.name == "DIE") {
       console.log("Die message");
-      this.closeConnection();
+      this.closeConnection(false);
     }
 
     else if (msg.name == "FOUNDFACE") {

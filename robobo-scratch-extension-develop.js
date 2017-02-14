@@ -128,12 +128,10 @@
     ext.connectToRobobo = function(ip,passwd) {
         if (rem != undefined){
           console.log("Closing previous connection");
-          rem.closeConnection();
-          reconnect = true
-        }else{
-          reconnect = false;
+          rem.closeConnection(true);
+
         }
-        rem = new Remote(ip,reconnect);
+        rem = new Remote(ip,passwd);
         rem.connect();
         rem.registerCallback("onNewColor",ext.onNewColor);
         rem.registerCallback("onIrChanged",ext.onIrChanged);
@@ -154,11 +152,11 @@
 
 
 
-        setTimeout(function(){
+        //setTimeout(function(){
 
-          ext.authenticate(passwd);
+          //ext.authenticate(passwd);
 
-        }, 1000);
+        //}, 1000);
 
 
 
@@ -167,7 +165,7 @@
 
     //Close connection
     ext.disconnect = function () {
-      rem.closeConnection();
+      rem.closeConnection(false);
     }
 
 
