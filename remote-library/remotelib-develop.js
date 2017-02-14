@@ -135,7 +135,6 @@ Remote.prototype = {
     while(this.connectionState == Remote.ConnectionStateEnum.CONNECTING) {
       var currentTime = new Date().getTime();
       if (startTime+1000 < currentTime) break;
-      sleep(50);
       console.log("Waiting");
     }
 
