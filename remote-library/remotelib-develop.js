@@ -61,7 +61,7 @@ Remote.prototype = {
       console.log("Connection Stablished");
       this.authenticate(this.password);
 
-    }.bind(this));
+    }.bind(this);
 
 
     this.ws.addEventListener('message', function(evt) {
