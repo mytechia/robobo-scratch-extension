@@ -59,9 +59,9 @@ Remote.prototype = {
 
     this.ws.onopen = function() {
       console.log("Connection Stablished");
-      authenticate(this.password);
+      this.authenticate(this.password);
 
-    }
+    }.bind(this));
 
 
     this.ws.addEventListener('message', function(evt) {
