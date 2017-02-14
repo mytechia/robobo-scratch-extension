@@ -37,9 +37,19 @@ function Remote(ip,passwd){
   this.firstime = true;
   //Reconnect flag
   this.reconnecting = false;
+  //Connection state
+  this.connectionState = Remote.ConectionStateEnum.DISCONECTED;
+  //Connection password
   this.password = passwd;
 //END OF REMOTE OBJECT
 };
+
+Remote.ConectionStateEnum = {
+  CONNECTING: 0,
+  CONECTED: 1,
+  RECONNECTING: 2,
+  DISCONECTED: 3
+}
 
 Remote.prototype = {
 
@@ -51,27 +61,24 @@ Remote.prototype = {
   connect :function() {
     if (this.ws != undefined){
       console.log("Closing previous connection");
-
       this.ws.close();
-
     }
     this.ws = new WebSocket("ws://"+this.ip+":"+this.port);
 
     this.ws.onopen = function() {
       console.log("Connection Stablished");
       this.sendMessage("PASSWORD: "+this.password);
-
+      this.connectionState = Remote.ConectionStateEnum.CONECTED;
     }.bind(this);
 
 
     this.ws.addEventListener('message', function(evt) {
       var received_msg = evt.data;
       this.handleMessage(received_msg);
-
     }.bind(this));
 
     this.ws.onclose = function(event) {
-      if(!this.reconnecting){
+      if(!this.connectionState == Remote.ConectionStateEnum.RECONNECTING){
         var reason;
 
           // See http://tools.ietf.org/html/rfc6455#section-7.4.1
@@ -105,13 +112,14 @@ Remote.prototype = {
               reason = "Unknown reason";
           alert('Connection closed\n'+reason);
       }
-      else {
-        this.reconnecting = false;
-      }
+
+      this.reconnecting = false;
       console.log("Connection Closed");
+      this.connectionState = Remote.ConectionStateEnum.DISCONECTED;
     }.bind(this);
 
     this.ws.onerror = function(error){
+      this.connectionState = Remote.ConectionStateEnum.DISCONECTED;
       alert("Websocket Error");
     };
 
@@ -119,7 +127,9 @@ Remote.prototype = {
   },
 
   closeConnection: function(reconnect) {
-    this.reconnecting = reconnect;
+    if (reconnect) {
+      this.connectionState = Remote.ConectionStateEnum.RECONNECTING;
+    }
     this.ws.close();
     //END OF CLOSECONNECTION METHOD
   },
