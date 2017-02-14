@@ -124,11 +124,11 @@ Remote.prototype = {
     this.ws.onerror = function(error){
       this.connectionState = Remote.ConnectionStateEnum.DISCONECTED;
       alert("Websocket Error");
-    };
+    }.bind(this);
 
     setTimeout(function(){
         this.connectionState = Remote.ConnectionStateEnum.DISCONECTED;
-    }, 1000);
+    }, 1000).bind(this);
 
     while(this.connectionState == Remote.ConnectionStateEnum.CONNECTING) {
       //wait
