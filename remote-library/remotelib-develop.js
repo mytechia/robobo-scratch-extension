@@ -38,15 +38,15 @@ function Remote(ip,passwd){
   //Reconnect flag
   this.reconnecting = false;
   //Connection state
-  this.connectionState = Remote.ConectionStateEnum.DISCONECTED;
+  this.connectionState = Remote.ConnectionStateEnum.DISCONECTED;
   //Connection password
   this.password = passwd;
 //END OF REMOTE OBJECT
 };
 
-Remote.ConectionStateEnum = {
+Remote.ConnectionStateEnum = {
   CONNECTING: 0,
-  CONECTED: 1,
+  CONNECTED: 1,
   RECONNECTING: 2,
   DISCONECTED: 3
 }
@@ -63,12 +63,15 @@ Remote.prototype = {
       console.log("Closing previous connection");
       this.ws.close();
     }
+
+    this.connectionState = Remote.ConnectionStateEnum.CONNECTING;
+
     this.ws = new WebSocket("ws://"+this.ip+":"+this.port);
 
     this.ws.onopen = function() {
       console.log("Connection Stablished");
       this.sendMessage("PASSWORD: "+this.password);
-      this.connectionState = Remote.ConectionStateEnum.CONECTED;
+      this.connectionState = Remote.ConnectionStateEnum.CONNECTED;
     }.bind(this);
 
 
@@ -78,7 +81,7 @@ Remote.prototype = {
     }.bind(this));
 
     this.ws.onclose = function(event) {
-      if(!this.connectionState == Remote.ConectionStateEnum.RECONNECTING){
+      if(!this.connectionState == Remote.ConnectionStateEnum.RECONNECTING){
         var reason;
 
           // See http://tools.ietf.org/html/rfc6455#section-7.4.1
@@ -115,20 +118,24 @@ Remote.prototype = {
 
       this.reconnecting = false;
       console.log("Connection Closed");
-      this.connectionState = Remote.ConectionStateEnum.DISCONECTED;
+      this.connectionState = Remote.ConnectionStateEnum.DISCONECTED;
     }.bind(this);
 
     this.ws.onerror = function(error){
-      this.connectionState = Remote.ConectionStateEnum.DISCONECTED;
+      this.connectionState = Remote.ConnectionStateEnum.DISCONECTED;
       alert("Websocket Error");
     };
+
+    while(!this.connectionState == Remote.ConnectionStateEnum.CONNECTED) {
+
+    }
 
     //END OF CONNECT FUNCTION
   },
 
   closeConnection: function(reconnect) {
     if (reconnect) {
-      this.connectionState = Remote.ConectionStateEnum.RECONNECTING;
+      this.connectionState = Remote.ConnectionStateEnum.RECONNECTING;
     }
     this.ws.close();
     //END OF CLOSECONNECTION METHOD
