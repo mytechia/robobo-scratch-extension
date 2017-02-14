@@ -125,8 +125,9 @@ Remote.prototype = {
     }.bind(this);
 
     var waitTime = new Date().getTime()+1000;
-    while(this.connectionState == Remote.ConnectionStateEnum.DISCONECTED
-          && waitTime > (new Date()).getTime()) {
+    while(this.connectionState == Remote.ConnectionStateEnum.DISCONECTED) {
+      var newDate = new Date().getTime();
+      if (waitTime < newDate) break;
       sleep(50);
       console.log("Waiting");
     }
