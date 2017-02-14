@@ -620,7 +620,7 @@
           ['h', 'when obstacle is detected','detectedObstacle'],//v
           ['h', 'when voice order detected','detectedVoice'],//v
 
-          ['h', 'when robobo started','roboboStarted']
+          ['h', 'robobo started','roboboStarted']
 
 
 
