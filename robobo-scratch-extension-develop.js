@@ -149,6 +149,7 @@
         rem.registerCallback("onObstacle", ext.onObstacle);
         rem.registerCallback("onError", ext.onError);
         rem.registerCallback("onPhrase", ext.onVoice);
+        rem.waitForConnection();
 
     };
 
