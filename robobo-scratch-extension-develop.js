@@ -132,6 +132,7 @@
 
         }
         rem = new Remote(ip,passwd);
+        var startTime = new Date().getTime();
         rem.connect();
         rem.registerCallback("onNewColor",ext.onNewColor);
         rem.registerCallback("onIrChanged",ext.onIrChanged);
@@ -150,6 +151,8 @@
         rem.registerCallback("onError", ext.onError);
         rem.registerCallback("onPhrase", ext.onVoice);
         rem.waitForConnection();
+        var currentTime = new Date().getTime();
+        console.log("Time elapsed: "+(currentTime-startTime));
 
     };
 

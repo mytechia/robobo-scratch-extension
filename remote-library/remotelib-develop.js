@@ -129,6 +129,7 @@ Remote.prototype = {
     //END OF CONNECT FUNCTION
   },
 
+  //Waits (a maximum of 2 seconds) until the connection is established with the server
   waitForConnection : function() {
 
     var startTime = new Date().getTime();
