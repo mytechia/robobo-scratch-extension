@@ -124,6 +124,10 @@ Remote.prototype = {
       alert("Websocket Error");
     }.bind(this);
 
+    while(rem.connectionState == Remote.ConnectionState.CONNECTING) {
+      console.log("Wait!");
+    }
+    
     //END OF CONNECT FUNCTION
   },
 

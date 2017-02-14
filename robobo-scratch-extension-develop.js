@@ -150,10 +150,6 @@
         rem.registerCallback("onError", ext.onError);
         rem.registerCallback("onPhrase", ext.onVoice);
 
-        while(rem.connectionState == Remote.ConnectionState.CONNECTING) {
-          console.log("Wait!");
-        }
-
     };
 
     //Close connection
