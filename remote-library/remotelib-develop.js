@@ -36,7 +36,7 @@ function Remote(ip,passwd){
   //First execution mark
   this.firstime = true;
   //Connection state
-  this.connectionState = Remote.ConnectionStateEnum.DISCONECTED;
+  this.connectionState = Remote.ConnectionStateEnum.DISCONNECTED;
   //Connection password
   this.password = passwd;
 //END OF REMOTE OBJECT
@@ -46,7 +46,7 @@ Remote.ConnectionStateEnum = {
   CONNECTING: 0,
   CONNECTED: 1,
   RECONNECTING: 2,
-  DISCONECTED: 3
+  DISCONNECTED: 3
 }
 
 Remote.prototype = {
@@ -116,11 +116,11 @@ Remote.prototype = {
 
       this.reconnecting = false;
       console.log("Connection Closed");
-      this.connectionState = Remote.ConnectionStateEnum.DISCONECTED;
+      this.connectionState = Remote.ConnectionStateEnum.DISCONNECTED;
     }.bind(this);
 
     this.ws.onerror = function(error){
-      this.connectionState = Remote.ConnectionStateEnum.DISCONECTED;
+      this.connectionState = Remote.ConnectionStateEnum.DISCONNECTED;
       alert("Websocket Error");
     }.bind(this);
 
@@ -129,14 +129,14 @@ Remote.prototype = {
     //END OF CONNECT FUNCTION
   },
 
-  //Waits (a maximum of 2 seconds) until the connection is established with the server
+  //Waits until the connection is established with the server
   waitForConnection : function() {
 
     var startTime = new Date().getTime();
     while(this.connectionState == Remote.ConnectionStateEnum.CONNECTING) {
       var currentTime = new Date().getTime();
-      if (startTime+2000 < currentTime) {
-        this.connectionState = Remote.ConnectionStateEnum.DISCONECTED;
+      if (startTime+500 < currentTime) {
+        this.connectionState = Remote.ConnectionStateEnum.DISCONNECTED;
         break;
       }
     }
