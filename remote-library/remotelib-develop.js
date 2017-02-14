@@ -20,7 +20,7 @@
  ******************************************************************************/
 //Remote library version 0.1.3-dev
 //Constructor of the remote control object
-function Remote(ip){
+function Remote(ip,reconnecting){
   this.ip = ip;
   this.port = 40404;
   //WebSocket to stablish the connection
@@ -36,7 +36,7 @@ function Remote(ip){
   //First execution mark
   this.firstime = true;
   //Reconnect flag
-  this.reconnecting = false;
+  this.reconnecting = reconnecting;
 //END OF REMOTE OBJECT
 };
 
@@ -77,7 +77,7 @@ Remote.prototype = {
           if (event.code == 1000)
               reason = "";
           else if(event.code == 1001)
-              reason = "An endpoint is \"going away\", such as a server going down or a browser having navigated away from a page.";
+              reason = "";
           else if(event.code == 1002)
               reason = "Protocol Error";
           else if(event.code == 1003)
@@ -102,7 +102,7 @@ Remote.prototype = {
               reason = "Failure to perform a TLS handshake";
           else
               reason = "Unknown reason";
-              alert('Connection closed\n'+reason);
+          alert('Connection closed\n'+reason);
       }
       else {
         this.reconnecting = false;

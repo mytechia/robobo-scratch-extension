@@ -129,8 +129,11 @@
         if (rem != undefined){
           console.log("Closing previous connection");
           rem.closeConnection();
+          reconnect = true
+        }else{
+          reconnect = false;
         }
-        rem = new Remote(ip);
+        rem = new Remote(ip,reconnect);
         rem.connect();
         rem.registerCallback("onNewColor",ext.onNewColor);
         rem.registerCallback("onIrChanged",ext.onIrChanged);
