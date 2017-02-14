@@ -131,7 +131,7 @@ Remote.prototype = {
     }, 1000).bind(this);
 
     while(this.connectionState == Remote.ConnectionStateEnum.CONNECTING) {
-      //wait
+      console.log("Waiting!");
     }
 
     //END OF CONNECT FUNCTION
