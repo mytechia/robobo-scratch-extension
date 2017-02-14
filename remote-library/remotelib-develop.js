@@ -134,19 +134,12 @@ Remote.prototype = {
     var startTime = new Date().getTime();
     while(this.connectionState == Remote.ConnectionStateEnum.CONNECTING) {
       var currentTime = new Date().getTime();
-      if (startTime+1000 < currentTime) break;
-      console.log("Waiting");
-    }
-
-  },
-
-  sleep : function(milliseconds) {
-    var start = new Date().getTime();
-    for (var i = 0; i < 1e7; i++) {
-      if ((new Date().getTime() - start) > milliseconds){
+      if (startTime+2000 < currentTime) {
+        this.connectionState = Remote.ConnectionStateEnum.DISCONECTED;
         break;
       }
     }
+
   },
 
   closeConnection: function(reconnect) {
