@@ -135,8 +135,8 @@ Remote.prototype = {
     var startTime = new Date().getTime();
     while(true) {
       var currentTime = new Date().getTime();
-      if (startTime+500 < currentTime) {
-        this.connectionState = Remote.ConnectionStateEnum.DISCONNECTED;
+      if (startTime+1000 < currentTime) {
+
         break;
       }
     }
