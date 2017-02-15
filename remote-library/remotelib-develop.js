@@ -79,7 +79,7 @@ Remote.prototype = {
     }.bind(this));
 
     this.ws.onclose = function(event) {
-      if(!this.connectionState == Remote.ConnectionStateEnum.RECONNECTING){
+      if(this.connectionState != Remote.ConnectionStateEnum.RECONNECTING){
         var reason;
 
           // See http://tools.ietf.org/html/rfc6455#section-7.4.1
