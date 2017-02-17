@@ -634,7 +634,7 @@
           gaps: ['Gap1','Gap2','Gap3','Gap4'],
           axis: ['x','y'],
           axis3d: ['x','y','z'],
-          sounds: ['alert','claps','booooo','laugh','alarm','rimshot'],
+          sounds: ['moan','purr'],
           colorchan: ['red','green','blue'],
         },
     };
