@@ -27,6 +27,7 @@
     var lostface = false;
     var error = false;
     var voice = false;
+    var device = false;
 
     var lastIrChange = "";
     var lastFall = "";
@@ -154,6 +155,7 @@
         rem.registerCallback("onError", ext.onError);
         rem.registerCallback("onPhrase", ext.onVoice);
         rem.waitForConnection();
+        device = true;
 
     };
 
@@ -165,7 +167,13 @@
     //Speech production function
     ext.talkRobobo = function(text){
         rem.talk(text);
+        device = false;
     };
+
+    ext._getStatus = function() {
+    if(!device) return {status: 1, msg: 'Device not connected'};
+    return {status: 2, msg: 'Device connected'};
+    }
 
     //Movement function
     ext.moveRobobo = function(wheel,quantity,mtype,speed){
