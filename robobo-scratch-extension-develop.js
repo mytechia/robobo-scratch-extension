@@ -561,7 +561,7 @@
       rem.moveWheelsSeparated(lSpeed,rSpeed,time);
       window.setTimeout(function() {
             callback();
-        }, (time*1000)-10);
+        }, (time*1000)-100);
     };
 
 
