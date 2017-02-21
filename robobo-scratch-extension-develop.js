@@ -162,12 +162,13 @@
     //Close connection
     ext.disconnect = function () {
       rem.closeConnection(false);
+      device = false;
     }
 
     //Speech production function
     ext.talkRobobo = function(text){
         rem.talk(text);
-        device = false;
+
     };
 
     ext._getStatus = function() {
