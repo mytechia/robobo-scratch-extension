@@ -42,6 +42,8 @@
     var clapnumber = 0;
     var lastphrase = '';
 
+    var blockCallback = undefined;
+
     $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib-develop.js", function(){});
 
 
@@ -562,6 +564,19 @@
         }, (time*1000)-10);
     };
 
+
+    ext.blockFun = function(callback){
+      ext.blockCallback = callback;
+
+    };
+
+    ext.unblockFun = function() {
+      ext.blockCallback();
+
+    }
+
+
+
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
@@ -583,8 +598,11 @@
           [' ', 'play %m.sounds sound','playSound', 'rimshot'],
           [' ', 'reset clap counter','resetClap'],
           [' ', 'reset last voice order','resetPhrase'],//v
+          [' ', 'unblock','unblockFun']
 
           ['w', 'move wheel left at speed %s and wheel right at speed %s for %s seconds and wait','moveRoboboWheelsWait','50','50','1000'],
+          ['w', 'block','blockFun'],
+
 
 
 
