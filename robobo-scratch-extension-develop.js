@@ -571,7 +571,7 @@
 
           [' ', 'say %s','talkRobobo','hello world'],
           [' ', 'move wheel %m.wheels by %s %m.mtype at speed %s','moveRobobo','both','1','seconds','50'],
-          [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheelsWait','50','50','1000'],
+          [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],
           [' ', 'set left motor to %m.motorDirectionBis and right motor to %m.motorDirectionBis at speed %s','setMotorsOn','forward','forward','100'],
           [' ', 'move pan to %s at speed %s','movePanRobobo','180','5'],
           [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
@@ -584,7 +584,7 @@
           [' ', 'reset clap counter','resetClap'],
           [' ', 'reset last voice order','resetPhrase'],//v
 
-          ['w', 'move wheel left at speed %s and wheel right at speed %s for %s seconds and wait','moveRoboboWheels','50','50','1000'],
+          ['w', 'move wheel left at speed %s and wheel right at speed %s for %s seconds and wait','moveRoboboWheelsWait','50','50','1000'],
 
 
 
