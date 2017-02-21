@@ -598,7 +598,7 @@
           [' ', 'play %m.sounds sound','playSound', 'rimshot'],
           [' ', 'reset clap counter','resetClap'],
           [' ', 'reset last voice order','resetPhrase'],//v
-          [' ', 'unblock','unblockFun']
+          [' ', 'unblock','unblockFun'],
 
           ['w', 'move wheel left at speed %s and wheel right at speed %s for %s seconds and wait','moveRoboboWheelsWait','50','50','1000'],
           ['w', 'block','blockFun'],
