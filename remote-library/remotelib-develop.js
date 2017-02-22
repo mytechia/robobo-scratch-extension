@@ -63,6 +63,8 @@ Remote.prototype = {
     }
 
     this.connectionState = Remote.ConnectionStateEnum.CONNECTING;
+    this.callbackmap.get("updateConnectionStatus")(this.connectionState);
+
 
     this.ws = new WebSocket("ws://"+this.ip+":"+this.port);
 
@@ -70,6 +72,8 @@ Remote.prototype = {
       console.log("Connection Stablished");
       this.sendMessage("PASSWORD: "+this.password);
       this.connectionState = Remote.ConnectionStateEnum.CONNECTED;
+      this.callbackmap.get("updateConnectionStatus")(this.connectionState);
+
     }.bind(this);
 
 
@@ -113,6 +117,7 @@ Remote.prototype = {
               reason = "Unknown reason";
           alert('Connection closed\n'+reason);
       }
+      this.callbackmap.get("updateConnectionStatus")(this.connectionState);
 
       this.reconnecting = false;
       console.log("Connection Closed");
