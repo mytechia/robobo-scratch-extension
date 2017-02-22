@@ -99,9 +99,10 @@ Remote.prototype = {
               reason = "";
           else if(event.code == 1005)
               reason = "";
-          else if(event.code == 1006)
+          else if(event.code == 1006){
              reason = "Lost connection";
              error = true;
+           }
           else if(event.code == 1007)
               reason = "";
           else if(event.code == 1008)
