@@ -27,7 +27,9 @@
     var lostface = false;
     var error = false;
     var voice = false;
-    var device = false;
+
+    var connectionStatus = 1;
+
 
     var lastIrChange = "";
     var lastFall = "";
@@ -127,6 +129,10 @@
       voice = true;
       lastphrase = text;
     }
+
+    ext.onConnectionChanges = function (status) {
+      connectionStatus = status;
+    }
     //Connection Block
     ext.connectToRobobo = function(ip,passwd) {
         if (rem != undefined){
@@ -154,15 +160,17 @@
         rem.registerCallback("onObstacle", ext.onObstacle);
         rem.registerCallback("onError", ext.onError);
         rem.registerCallback("onPhrase", ext.onVoice);
+        rem.registerCallback("onConnectionChanges", ext.onConnectionChanges);
+
         rem.waitForConnection();
-        device = true;
+
 
     };
 
     //Close connection
     ext.disconnect = function () {
       rem.closeConnection(false);
-      device = false;
+
     }
 
     //Speech production function
@@ -172,8 +180,20 @@
     };
 
     ext._getStatus = function() {
-    if(!device) return {status: 1, msg: 'Device not connected'};
-    return {status: 2, msg: 'Device connected'};
+      switch (connectionStatus) {
+        case 0:
+          return {status: 0, msg: 'Error'};
+          break;
+        case 1:
+          return {status: 1, msg: 'Device not connected'};
+          break;
+        case 2:
+          return {status: 2, msg: 'Device connected'};
+          break;
+      }
+
+
+
     }
 
     //Movement function

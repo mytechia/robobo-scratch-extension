@@ -60,6 +60,8 @@ Remote.prototype = {
     if (this.ws != undefined){
       console.log("Closing previous connection");
       this.ws.close();
+      (this.callbackmap.get("onConnectionChanges"))(1);
+
     }
 
     this.connectionState = Remote.ConnectionStateEnum.CONNECTING;
@@ -68,6 +70,7 @@ Remote.prototype = {
 
     this.ws.onopen = function() {
       console.log("Connection Stablished");
+      (this.callbackmap.get("onConnectionChanges"))(2);
       this.sendMessage("PASSWORD: "+this.password);
       this.connectionState = Remote.ConnectionStateEnum.CONNECTED;
     }.bind(this);
@@ -113,7 +116,7 @@ Remote.prototype = {
               reason = "Unknown reason";
           alert('Connection closed\n'+reason);
       }
-
+      (this.callbackmap.get("onConnectionChanges"))(1);
       this.reconnecting = false;
       console.log("Connection Closed");
       this.connectionState = Remote.ConnectionStateEnum.DISCONNECTED;
@@ -121,6 +124,7 @@ Remote.prototype = {
 
     this.ws.onerror = function(error){
       this.connectionState = Remote.ConnectionStateEnum.DISCONNECTED;
+      (this.callbackmap.get("onConnectionChanges"))(0);
       alert("Websocket Error");
     }.bind(this);
 
