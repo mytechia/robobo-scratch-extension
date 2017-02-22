@@ -82,6 +82,7 @@ Remote.prototype = {
     }.bind(this));
 
     this.ws.onclose = function(event) {
+      var error = false;
       if(this.connectionState != Remote.ConnectionStateEnum.RECONNECTING){
         var reason;
 
@@ -100,6 +101,7 @@ Remote.prototype = {
               reason = "";
           else if(event.code == 1006)
              reason = "Lost connection";
+             error = true;
           else if(event.code == 1007)
               reason = "";
           else if(event.code == 1008)
@@ -116,7 +118,11 @@ Remote.prototype = {
               reason = "Unknown reason";
           alert('Connection closed\n'+reason);
       }
-      (this.callbackmap.get("onConnectionChanges"))(1);
+      if (error){
+        (this.callbackmap.get("onConnectionChanges"))(0);
+      }else{
+        (this.callbackmap.get("onConnectionChanges"))(1);
+      }
       this.reconnecting = false;
       console.log("Connection Closed");
       this.connectionState = Remote.ConnectionStateEnum.DISCONNECTED;
