@@ -194,6 +194,7 @@
       }else {
         return {status: 2, msg: 'Device connected'};
       }
+    };
 
 
     //Movement function
