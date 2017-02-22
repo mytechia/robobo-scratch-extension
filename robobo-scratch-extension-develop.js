@@ -186,7 +186,7 @@
     };
 
     ext._getStatus = function() {
-      if()(statusDevice==0)||(statusDevice==2)){
+      if((statusDevice==0)||(statusDevice==2)){
         return {status: 0, msg: 'Device connecting'};
       }else if (statusDevice==3) {
         return {status: 1, msg: 'Device not connected'};
