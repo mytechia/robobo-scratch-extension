@@ -163,7 +163,7 @@
     };
 
 
-    ext.updateConnectionStatus(status){
+    ext.updateConnectionStatus = function(status){
       if(status==0){
         statusDevice=0;
       }else if (status==2) {
@@ -171,13 +171,13 @@
       }else {
         statusDevice=1;
       }
-    }
+    };
     //Close connection
     ext.disconnect = function () {
 
       rem.closeConnection(false);
 
-    }
+    };
 
     //Speech production function
     ext.talkRobobo = function(text){
