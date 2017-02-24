@@ -677,8 +677,8 @@
           ['r', 'read error','readErrorFun'],//v
           ['h', 'on error','errorFun'],//v
 
-          [' ', 'unblock','unblockFun'],
-          ['w', 'block','blockFun'],
+          //[' ', 'unblock','unblockFun'],
+          //['w', 'block','blockFun'],
 
 
         ],
