@@ -613,66 +613,72 @@
           [' ', 'close connection','disconnect'],
           [' ', 'stop','stop'],
 
-          [' ', 'say %s','talkRobobo','hello world'],
           [' ', 'move wheel %m.wheels by %s %m.mtype at speed %s','moveRobobo','both','1','seconds','50'],
           [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],
           [' ', 'set left motor to %m.motorDirectionBis and right motor to %m.motorDirectionBis at speed %s','setMotorsOn','forward','forward','100'],
+          ['w', '(blocking) move wheel left at speed %s and wheel right at speed %s for %s seconds and wait','moveRoboboWheelsWait','50','50','1000'],
           [' ', 'move pan to %s at speed %s','movePanRobobo','180','5'],
           [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
           [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
           [' ', 'move tilt %s degrees at speed %s','moveTiltRoboboDegree','5','5'],//v
+
+
           [' ', 'change emotion to %m.emotions','changeEmotion','normal'],
+
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
           [' ', 'set led %m.leds %m.status','changeLedStatus','all', 'off'],
-          [' ', 'play %m.sounds sound','playSound', 'rimshot'],
-          [' ', 'reset clap counter','resetClap'],
-          [' ', 'reset last voice order','resetPhrase'],//v
-          [' ', 'unblock','unblockFun'],
-
-          ['w', 'move wheel left at speed %s and wheel right at speed %s for %s seconds and wait','moveRoboboWheelsWait','50','50','1000'],
-          ['w', 'block','blockFun'],
-
-
-
-
-          ['r', 'read ROB battery level','readBatteryLevel'],//v
-          ['r', 'read OBO battery level','readOboBatteryLevel'],//v
 
           ['r', 'read face distance','readFaceDist'],//v
-          ['r', 'read error','readErrorFun'],//v
-
-          ['r', 'read obstacle at sensor %m.ir','readObstacle'],//v
-          ['r', 'read fling angle','readFlingAngle'],//v
           ['r', 'read face position at %m.axis axis','readFaceCoord','x'],//v
-          ['r', 'read tap position at %m.axis axis','readTapCoord','x'],//v
-          ['r', 'read orientation at %m.orientation axis','readOrientation','yaw'],//v
-          ['r', 'read acceleration at %m.axis3d axis','readAcceleration','x'],//v
-
-          ['r', 'read gap at %m.gaps','readGap'],//v
-          ['r', 'read clap counter','readClap'],//v
-          ['r', 'read brightness','readBrightnessLevel'],//v
-          ['r', 'read color at %m.colorchan channel','measureColor'],//v
-          ['r', 'read last voice order','readPhrase'],//v
-
-
           ['h', 'when face is detected','newFaceFun'],//v
           ['h', 'when face is lost','lostFace'],//v
 
-          ['h', 'on error','errorFun'],//v
+          ['r', 'read color at %m.colorchan channel','measureColor'],//v
 
 
-          ['h', 'when ROB battery level is low','lowBatt'],//v
-          ['h', 'when OBO battery level is low','lowBatt'],//v
-          ['h', 'when tap detected','newTap'],//v
-          ['h', 'when fling detected','newFling'],//v
-          ['h', 'when acceleration detected','newAcceleration'],//v
-          ['h', 'when clap detected','newClap'],//v
+          [' ', 'say %s','talkRobobo','hello world'],
 
-          ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
-          ['h', 'when a brightness change is detected','changedBrightness'],//v
-          ['h', 'when obstacle is detected','detectedObstacle'],//v
+          [' ', 'reset last voice order','resetPhrase'],//v
+          ['r', 'read last voice order','readPhrase'],//v
           ['h', 'when voice order detected','detectedVoice'],//v
 
+
+          [' ', 'play %m.sounds sound','playSound', 'moan'],
+
+
+          ['r', 'read orientation at %m.orientation axis','readOrientation','yaw'],//v
+
+          ['r', 'read fling angle','readFlingAngle'],//v
+          ['r', 'read tap position at %m.axis axis','readTapCoord','x'],//v
+          ['h', 'when tap detected','newTap'],//v
+          ['h', 'when fling detected','newFling'],//v
+
+          ['r', 'read acceleration at %m.axis3d axis','readAcceleration','x'],//v
+          ['h', 'when acceleration detected','newAcceleration'],//v
+
+          ['r', 'read brightness','readBrightnessLevel'],//v
+          ['h', 'when a brightness change is detected','changedBrightness'],//v
+
+          ['r', 'read OBO battery level','readOboBatteryLevel'],//v
+          ['h', 'when OBO battery level is low','lowBatt'],//v
+
+
+
+          ['r', 'read obstacle at sensor %m.ir','readObstacle'],//v
+          ['h', 'when obstacle is detected','detectedObstacle'],//v
+
+          ['r', 'read gap at %m.gaps','readGap'],//v
+          ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
+
+          ['r', 'read ROB battery level','readBatteryLevel'],//v
+          ['h', 'when ROB battery level is low','lowBatt'],//v
+
+
+          ['r', 'read error','readErrorFun'],//v
+          ['h', 'on error','errorFun'],//v
+
+          [' ', 'unblock','unblockFun'],
+          ['w', 'block','blockFun'],
 
 
         ],
