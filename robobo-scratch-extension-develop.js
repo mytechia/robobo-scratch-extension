@@ -499,7 +499,7 @@
     ext.stop = function () {
       ext.movePanRobobo(180,0);
       ext.moveTiltRobobo(90,0);
-      ext.moveRoboboWheels(0,0,1);
+      ext.moveRoboboWheels(1,1,1);
     };
 
     //Hat function that tracks brightness changes
