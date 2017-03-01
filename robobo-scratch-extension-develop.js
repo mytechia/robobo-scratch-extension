@@ -604,6 +604,14 @@
 
     }
 
+    ext.readPan = function () {
+      return rem.getPan();
+    };
+
+    ext.readTilt = function () {
+      return rem.getTilt();
+    };
+
 
 
     // Block and block menu descriptions
@@ -621,6 +629,9 @@
           [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
           [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
           [' ', 'move tilt %s degrees at speed %s','moveTiltRoboboDegree','5','5'],//v
+          ['r', 'read pan position','readPan'],//v
+          ['r', 'read tilt position','readTilt'],//v
+
 
 
           [' ', 'change emotion to %m.emotions','changeEmotion','normal'],
