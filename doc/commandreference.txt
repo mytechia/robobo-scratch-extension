@@ -68,6 +68,17 @@ parameters:
   rmotor: string in ['forward','backward','off']
   speed: integer
 
+13.(v0.1.4)
+
+name:
+  TWOWHEELSBLOCKING
+
+parameters:
+  lspeed: integer (-100:100)
+  rspeed: integer (-100:100)
+  time: integer (>0)
+  blockid: integer (>0)
+
 
 ----------------------------------HRI COMMANDS----------------------------------
 
@@ -105,7 +116,7 @@ parameters:
   sound: string in ['moan','purr']
 
 ----------------------------------OTHER COMMANDS----------------------------------
-11.(v0.1.3.2)
+12.(v0.1.3.2)
 
 name:
   DIE

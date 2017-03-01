@@ -33,12 +33,16 @@ function Remote(ip,passwd){
   this.laststatusmap = new Map();
   //Map of callbacks registered by the extension
   this.callbackmap = new Map();
+  //Map of blocking callbacks
+  this.blockingcallbackmap = new Map();
   //First execution mark
   this.firstime = true;
   //Connection state
   this.connectionState = Remote.ConnectionStateEnum.DISCONNECTED;
   //Connection password
   this.password = passwd;
+  //Last block id
+  this.lastblock = 0;
 //END OF REMOTE OBJECT
 };
 
@@ -231,6 +235,25 @@ Remote.prototype = {
             lspeed: lSpeed,
             rspeed: rSpeed,
             time:time
+        },
+        "id": this.commandid
+    });
+    this.sendMessage(message);
+    //END OF MOVETWOWHEELS FUNCTION
+  },
+
+  moveWheelsSeparatedWait: function(lSpeed,rSpeed,time,callback) {
+    lastblock = lastblock+1;
+    blockingcallbackmap.set(lastblock+"",callback);
+
+    var message = JSON.stringify({
+        "name": "TWOWHEELSBLOCKING",
+        "parameters": {
+            lspeed: lSpeed,
+            rspeed: rSpeed,
+            time:time,
+            blockid: lastblock
+
         },
         "id": this.commandid
     });
@@ -741,6 +764,10 @@ Remote.prototype = {
     else if (msg.name == "ONPHRASE") {
       console.log('ONPHRASE '+msg.value['text']);
       (this.callbackmap.get("onPhrase"))(msg.value['text']);
+    }
+    else if (msg.name == "UNLOCK") {
+      console.log('UNLOCK '+msg.value['id']);
+      (this.blockingcallbackmap.get(msg.value['id']))();
     }
 
     else {

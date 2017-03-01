@@ -593,6 +593,12 @@
         }, (time*1000)-100);
     };
 
+    //Two wheels movement function
+    ext.moveRoboboWheelsWaitNew = function(lSpeed,rSpeed,time,callback){
+      rem.moveWheelsSeparatedWait(lSpeed,rSpeed,time,callback);
+
+    };
+
 
     ext.blockFun = function(callback){
       ext.blockCallback = callback;
@@ -628,7 +634,7 @@
           [' ', 'move wheel %m.wheels by %s %m.mtype at speed %s','moveRobobo','both','1','seconds','50'],
           [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],
           [' ', 'set left motor to %m.motorDirectionBis and right motor to %m.motorDirectionBis at speed %s','setMotorsOn','forward','forward','100'],
-          ['w', '(blocking) move wheel left at speed %s and wheel right at speed %s for %s seconds and wait','moveRoboboWheelsWait','50','50','1000'],
+          ['w', '(blocking) move wheel left at speed %s and wheel right at speed %s for %s seconds and wait','moveRoboboWheelsWaitNew','50','50','1000'],
           [' ', 'move pan to %s at speed %s','movePanRobobo','180','5'],
           [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
           [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
