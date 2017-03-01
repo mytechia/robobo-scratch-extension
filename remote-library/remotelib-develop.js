@@ -247,7 +247,7 @@ Remote.prototype = {
     blockingcallbackmap.set(lastblock+"",callback);
 
     var message = JSON.stringify({
-        "name": "TWOWHEELSBLOCKING",
+        "name": "TWOWHEELSBLOCKING", 
         "parameters": {
             lspeed: lSpeed,
             rspeed: rSpeed,
