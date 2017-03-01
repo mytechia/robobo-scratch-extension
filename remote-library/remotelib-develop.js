@@ -281,6 +281,14 @@ Remote.prototype = {
     //END OF MOVEPAN FUNCTION
   },
 
+  getPan:function() {
+    return this.statusmap.get("panPos")
+  },
+
+  getTilt:function() {
+    return this.statusmap.get("tiltPos")
+  },
+
   movePanByDegrees (degrees, speed) {
     console.log("movePanByDegrees");
     var actual = this.statusmap.get("panPos");

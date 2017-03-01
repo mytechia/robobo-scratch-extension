@@ -605,11 +605,15 @@
     }
 
     ext.readPan = function () {
-      return rem.getPan();
+      var value = 0;
+      value = rem.getPan()
+      return value;
     };
 
     ext.readTilt = function () {
-      return rem.getTilt();
+      var value = 0;
+      value = rem.getTilt();
+      return value;
     };
 
 
