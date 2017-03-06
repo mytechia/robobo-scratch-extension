@@ -631,7 +631,7 @@
           [' ', 'end connection','disconnect'],
           [' ', 'stop all motors','stop'],
 
-          [' ', 'move wheels at speed %s %s for %s %m.mtype','moveRoboboWheels','50','50','10'],
+          [' ', 'move wheels at speed %s %s for %s %m.mtype','moveRoboboWheels','50','50','10','seconds'],
 
           [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
           [' ', 'move tilt %s degrees at speed %s','moveTiltRoboboDegree','5','5'],//v
@@ -639,7 +639,7 @@
           ['r', 'tilt position','readTilt'],//v
 
           //NEW RESET BLOCK
-          ['','reset sensor %m.sensors'],
+          [' ','reset sensor %m.sensors','all'],
 
 
           //BLOCKS-TO-BE-REMOVED
