@@ -639,7 +639,7 @@
           ['r', 'tilt position','readTilt'],//v
 
           //NEW RESET BLOCK
-          [' ','reset sensor %m.sensors','all'],
+          [' ','reset sensor %m.sensors','resetSensor','all'],
 
 
           //BLOCKS-TO-BE-REMOVED
