@@ -630,17 +630,17 @@
           [' ', 'connect ROBOBO at %s with password %s ','connectToRobobo','192.168.0.110',''],
           [' ', 'end connection','disconnect'],
           [' ', 'stop all motors','stop'],
-
-          [' ', 'move wheel %m.wheels by %s %m.mtype at speed %s','moveRobobo','both','1','seconds','50'],
-          [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],
+//move wheel left at speed x right at speed y by (seconds/degrees/nonstop) z
+          [' ', 'move wheel %m.wheels by %s %m.mtype at speed %s','moveRobobo','both','1','seconds','50'],//X
+          [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],//X
           [' ', 'set left motor to %m.motorDirectionBis and right motor to %m.motorDirectionBis at speed %s','setMotorsOn','forward','forward','100'],
           ['w', '(blocking) move wheel left at speed %s and wheel right at speed %s for %s seconds and wait','moveRoboboWheelsWait','50','50','1000'],
           [' ', 'move pan to %s at speed %s','movePanRobobo','180','5'],
           [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
-          [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
-          [' ', 'move tilt %s degrees at speed %s','moveTiltRoboboDegree','5','5'],//v
-          ['r', 'read pan position','readPan'],//v
-          ['r', 'read tilt position','readTilt'],//v
+//          [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
+//          [' ', 'move tilt %s degrees at speed %s','moveTiltRoboboDegree','5','5'],//v
+          ['r', ' pan position','readPan'],//v
+          ['r', ' tilt position','readTilt'],//v
 
 
 
@@ -649,54 +649,54 @@
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
           [' ', 'set led %m.leds %m.status','changeLedStatus','all', 'off'],
 
-          ['r', 'read face distance','readFaceDist'],//v
-          ['r', 'read face position at %m.axis axis','readFaceCoord','x'],//v
-          ['h', 'when face is detected','newFaceFun'],//v
-          ['h', 'when face is lost','lostFace'],//v
+          ['r', ' face distance','readFaceDist'],//v
+          ['r', ' face position at %m.axis axis','readFaceCoord','x'],//v
+//          ['h', 'when face is detected','newFaceFun'],//v
+//          ['h', 'when face is lost','lostFace'],//v
 
-          ['r', 'read color at %m.colorchan channel','measureColor'],//v
+          ['r', ' color at %m.colorchan channel','measureColor'],//v
 
 
           [' ', 'say %s','talkRobobo','hello world'],
 
           [' ', 'reset last voice order','resetPhrase'],//v
-          ['r', 'read last voice order','readPhrase'],//v
-          ['h', 'when voice order detected','detectedVoice'],//v
+          ['r', ' last voice order','readPhrase'],//v
+//          ['h', 'when voice order detected','detectedVoice'],//v
 
 
           [' ', 'play %m.sounds sound','playSound', 'moan'],
 
 
-          ['r', 'read orientation at %m.orientation axis','readOrientation','yaw'],//v
+          ['r', ' orientation at %m.orientation axis','readOrientation','yaw'],//v
 
-          ['r', 'read fling angle','readFlingAngle'],//v
-          ['r', 'read tap position at %m.axis axis','readTapCoord','x'],//v
+          ['r', ' fling angle','readFlingAngle'],//v
+          ['r', ' tap position at %m.axis axis','readTapCoord','x'],//v
           ['h', 'when tap detected','newTap'],//v
           ['h', 'when fling detected','newFling'],//v
 
-          ['r', 'read acceleration at %m.axis3d axis','readAcceleration','x'],//v
-          ['h', 'when acceleration detected','newAcceleration'],//v
+          ['r', ' acceleration at %m.axis3d axis','readAcceleration','x'],//v
+  //        ['h', 'when acceleration detected','newAcceleration'],//v
 
-          ['r', 'read brightness','readBrightnessLevel'],//v
-          ['h', 'when a brightness change is detected','changedBrightness'],//v
+          ['r', ' brightness','readBrightnessLevel'],//v
+  //        ['h', 'when a brightness change is detected','changedBrightness'],//v
 
-          ['r', 'read OBO battery level','readOboBatteryLevel'],//v
-          ['h', 'when OBO battery level is low','lowBatt'],//v
-
-
-
-          ['r', 'read obstacle at sensor %m.ir','readObstacle'],//v
-          ['h', 'when obstacle is detected','detectedObstacle'],//v
-
-          ['r', 'read gap at %m.gaps','readGap'],//v
-          ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
-
-          ['r', 'read ROB battery level','readBatteryLevel'],//v
-          ['h', 'when ROB battery level is low','lowBatt'],//v
+          ['r', ' OBO battery level','readOboBatteryLevel'],//v
+  //        ['h', 'when OBO battery level is low','lowBatt'],//v
 
 
-          ['r', 'read error','readErrorFun'],//v
-          ['h', 'on error','errorFun'],//v
+
+          ['r', ' obstacle at sensor %m.ir','readObstacle'],//v
+  //        ['h', 'when obstacle is detected','detectedObstacle'],//v
+
+          ['r', ' gap at %m.gaps','readGap'],//v
+  //        ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
+
+          ['r', ' ROB battery level','readBatteryLevel'],//v
+//          ['h', 'when ROB battery level is low','lowBatt'],//v
+
+
+          ['r', ' error','readErrorFun'],//v
+  //        ['h', 'on error','errorFun'],//v
 
           //[' ', 'unblock','unblockFun'],
           //['w', 'block','blockFun'],
