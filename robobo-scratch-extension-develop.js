@@ -627,76 +627,101 @@
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
-          [' ', 'connect ROBOBO at %s with password %s ','connectToRobobo','192.168.0.110',''],
+          [' ', 'connect to ROBOBO at %s with password %s ','connectToRobobo','192.168.0.110',''],
           [' ', 'end connection','disconnect'],
           [' ', 'stop all motors','stop'],
 
+          [' ', 'move wheels at speed %s %s for %s %m.mtype','moveRoboboWheels','50','50','10'],
+
+          [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
+          [' ', 'move tilt %s degrees at speed %s','moveTiltRoboboDegree','5','5'],//v
+          ['r', 'pan position','readPan'],//v
+          ['r', 'tilt position','readTilt'],//v
+
+          //NEW RESET BLOCK
+          ['','reset sensor %m.sensors']
+
+
+          //BLOCKS-TO-BE-REMOVED
           [' ', 'move wheel %m.wheels by %s %m.mtype at speed %s','moveRobobo','both','1','seconds','50'],
           [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],
           [' ', 'set left motor to %m.motorDirectionBis and right motor to %m.motorDirectionBis at speed %s','setMotorsOn','forward','forward','100'],
           ['w', '(blocking) move wheel left at speed %s and wheel right at speed %s for %s seconds and wait','moveRoboboWheelsWait','50','50','1000'],
           [' ', 'move pan to %s at speed %s','movePanRobobo','180','5'],
           [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
-          [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
-          [' ', 'move tilt %s degrees at speed %s','moveTiltRoboboDegree','5','5'],//v
-          ['r', 'read pan position','readPan'],//v
-          ['r', 'read tilt position','readTilt'],//v
+          //END BLOCKS-TO-BE-REMOVED
 
 
 
-          [' ', 'change emotion to %m.emotions','changeEmotion','normal'],
+          [' ', 'set emotion to %m.emotions','changeEmotion','normal'],
 
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
-          [' ', 'set led %m.leds %m.status','changeLedStatus','all', 'off'],
 
-          ['r', 'read face distance','readFaceDist'],//v
-          ['r', 'read face position at %m.axis axis','readFaceCoord','x'],//v
+          //BLOCKS-TO-BE-REMOVED
+          [' ', 'set led %m.leds %m.status','changeLedStatus','all', 'off'],
+          //END BLOCKS-TO-BE-REMOVED
+
+          ['r', 'face distance','readFaceDist'],//v
+          ['r', 'face position at %m.axis axis','readFaceCoord','x'],//v
           ['h', 'when face is detected','newFaceFun'],//v
           ['h', 'when face is lost','lostFace'],//v
 
-          ['r', 'read color at %m.colorchan channel','measureColor'],//v
+          ['r', 'color at %m.colorchan channel','measureColor'],//v
 
 
           [' ', 'say %s','talkRobobo','hello world'],
 
+          //BLOCKS-TO-BE-REMOVED
           [' ', 'reset last voice order','resetPhrase'],//v
           ['r', 'read last voice order','readPhrase'],//v
           ['h', 'when voice order detected','detectedVoice'],//v
-
+          //END BLOCKS-TO-BE-REMOVED
 
           [' ', 'play %m.sounds sound','playSound', 'moan'],
 
 
-          ['r', 'read orientation at %m.orientation axis','readOrientation','yaw'],//v
+          ['r', 'orientation at %m.orientation axis','readOrientation','yaw'],//v
 
-          ['r', 'read fling angle','readFlingAngle'],//v
-          ['r', 'read tap position at %m.axis axis','readTapCoord','x'],//v
+          ['r', 'fling angle','readFlingAngle'],//v
+          ['r', 'tap position at %m.axis axis','readTapCoord','x'],//v
           ['h', 'when tap detected','newTap'],//v
           ['h', 'when fling detected','newFling'],//v
 
-          ['r', 'read acceleration at %m.axis3d axis','readAcceleration','x'],//v
+          ['r', 'acceleration at %m.axis3d axis','readAcceleration','x'],//v
+
+          //BLOCKS-TO-BE-REMOVED
           ['h', 'when acceleration detected','newAcceleration'],//v
+          //END BLOCKS-TO-BE-REMOVED
 
-          ['r', 'read brightness','readBrightnessLevel'],//v
+          ['r', 'brightness','readBrightnessLevel'],//v
+
+          //BLOCKS-TO-BE-REMOVED
           ['h', 'when a brightness change is detected','changedBrightness'],//v
+          //END BLOCKS-TO-BE-REMOVED
 
-          ['r', 'read OBO battery level','readOboBatteryLevel'],//v
+          ['r', 'OBO battery level','readOboBatteryLevel'],//v
+
+          //BLOCKS-TO-BE-REMOVED
           ['h', 'when OBO battery level is low','lowBatt'],//v
+          //END BLOCKS-TO-BE-REMOVED
 
 
-
-          ['r', 'read obstacle at sensor %m.ir','readObstacle'],//v
+          ['r', 'obstacle at sensor %m.ir','readObstacle'],//v
           ['h', 'when obstacle is detected','detectedObstacle'],//v
 
-          ['r', 'read gap at %m.gaps','readGap'],//v
+          ['r', 'gap at %m.gaps','readGap'],//v
           ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
 
-          ['r', 'read ROB battery level','readBatteryLevel'],//v
+          ['r', 'ROB battery level','readBatteryLevel'],//v
+
+          //BLOCKS-TO-BE-REMOVED
           ['h', 'when ROB battery level is low','lowBatt'],//v
+          //END BLOCKS-TO-BE-REMOVED
 
-
+          //BLOCKS-TO-BE-REMOVED
           ['r', 'read error','readErrorFun'],//v
           ['h', 'on error','errorFun'],//v
+          //END BLOCKS-TO-BE-REMOVED
 
           //[' ', 'unblock','unblockFun'],
           //['w', 'block','blockFun'],
@@ -707,10 +732,10 @@
           motorDirection: ['forward', 'backward'],
           motorDirectionBis: ['forward', 'backward','off'],
           wheels: ['right', 'left','both'],
-          mtype: ['seconds','degrees','centimeters'],
+          mtype: ['non-stop','seconds','degrees','centimeters'],
           orientation: ['yaw','pitch','roll'],
           emotions: ['happy','laughting','sad','angry','surprised','normal'],
-          colors: ['white','red','blue','cyan','magenta','yellow','green','orange'],
+          colors: ['off','white','red','blue','cyan','magenta','yellow','green','orange'],
           status: ['on','off'],
           leds: ['1','2','3','4','5','6','7','8','9','all'],
           ir: ['1','2','3','4','5','6','7','8','9'],
@@ -720,6 +745,7 @@
           axis3d: ['x','y','z'],
           sounds: ['moan','purr',"angry","approve","disapprove","discomfort","doubtful","laugh","likes","mumble","ouch","thinking","various"],
           colorchan: ['red','green','blue'],
+          sensors: ['all','acceleratrion','brighness','claps','face','fling','gaps''obstacles','pan','orientation','tap','tilt']
         },
     };
 
