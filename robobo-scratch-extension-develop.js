@@ -639,7 +639,7 @@
           ['r', 'tilt position','readTilt'],//v
 
           //NEW RESET BLOCK
-          ['','reset sensor %m.sensors']
+          ['','reset sensor %m.sensors'],
 
 
           //BLOCKS-TO-BE-REMOVED
@@ -745,7 +745,7 @@
           axis3d: ['x','y','z'],
           sounds: ['moan','purr',"angry","approve","disapprove","discomfort","doubtful","laugh","likes","mumble","ouch","thinking","various"],
           colorchan: ['red','green','blue'],
-          sensors: ['all','acceleratrion','brighness','claps','face','fling','gaps''obstacles','pan','orientation','tap','tilt']
+          sensors: ['all','acceleratrion','brighness','claps','face','fling','gaps''obstacles','pan','orientation','tap','tilt'],
         },
     };
 
