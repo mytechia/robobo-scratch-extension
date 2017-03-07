@@ -649,7 +649,7 @@
 
           [' ', 'move wheels at speed %s %s for %s %m.mtype','moveRoboboWheels','50','50','10','seconds'],
 //          move wheels L 'X' and R 'Y' for 'Z' 'non-stop|seconds|degrees|centimeters'
-          ['w', 'move wheels L %s and R %S for %m.mtype','newMovement','50','50','seconds'],
+          ['w', 'move wheels L %s and R %s for %m.mtype','newMovement','50','50','seconds'],
           [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
           [' ', 'move tilt %s degrees at speed %s','moveTiltRoboboDegree','5','5'],//v
           ['r', 'pan position','readPan'],//v
