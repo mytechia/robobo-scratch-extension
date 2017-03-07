@@ -639,6 +639,82 @@
       }
     };
 
+    ext.resetSensor = function(sensor) {
+    //  sensors: [''obstacles','pan','orientation','tap','tilt'],
+    if (sensor == 'all'){
+      ext.lastIrChange = "";
+      ext.lastFall = "";
+      ext.lastGap = "";
+      ext.lowbattery = false;
+      ext.lowobobattery = false;
+      ext.tap = false;
+      ext.clap = false;
+      ext.brightnessChange = false;
+      ext.fling = false;
+      ext.accelchange = false;
+      ext.obstacle = false;
+      ext.clapnumber = 0;
+      ext.lastphrase = '';
+      rem.statusmap.set("facex",0);
+      rem.statusmap.set("facey",0);
+      rem.statusmap.set("flingangle",0);
+      rem.statusmap.set('Gap1',false);
+      rem.statusmap.set('Gap2',false);
+      rem.statusmap.set('Gap3',false);
+      rem.statusmap.set('Gap4',false);
+      ext.obstacle = false;
+      ext.statusmap.set("yaw",0);
+      ext.statusmap.set("pitch",0);
+      ext.statusmap.set("roll",0);
+      ext.statusmap.set("tapx",0);
+      ext.statusmap.set("tapy",0);
+      ext.statusmap.set("xaccel",0);
+      ext.statusmap.set("yaccel",0);
+      ext.statusmap.set("zaccel",0);
+
+    }else if (sensor == 'brightness') {
+      ext.brightnessChange = false;
+
+    }else if (sensor == 'claps') {
+      ext.clapnumber = 0;
+
+    }else if (sensor == 'face') {
+      rem.statusmap.set("facex",0);
+      rem.statusmap.set("facey",0);
+    }else if (sensor == 'fling') {
+      rem.statusmap.set("flingangle",0);
+
+    }else if (sensor == 'gaps') {
+      rem.statusmap.set('Gap1',false);
+      rem.statusmap.set('Gap2',false);
+      rem.statusmap.set('Gap3',false);
+      rem.statusmap.set('Gap4',false);
+
+
+    }else if (sensor == 'obstacles') {
+      ext.obstacle = false;
+
+    }else if (sensor == 'pan') {
+
+    }else if (sensor == 'tilt') {
+
+    }else if (sensor == 'orientation') {
+      ext.statusmap.set("yaw",0);
+      ext.statusmap.set("pitch",0);
+      ext.statusmap.set("roll",0);
+
+    }else if (sensor == 'tap') {
+      ext.statusmap.set("tapx",0);
+      ext.statusmap.set("tapy",0);
+    }else if (sensor== 'acceleration') {
+      ext.statusmap.set("xaccel",0);
+      ext.statusmap.set("yaccel",0);
+      ext.statusmap.set("zaccel",0);
+    }
+
+
+    }
+
 
     // Block and block menu descriptions
     var descriptor = {
@@ -762,7 +838,7 @@
           axis3d: ['x','y','z'],
           sounds: ['moan','purr',"angry","approve","disapprove","discomfort","doubtful","laugh","likes","mumble","ouch","thinking","various"],
           colorchan: ['red','green','blue'],
-          sensors: ['all','acceleratrion','brighness','claps','face','fling','gaps','obstacles','pan','orientation','tap','tilt'],
+          sensors: ['all','acceleration','brighness','claps','face','fling','gaps','obstacles','pan','orientation','tap','tilt'],
         },
     };
 
