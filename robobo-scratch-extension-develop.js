@@ -663,14 +663,14 @@
       rem.statusmap.set('Gap3',false);
       rem.statusmap.set('Gap4',false);
       ext.obstacle = false;
-      ext.statusmap.set("yaw",0);
-      ext.statusmap.set("pitch",0);
-      ext.statusmap.set("roll",0);
-      ext.statusmap.set("tapx",0);
-      ext.statusmap.set("tapy",0);
-      ext.statusmap.set("xaccel",0);
-      ext.statusmap.set("yaccel",0);
-      ext.statusmap.set("zaccel",0);
+      rem.statusmap.set("yaw",0);
+      rem.statusmap.set("pitch",0);
+      rem.statusmap.set("roll",0);
+      rem.statusmap.set("tapx",0);
+      rem.statusmap.set("tapy",0);
+      rem.statusmap.set("xaccel",0);
+      rem.statusmap.set("yaccel",0);
+      rem.statusmap.set("zaccel",0);
 
     }else if (sensor == 'brightness') {
       ext.brightnessChange = false;
@@ -699,17 +699,18 @@
     }else if (sensor == 'tilt') {
 
     }else if (sensor == 'orientation') {
-      ext.statusmap.set("yaw",0);
-      ext.statusmap.set("pitch",0);
-      ext.statusmap.set("roll",0);
+      rem.statusmap.set("yaw",0);
+      rem.statusmap.set("pitch",0);
+      rem.statusmap.set("roll",0);
 
     }else if (sensor == 'tap') {
-      ext.statusmap.set("tapx",0);
-      ext.statusmap.set("tapy",0);
-    }else if (sensor== 'acceleration') {
-      ext.statusmap.set("xaccel",0);
-      ext.statusmap.set("yaccel",0);
-      ext.statusmap.set("zaccel",0);
+      rem.statusmap.set("tapx",0);
+      rem.statusmap.set("tapy",0);
+
+    }else if (sensor == 'acceleration') {
+      rem.statusmap.set("xaccel",0);
+      rem.statusmap.set("yaccel",0);
+      rem.statusmap.set("zaccel",0);
     }
 
 
