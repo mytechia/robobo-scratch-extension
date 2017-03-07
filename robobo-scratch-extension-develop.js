@@ -647,11 +647,7 @@
           [' ', 'move wheel %m.wheels by %s %m.mtype at speed %s','moveRobobo','both','1','seconds','50'],
           [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],
           [' ', 'set left motor to %m.motorDirectionBis and right motor to %m.motorDirectionBis at speed %s','setMotorsOn','forward','forward','100'],
-<<<<<<< HEAD
           ['w', '(blocking) move wheel left at speed %s and wheel right at speed %s for %s seconds and wait','moveRoboboWheelsWait','50','50','1'],
-=======
-          ['w', '(blocking) move wheel left at speed %s and wheel right at speed %s for %s seconds and wait','moveRoboboWheelsWait','50','50','1000'],
->>>>>>> 3c60b0a06c86c19142ebe44605981323b5ba0ef7
           [' ', 'move pan to %s at speed %s','movePanRobobo','180','5'],
           [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
           //END BLOCKS-TO-BE-REMOVED
@@ -663,7 +659,7 @@
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
 
           //BLOCKS-TO-BE-REMOVED
-          [' ', 'set led %m.leds %m.status','changeLedStatus','all', 'off'],
+//          [' ', 'set led %m.leds %m.status','changeLedStatus','all', 'off'],
           //END BLOCKS-TO-BE-REMOVED
 
           ['r', 'face distance','readFaceDist'],//v
@@ -740,7 +736,7 @@
           mtype: ['non-stop','seconds','degrees','centimeters'],
           orientation: ['yaw','pitch','roll'],
           emotions: ['happy','laughting','sad','angry','surprised','normal'],
-          colors: ['off','white','red','blue','cyan','magenta','yellow','green','orange'],
+          colors: ['off','white','red','blue','cyan','magenta','yellow','green','orange','on','off'],
           status: ['on','off'],
           leds: ['1','2','3','4','5','6','7','8','9','all'],
           ir: ['1','2','3','4','5','6','7','8','9'],
