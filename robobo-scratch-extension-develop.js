@@ -727,8 +727,8 @@
           [' ', 'move wheels at speed %s %s for %s %m.mtype','moveRoboboWheels','50','50','10','seconds'],
 //          move wheels L 'X' and R 'Y' for 'Z' 'non-stop|seconds|degrees|centimeters'
 //          ['w', 'move wheels L %s and R %s for %s %m.mtype','newMovement','50','50','1','seconds'],
-          [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
-          [' ', 'move tilt %s degrees at speed %s','moveTiltRoboboDegree','5','5'],//v
+//          [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
+//          [' ', 'move tilt %s degrees at speed %s','moveTiltRoboboDegree','5','5'],//v
           ['r', 'pan position','readPan'],//v
           ['r', 'tilt position','readTilt'],//v
 
@@ -741,8 +741,8 @@
 //          [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],
 //          [' ', 'set left motor to %m.motorDirectionBis and right motor to %m.motorDirectionBis at speed %s','setMotorsOn','forward','forward','100'],
 //          ['w', '(blocking) move wheel left at speed %s and wheel right at speed %s for %s seconds and wait','moveRoboboWheelsWait','50','50','1'],
-//          [' ', 'move pan to %s at speed %s','movePanRobobo','180','5'],
-//          [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
+          [' ', 'move pan to %s at speed %s','movePanRobobo','180','5'],
+          [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
           //END BLOCKS-TO-BE-REMOVED
 
 
