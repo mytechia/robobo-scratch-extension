@@ -642,19 +642,19 @@
     ext.resetSensor = function(sensor) {
     //  sensors: [''obstacles','pan','orientation','tap','tilt'],
     if (sensor == 'all'){
-      ext.lastIrChange = "";
-      ext.lastFall = "";
-      ext.lastGap = "";
-      ext.lowbattery = false;
-      ext.lowobobattery = false;
-      ext.tap = false;
-      ext.clap = false;
-      ext.brightnessChange = false;
-      ext.fling = false;
-      ext.accelchange = false;
-      ext.obstacle = false;
-      ext.clapnumber = 0;
-      ext.lastphrase = '';
+      lastIrChange = "";
+      lastFall = "";
+      lastGap = "";
+      lowbattery = false;
+      lowobobattery = false;
+      tap = false;
+      clap = false;
+      brightnessChange = false;
+      fling = false;
+      accelchange = false;
+      obstacle = false;
+      clapnumber = 0;
+      lastphrase = '';
       rem.statusmap.set("facex",0);
       rem.statusmap.set("facey",0);
       rem.statusmap.set("flingangle",0);
@@ -673,10 +673,10 @@
       rem.statusmap.set("zaccel",0);
 
     }else if (sensor == 'brightness') {
-      ext.brightnessChange = false;
+      brightnessChange = false;
 
     }else if (sensor == 'claps') {
-      ext.clapnumber = 0;
+      clapnumber = 0;
 
     }else if (sensor == 'face') {
       rem.statusmap.set("facex",0);
@@ -692,7 +692,7 @@
 
 
     }else if (sensor == 'obstacles') {
-      ext.obstacle = false;
+      obstacle = false;
 
     }else if (sensor == 'pan') {
 
