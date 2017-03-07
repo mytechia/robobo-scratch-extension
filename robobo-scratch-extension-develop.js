@@ -625,7 +625,7 @@
 
     ext.newMovement = function(rSpeed,lSpeed,quantity,mode,callback){
       if (mode == 'non-stop'){
-        rem.moveWheelsSeparated(l,r,2147483647)
+        rem.moveWheelsSeparated(rSpeed,lSpeed,2147483647)
         callback();
       }else if (mode=='seconds') {
         rem.moveWheelsSeparated(lSpeed,rSpeed,quantity);
