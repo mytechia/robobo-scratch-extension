@@ -623,6 +623,21 @@
       return value;
     };
 
+    ext.newMovement = function(rSpeed,lSpeed,mode,callback){
+      if (mode == 'non-stop'){
+        rem.moveWheelsSeparated(l,r,2147483647)
+        callback();
+      }else if (mode=='seconds') {
+        rem.moveWheelsSeparated(lSpeed,rSpeed,time);
+        window.setTimeout(function() {
+              callback();
+          }, (time*1000)-100);
+      }else if (mode=='degrees') {
+
+      }else if (mode=='centimeters') {
+
+      }
+    };
 
 
     // Block and block menu descriptions
@@ -633,7 +648,8 @@
           [' ', 'stop all motors','stop'],
 
           [' ', 'move wheels at speed %s %s for %s %m.mtype','moveRoboboWheels','50','50','10','seconds'],
-
+//          move wheels L 'X' and R 'Y' for 'Z' 'non-stop|seconds|degrees|centimeters'
+          ['w', 'move wheels L %s and R %S for %m.mtype','newMovement','50','50','seconds'],
           [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
           [' ', 'move tilt %s degrees at speed %s','moveTiltRoboboDegree','5','5'],//v
           ['r', 'pan position','readPan'],//v
@@ -733,10 +749,10 @@
           motorDirection: ['forward', 'backward'],
           motorDirectionBis: ['forward', 'backward','off'],
           wheels: ['right', 'left','both'],
-          mtype: ['non-stop','seconds','degrees','centimeters'],
+          mtype: ['non-stop','seconds'],
           orientation: ['yaw','pitch','roll'],
           emotions: ['happy','laughting','sad','angry','surprised','normal'],
-          colors: ['off','white','red','blue','cyan','magenta','yellow','green','orange','on','off'],
+          colors: ['off','white','red','blue','cyan','magenta','yellow','green','orange'],
           status: ['on','off'],
           leds: ['1','2','3','4','5','6','7','8','9','all'],
           ir: ['1','2','3','4','5','6','7','8','9'],
