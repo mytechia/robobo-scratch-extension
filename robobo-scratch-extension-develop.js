@@ -631,7 +631,7 @@
         rem.moveWheelsSeparated(lSpeed,rSpeed,quantity);
         window.setTimeout(function() {
               callback();
-          }, (time*1000)-100);
+          }, (quantity*1000)-100);
       }else if (mode=='degrees') {
 
       }else if (mode=='centimeters') {
