@@ -726,14 +726,14 @@
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
-          ['h', 'CONNECTION BLOCKS'],
+          ['h', 'CONNECTION BLOCKS','dummyFun'],
 
           [' ', 'connect to ROBOBO at %s with password %s ','connectToRobobo','192.168.0.110',''],
           [' ', 'end connection','disconnect'],
           [' ', 'stop all motors','stop'],
           [' ','reset sensor %m.sensors','resetSensor','all'],
 
-          ['h', 'BASE ACTUATION BLOCKS'],
+          ['h', 'BASE ACTUATION BLOCKS','dummyFun'],
 
           [' ', 'move wheels at speed L %s R %s for %s %m.mtype','moveRoboboWheels','30','30','1','seconds'],
           [' ', 'move pan to %s at speed %s','movePanRobobo','180','5'],
@@ -747,7 +747,7 @@
 //          [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
 //          [' ', 'move tilt %s degrees at speed %s','moveTiltRoboboDegree','5','5'],//v
 
-          ['h', 'BASE SENSING BLOCKS'],
+          ['h', 'BASE SENSING BLOCKS','dummyFun'],
 
           ['r', 'pan position','readPan'],//v
           ['r', 'tilt position','readTilt'],//v
@@ -760,12 +760,12 @@
 
           ['r', 'ROB battery level','readBatteryLevel'],//v
 
-          ['h', 'SMARTPHONE ACTUATION BLOCKS'],
+          ['h', 'SMARTPHONE ACTUATION BLOCKS','dummyFun'],
           [' ', 'set emotion to %m.emotions','changeEmotion','normal'],
           [' ', 'say %s','talkRobobo','hello world'],
           [' ', 'play %m.sounds sound','playSound', 'moan'],
 
-          ['h', 'SMARTPHONE SENSING BLOCKS'],
+          ['h', 'SMARTPHONE SENSING BLOCKS','dummyFun'],
 
           ['r', 'face distance','readFaceDist'],//v
           ['r', 'face position at %m.axis axis','readFaceCoord','x'],//v
