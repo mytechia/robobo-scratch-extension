@@ -714,46 +714,58 @@
     }
 
 
-    }
+  };
+
+  ext.dummyFun = function () {
+    return false;
+  }
+
+
 
 
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
+          ['h', 'CONNECTION BLOCKS'],
+
           [' ', 'connect to ROBOBO at %s with password %s ','connectToRobobo','192.168.0.110',''],
           [' ', 'end connection','disconnect'],
           [' ', 'stop all motors','stop'],
+          [' ','reset sensor %m.sensors','resetSensor','all'],
 
-          [' ', 'move wheels at speed %s %s for %s %m.mtype','moveRoboboWheels','50','50','10','seconds'],
+          ['h', 'BASE ACTUATION BLOCKS'],
+
+          [' ', 'move wheels at speed L %s R %s for %s %m.mtype','moveRoboboWheels','30','30','1','seconds'],
+          [' ', 'move pan to %s at speed %s','movePanRobobo','180','5'],
+          [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
+          [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
+
+
+
 //          move wheels L 'X' and R 'Y' for 'Z' 'non-stop|seconds|degrees|centimeters'
 //          ['w', 'move wheels L %s and R %s for %s %m.mtype','newMovement','50','50','1','seconds'],
 //          [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
 //          [' ', 'move tilt %s degrees at speed %s','moveTiltRoboboDegree','5','5'],//v
+
+          ['h', 'BASE SENSING BLOCKS'],
+
           ['r', 'pan position','readPan'],//v
           ['r', 'tilt position','readTilt'],//v
 
-          //NEW RESET BLOCK
-          [' ','reset sensor %m.sensors','resetSensor','all'],
+          ['r', 'obstacle at sensor %m.ir','readObstacle'],//v
+          ['h', 'when obstacle is detected','detectedObstacle'],//v
 
+          ['r', 'gap at %m.gaps','readGap','Gap1'],//v
+          ['h', 'when gap is detected at %m.gaps','changedGaps','Gap1'],//v
 
-          //BLOCKS-TO-BE-REMOVED
-//          [' ', 'move wheel %m.wheels by %s %m.mtype at speed %s','moveRobobo','both','1','seconds','50'],
-//          [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],
-//          [' ', 'set left motor to %m.motorDirectionBis and right motor to %m.motorDirectionBis at speed %s','setMotorsOn','forward','forward','100'],
-//          ['w', '(blocking) move wheel left at speed %s and wheel right at speed %s for %s seconds and wait','moveRoboboWheelsWait','50','50','1'],
-          [' ', 'move pan to %s at speed %s','movePanRobobo','180','5'],
-          [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
-          //END BLOCKS-TO-BE-REMOVED
+          ['r', 'ROB battery level','readBatteryLevel'],//v
 
-
-
+          ['h', 'SMARTPHONE ACTUATION BLOCKS'],
           [' ', 'set emotion to %m.emotions','changeEmotion','normal'],
+          [' ', 'say %s','talkRobobo','hello world'],
+          [' ', 'play %m.sounds sound','playSound', 'moan'],
 
-          [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
-
-          //BLOCKS-TO-BE-REMOVED
-//          [' ', 'set led %m.leds %m.status','changeLedStatus','all', 'off'],
-          //END BLOCKS-TO-BE-REMOVED
+          ['h', 'SMARTPHONE SENSING BLOCKS'],
 
           ['r', 'face distance','readFaceDist'],//v
           ['r', 'face position at %m.axis axis','readFaceCoord','x'],//v
@@ -761,18 +773,6 @@
           ['h', 'when face is lost','lostFace'],//v
 
           ['r', 'color at %m.colorchan channel','measureColor'],//v
-
-
-          [' ', 'say %s','talkRobobo','hello world'],
-
-          //BLOCKS-TO-BE-REMOVED
-//          [' ', 'reset last voice order','resetPhrase'],//v
-//          ['r', 'read last voice order','readPhrase'],//v
-//          ['h', 'when voice order detected','detectedVoice'],//v
-          //END BLOCKS-TO-BE-REMOVED
-
-          [' ', 'play %m.sounds sound','playSound', 'moan'],
-
           ['r', 'read clap counter','readClap'],//v
 
 
@@ -785,30 +785,59 @@
 
           ['r', 'acceleration at %m.axis3d axis','readAcceleration','x'],//v
 
+          ['r', 'brightness','readBrightnessLevel'],//v
+          ['r', 'OBO battery level','readOboBatteryLevel'],//v
+
+
+
+          //NEW RESET BLOCK
+
+
+          //BLOCKS-TO-BE-REMOVED
+//          [' ', 'move wheel %m.wheels by %s %m.mtype at speed %s','moveRobobo','both','1','seconds','50'],
+//          [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],
+//          [' ', 'set left motor to %m.motorDirectionBis and right motor to %m.motorDirectionBis at speed %s','setMotorsOn','forward','forward','100'],
+//          ['w', '(blocking) move wheel left at speed %s and wheel right at speed %s for %s seconds and wait','moveRoboboWheelsWait','50','50','1'],
+
+          //END BLOCKS-TO-BE-REMOVED
+
+
+
+
+
+          //BLOCKS-TO-BE-REMOVED
+//          [' ', 'set led %m.leds %m.status','changeLedStatus','all', 'off'],
+          //END BLOCKS-TO-BE-REMOVED
+
+
+
+
+
+          //BLOCKS-TO-BE-REMOVED
+//          [' ', 'reset last voice order','resetPhrase'],//v
+//          ['r', 'read last voice order','readPhrase'],//v
+//          ['h', 'when voice order detected','detectedVoice'],//v
+          //END BLOCKS-TO-BE-REMOVED
+
+
+
+
           //BLOCKS-TO-BE-REMOVED
 //          ['h', 'when acceleration detected','newAcceleration'],//v
           //END BLOCKS-TO-BE-REMOVED
 
-          ['r', 'brightness','readBrightnessLevel'],//v
+
 
           //BLOCKS-TO-BE-REMOVED
 //          ['h', 'when a brightness change is detected','changedBrightness'],//v
           //END BLOCKS-TO-BE-REMOVED
 
-          ['r', 'OBO battery level','readOboBatteryLevel'],//v
 
           //BLOCKS-TO-BE-REMOVED
   //        ['h', 'when OBO battery level is low','lowBatt'],//v
           //END BLOCKS-TO-BE-REMOVED
 
 
-          ['r', 'obstacle at sensor %m.ir','readObstacle'],//v
-          ['h', 'when obstacle is detected','detectedObstacle'],//v
-
-          ['r', 'gap at %m.gaps','readGap'],//v
-          ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
-
-          ['r', 'ROB battery level','readBatteryLevel'],//v
 
           //BLOCKS-TO-BE-REMOVED
 //          ['h', 'when ROB battery level is low','lowBatt'],//v
