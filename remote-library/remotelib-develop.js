@@ -235,7 +235,7 @@ Remote.prototype = {
     if (Math.abs(speed)<10) {
       return 0;
     }else {
-      return convertedSpeed;
+      return Math.round(convertedSpeed);
     }
   },
 
