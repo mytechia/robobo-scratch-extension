@@ -145,6 +145,8 @@ Remote.prototype = {
   },
 
   //Waits until the connection is established with the server
+
+
   waitForConnection : function() {
 
     var startTime = new Date().getTime();
@@ -228,12 +230,24 @@ Remote.prototype = {
     //END OF MOVETIME FUNCTION
   },
 
+  convertSpeedWheels: function (speed) {
+    convertedSpeed = speed*2.5;
+    if (Math.abs(speed)<10) {
+      return 0;
+    }else {
+      return convertedSpeed;
+    }
+  },
+
   moveWheelsSeparated: function(lSpeed,rSpeed,time) {
+    ls = ''+convertSpeedWheels(parseInt(lSpeed));
+    rs = ''+convertSpeedWheels(parseInt(rSpeed));
+
     var message = JSON.stringify({
         "name": "MOVETWOWHEELS",
         "parameters": {
-            lspeed: lSpeed,
-            rspeed: rSpeed,
+            lspeed: lS,
+            rspeed: rS,
             time:time
         },
         "id": this.commandid
