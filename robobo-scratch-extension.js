@@ -18,12 +18,19 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-//Scratch extension version 0.1.3.1
+//Scratch extension version 0.2.0
 (function(ext) {
     var rem;
     var commandid = 0;
     var newcolor = false;
     var newface = false;
+    var lostface = false;
+    var error = false;
+    var voice = false;
+
+    var connectionStatus = 1;
+
+
     var lastIrChange = "";
     var lastFall = "";
     var lastGap = "";
@@ -36,6 +43,9 @@
     var accelchange = false;
     var obstacle = false;
     var clapnumber = 0;
+    var lastphrase = '';
+
+    var blockCallback = undefined;
 
     $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib.js", function(){});
 
@@ -45,9 +55,9 @@
 
     // Status reporting code
     // Use this to report missing hardware, plugin or unsupported browser
-    ext._getStatus = function() {
+    /*ext._getStatus = function() {
         return {status: 2, msg: 'Ready'};
-    };
+    };*/
 
     //Callback for color
     ext.onNewColor = function () {
@@ -68,6 +78,10 @@
     //Callback for faces
     ext.onNewFace = function () {
       newface = true;
+    }
+    //Callback for faces
+    ext.onFaceLost = function () {
+      lostface = true;
     }
     //Callback for low battery level on the rob
     ext.onLowBatt = function () {
@@ -105,13 +119,35 @@
       obstacle = true;
 
     }
+
+    ext.onError = function () {
+      error = true;
+    }
+
+    ext.onVoice = function (text) {
+      console.log('onVoice');
+      voice = true;
+      lastphrase = text;
+    }
+
+    ext.onConnectionChanges = function (status) {
+      connectionStatus = status;
+    }
     //Connection Block
-    ext.connectToRobobo = function(ip) {
-        rem = new Remote(ip);
+    ext.connectToRobobo = function(ip,passwd) {
+        if (rem != undefined){
+          console.log("Closing previous connection");
+          rem.closeConnection(true);
+
+        }
+        rem = new Remote(ip,passwd);
+        this.started = false;
+
         rem.connect();
         rem.registerCallback("onNewColor",ext.onNewColor);
         rem.registerCallback("onIrChanged",ext.onIrChanged);
         rem.registerCallback("onNewFace",ext.onNewFace);
+        rem.registerCallback("onLostFace",ext.onFaceLost);
         rem.registerCallback("onFall",ext.onFall);
         rem.registerCallback("onGap",ext.onGap);
         rem.registerCallback("onLowBatt",ext.onLowBatt);
@@ -122,27 +158,43 @@
         rem.registerCallback("onNewFling",ext.onNewFling);
         rem.registerCallback("onAccelChanged", ext.onAccelChanged);
         rem.registerCallback("onObstacle", ext.onObstacle);
+        rem.registerCallback("onError", ext.onError);
+        rem.registerCallback("onPhrase", ext.onVoice);
+        rem.registerCallback("onConnectionChanges", ext.onConnectionChanges);
 
-
+        rem.waitForConnection();
 
 
     };
 
     //Close connection
     ext.disconnect = function () {
-      rem.closeConnection();
-    }
+      rem.closeConnection(false);
 
-
-    //Close connection
-    ext.authenticate = function (password) {
-      rem.sendMessage("PASSWORD: "+password);
     }
 
     //Speech production function
     ext.talkRobobo = function(text){
         rem.talk(text);
+
     };
+
+    ext._getStatus = function() {
+      switch (connectionStatus) {
+        case 0:
+          return {status: 0, msg: 'Error'};
+          break;
+        case 1:
+          return {status: 1, msg: 'Device not connected'};
+          break;
+        case 2:
+          return {status: 2, msg: 'Device connected'};
+          break;
+      }
+
+
+
+    }
 
     //Movement function
     ext.moveRobobo = function(wheel,quantity,mtype,speed){
@@ -295,15 +347,18 @@
       return value;
     };
 
-    //Hat function that checks for new faces
-    ext.newFace = function() {
-      if (newface){
-        newface = false;
+
+
+    //Hat function that checks for new facesd
+    ext.lostFace = function() {
+      if (lostface){
+        lostface = false;
         return true;
       }else {
         return false;
       }
     };
+
 
     //Hat function that checks falls
     ext.changedFalls= function(fallpos) {
@@ -315,6 +370,15 @@
       }
     };
 
+    //Hat function that checks for new faces
+    ext.newFaceFun = function() {
+      if (newface){
+        newface = false;
+        return true;
+      }else {
+        return false;
+      }
+    };
     //Hat function that checks gaps
     ext.changedGaps= function(gappos) {
       if (gappos == lastGap){
@@ -420,17 +484,12 @@
       return value;
     };
 
-    //Reporter function to get the orientation in one axis
-    ext.readMeasuredColor= function (channel) {
-      var value = 0;
-      value = rem.getMeasuredColor(channel);
-      return value;
-    };
+
 
     //Reporter function to get the orientation in one axis
-    ext.readObstacle = function () {
+    ext.readObstacle = function (ir) {
       var value = 0;
-      value = rem.getObstacle();
+      value = rem.getObstacle(ir);
       return value;
     };
 
@@ -438,10 +497,10 @@
 
     //Emergency stop
     ext.stop = function () {
-      ext.movePanRobobo(0,0);
-      ext.moveTiltRobobo(0,0);
-      ext.moveRoboboWheels(0,0,1);
-    }
+      ext.movePanRobobo(180,0);
+      ext.moveTiltRobobo(90,0);
+      ext.moveRoboboWheels(1,1,1);
+    };
 
     //Hat function that tracks brightness changes
     ext.changedBrightness = function() {
@@ -465,12 +524,12 @@
 
     ext.playSound = function (sound) {
       rem.playEmotionSound(sound);
-    }
+    };
 
 
     ext.setMotorsOn = function (lmotor, rmotor, speed) {
       rem.motorsOn(lmotor,rmotor, speed);
-    }
+    };
 
 
     ext.readClap = function () {
@@ -481,59 +540,317 @@
 
     ext.resetClap = function () {
       clapnumber = 0;
+    };
+
+    //Hat function that checks for errors
+    ext.errorFun = function() {
+      if (error){
+        error = false;
+        return true;
+      }else {
+        return false;
+      }
+    };
+
+    ext.readErrorFun = function () {
+      var value = 0;
+      value = ext.getError();
+      return value;
+    };
+
+    ext.readPhrase = function () {
+
+      return lastphrase;
+    };
+
+    ext.resetPhrase = function () {
+
+      lastphrase = '';
+    };
+
+    ext.detectedVoice = function() {
+      if (voice){
+        voice = false;
+        return true;
+      }else {
+        return false;
+      }
+    };
+
+
+    //Reporter function to get the orientation in one axis
+    ext.measureColor = function (channel) {
+      var value = 0;
+      value = rem.checkMeasuredColor(channel);
+      return value;
+    };
+
+    //Two wheels movement function
+    ext.moveRoboboWheelsWait = function(lSpeed,rSpeed,time,callback){
+      rem.moveWheelsSeparated(lSpeed,rSpeed,time);
+      window.setTimeout(function() {
+            callback();
+        }, (time*1000)-100);
+    };
+
+    //Two wheels movement function
+    ext.moveRoboboWheelsWaitNew = function(lSpeed,rSpeed,time,callback){
+      console.log("moveRoboboWheelsWaitNew "+lSpeed+" "+rSpeed+" "+time);
+      rem.moveWheelsSeparatedWait(lSpeed,rSpeed,time,callback);
+
+    };
+
+
+    ext.blockFun = function(callback){
+      ext.blockCallback = callback;
+
+    };
+
+    ext.unblockFun = function() {
+      ext.blockCallback();
+
+    };
+
+    ext.readPan = function () {
+      var value = 0;
+      value = rem.getPan()
+      return value;
+    };
+
+    ext.readTilt = function () {
+      var value = 0;
+      value = rem.getTilt();
+      return value;
+    };
+
+    ext.newMovement = function(rSpeed,lSpeed,quantity,mode,callback){
+      if (mode == 'non-stop'){
+        rem.moveWheelsSeparated(rSpeed,lSpeed,2147483647)
+        callback();
+      }else if (mode=='seconds') {
+        rem.moveWheelsSeparated(lSpeed,rSpeed,quantity);
+        window.setTimeout(function() {
+              callback();
+          }, (quantity*1000)-100);
+      }else if (mode=='degrees') {
+
+      }else if (mode=='centimeters') {
+
+      }
+    };
+
+    ext.resetSensor = function(sensor) {
+    //  sensors: [''obstacles','pan','orientation','tap','tilt'],
+    if (sensor == 'all'){
+      lastIrChange = "";
+      lastFall = "";
+      lastGap = "";
+      lowbattery = false;
+      lowobobattery = false;
+      tap = false;
+      clap = false;
+      brightnessChange = false;
+      fling = false;
+      accelchange = false;
+      obstacle = false;
+      clapnumber = 0;
+      lastphrase = '';
+      rem.statusmap.set("facex",0);
+      rem.statusmap.set("facey",0);
+      rem.statusmap.set("flingangle",0);
+      rem.statusmap.set('Gap1',false);
+      rem.statusmap.set('Gap2',false);
+      rem.statusmap.set('Gap3',false);
+      rem.statusmap.set('Gap4',false);
+      ext.obstacle = false;
+      rem.statusmap.set("yaw",0);
+      rem.statusmap.set("pitch",0);
+      rem.statusmap.set("roll",0);
+      rem.statusmap.set("tapx",0);
+      rem.statusmap.set("tapy",0);
+      rem.statusmap.set("xaccel",0);
+      rem.statusmap.set("yaccel",0);
+      rem.statusmap.set("zaccel",0);
+
+    }else if (sensor == 'brightness') {
+      brightnessChange = false;
+
+    }else if (sensor == 'claps') {
+      clapnumber = 0;
+
+    }else if (sensor == 'face') {
+      rem.statusmap.set("facex",0);
+      rem.statusmap.set("facey",0);
+    }else if (sensor == 'fling') {
+      rem.statusmap.set("flingangle",0);
+
+    }else if (sensor == 'gaps') {
+      rem.statusmap.set('Gap1',false);
+      rem.statusmap.set('Gap2',false);
+      rem.statusmap.set('Gap3',false);
+      rem.statusmap.set('Gap4',false);
+
+
+    }else if (sensor == 'obstacles') {
+      obstacle = false;
+
+    }else if (sensor == 'pan') {
+
+    }else if (sensor == 'tilt') {
+
+    }else if (sensor == 'orientation') {
+      rem.statusmap.set("yaw",0);
+      rem.statusmap.set("pitch",0);
+      rem.statusmap.set("roll",0);
+
+    }else if (sensor == 'tap') {
+      rem.statusmap.set("tapx",0);
+      rem.statusmap.set("tapy",0);
+
+    }else if (sensor == 'acceleration') {
+      rem.statusmap.set("xaccel",0);
+      rem.statusmap.set("yaccel",0);
+      rem.statusmap.set("zaccel",0);
     }
+
+
+  };
+
+  ext.dummyFun = function () {
+    return false;
+  };
+
 
 
 
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
-          [' ', 'connect ROBOBO at %s ','connectToRobobo','192.168.0.110'],
-          [' ', 'close connection','disconnect'],
-          [' ', 'stop','stop'],
-          [' ', 'authenticate with password %s','authenticate','passwd'],
-          [' ', 'say %s','talkRobobo','hello world'],
-          [' ', 'move wheel %m.wheels by %s %m.mtype at speed %s','moveRobobo','both','1','seconds','50'],
-          [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],
-          [' ', 'set left motor to %m.motorDirectionBis and right motor to %m.motorDirectionBis at speed %s','setMotorsOn','forward','forward','100'],
+          ['h', 'CONNECTION BLOCKS','dummyFun'],
+
+          [' ', 'connect to ROBOBO at %s with password %s ','connectToRobobo','192.168.0.110',''],
+          [' ', 'end connection','disconnect'],
+          [' ', 'stop all motors','stop'],
+
+          ['h', 'ROB ACTUATION BLOCKS','dummyFun'],
+
+          [' ', 'move wheels at speed L %s R %s for %s %m.mtype','moveRoboboWheels','30','30','1','seconds'],
           [' ', 'move pan to %s at speed %s','movePanRobobo','180','5'],
           [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
-          [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
-          [' ', 'move tilt %s degrees at speed %s','moveTiltRoboboDegree','5','5'],//v
-          [' ', 'change emotion to %m.emotions','changeEmotion','normal'],
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
-          [' ', 'set led %m.leds %m.status','changeLedStatus','all', 'off'],
-          [' ', 'play %m.sounds sound','playSound', 'rimshot'],
-          [' ', 'reset clap counter','resetClap'],
-          ['r', 'read IR %m.ir value','readIrValue','1'],
-          ['r', 'read ROB battery level','readBatteryLevel'],//v
-          ['r', 'read OBO battery level','readOboBatteryLevel'],//v
-          ['r', 'read color detected','readCol'],
-          ['r', 'read face distance','readFaceDist'],//v
-          ['r', 'read obstacle','readObstacle'],//v
-          ['r', 'read fling angle','readFlingAngle'],//v
-          ['r', 'read face position at %m.axis axis','readFaceCoord','x'],//v
-          ['r', 'read tap position at %m.axis axis','readTapCoord','x'],//v
-          ['r', 'read orientation at %m.orientation axis','readOrientation','yaw'],//v
-          ['r', 'read acceleration at %m.axis3d axis','readAcceleration','x'],//v
-          ['r', 'read fall at %m.falls','readFall'],//v
-          ['r', 'read gap at %m.gaps','readGap'],//v
+
+
+
+//          move wheels L 'X' and R 'Y' for 'Z' 'non-stop|seconds|degrees|centimeters'
+//          ['w', 'move wheels L %s and R %s for %s %m.mtype','newMovement','50','50','1','seconds'],
+//          [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
+//          [' ', 'move tilt %s degrees at speed %s','moveTiltRoboboDegree','5','5'],//v
+
+          ['h', 'ROB SENSING BLOCKS','dummyFun'],
+          [' ','reset sensor %m.sensors','resetSensor','all'],
+
+
+          ['r', 'pan position','readPan'],//v
+          ['r', 'tilt position','readTilt'],//v
+
+          ['r', 'obstacle at sensor %m.ir','readObstacle'],//v
+          ['h', 'when obstacle is detected','detectedObstacle'],//v
+
+          ['r', 'gap at %m.gaps','readGap','Gap1'],//v
+          ['h', 'when gap is detected at %m.gaps','changedGaps','Gap1'],//v
+
+          ['r', 'ROB battery level','readBatteryLevel'],//v
+
+          ['h', 'OBO ACTUATION BLOCKS','dummyFun'],
+          [' ', 'set emotion to %m.emotions','changeEmotion','normal'],
+          [' ', 'say %s','talkRobobo','hello world'],
+          [' ', 'play %m.sounds sound','playSound', 'moan'],
+
+          ['h', 'OBO SENSING BLOCKS','dummyFun'],
+
+          ['r', 'face distance','readFaceDist'],//v
+          ['r', 'face position at %m.axis axis','readFaceCoord','x'],//v
+          ['h', 'when face is detected','newFaceFun'],//v
+          ['h', 'when face is lost','lostFace'],//v
+
+          ['r', 'color at %m.colorchan channel','measureColor'],//v
           ['r', 'read clap counter','readClap'],//v
-          ['r', 'read brightness','readBrightnessLevel'],//v
-          ['r', 'read color at %m.colorchan channel','readMeasuredColor'],//v
-          ['h', 'when color is detected','newCol'],
-          ['h', 'when face is detected','newFace'],//v
-          ['h', 'when ir %m.ir changed','changedIr'],
-          ['h', 'when ROB battery level is low','lowBatt'],//v
-          ['h', 'when OBO battery level is low','lowBatt'],//v
+
+
+          ['r', 'orientation at %m.orientation axis','readOrientation','yaw'],//v
+
+          ['r', 'fling angle','readFlingAngle'],//v
+          ['r', 'tap position at %m.axis axis','readTapCoord','x'],//v
           ['h', 'when tap detected','newTap'],//v
           ['h', 'when fling detected','newFling'],//v
-          ['h', 'when acceleration detected','newAcceleration'],//v
-          ['h', 'when clap detected','newClap'],//v
-          ['h', 'when fall is detected at %m.falls','changedFalls'],//v
-          ['h', 'when gap is detected at %m.gaps','changedGaps'],//v
-          ['h', 'when a brightness change is detected','changedBrightness'],//v
-          ['h', 'when obstacle is detected','detectedObstacle'],//v
+
+          ['r', 'acceleration at %m.axis3d axis','readAcceleration','x'],//v
+
+          ['r', 'brightness','readBrightnessLevel'],//v
+          ['r', 'OBO battery level','readOboBatteryLevel'],//v
+
+
+
+          //NEW RESET BLOCK
+
+
+          //BLOCKS-TO-BE-REMOVED
+//          [' ', 'move wheel %m.wheels by %s %m.mtype at speed %s','moveRobobo','both','1','seconds','50'],
+//          [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],
+//          [' ', 'set left motor to %m.motorDirectionBis and right motor to %m.motorDirectionBis at speed %s','setMotorsOn','forward','forward','100'],
+//          ['w', '(blocking) move wheel left at speed %s and wheel right at speed %s for %s seconds and wait','moveRoboboWheelsWait','50','50','1'],
+
+          //END BLOCKS-TO-BE-REMOVED
+
+
+
+
+
+          //BLOCKS-TO-BE-REMOVED
+//          [' ', 'set led %m.leds %m.status','changeLedStatus','all', 'off'],
+          //END BLOCKS-TO-BE-REMOVED
+
+
+
+
+
+          //BLOCKS-TO-BE-REMOVED
+//          [' ', 'reset last voice order','resetPhrase'],//v
+//          ['r', 'read last voice order','readPhrase'],//v
+//          ['h', 'when voice order detected','detectedVoice'],//v
+          //END BLOCKS-TO-BE-REMOVED
+
+
+
+
+          //BLOCKS-TO-BE-REMOVED
+//          ['h', 'when acceleration detected','newAcceleration'],//v
+          //END BLOCKS-TO-BE-REMOVED
+
+
+
+          //BLOCKS-TO-BE-REMOVED
+//          ['h', 'when a brightness change is detected','changedBrightness'],//v
+          //END BLOCKS-TO-BE-REMOVED
+
+
+          //BLOCKS-TO-BE-REMOVED
+  //        ['h', 'when OBO battery level is low','lowBatt'],//v
+          //END BLOCKS-TO-BE-REMOVED
+
+
+
+          //BLOCKS-TO-BE-REMOVED
+//          ['h', 'when ROB battery level is low','lowBatt'],//v
+          //END BLOCKS-TO-BE-REMOVED
+
+          //BLOCKS-TO-BE-REMOVED
+//          ['r', 'read error','readErrorFun'],//v
+//          ['h', 'on error','errorFun'],//v
+          //END BLOCKS-TO-BE-REMOVED
+
+          //[' ', 'unblock','unblockFun'],
+          //['w', 'block','blockFun'],
 
 
         ],
@@ -541,10 +858,10 @@
           motorDirection: ['forward', 'backward'],
           motorDirectionBis: ['forward', 'backward','off'],
           wheels: ['right', 'left','both'],
-          mtype: ['seconds','degrees','centimeters'],
+          mtype: ['non-stop','seconds'],
           orientation: ['yaw','pitch','roll'],
           emotions: ['happy','laughting','sad','angry','surprised','normal'],
-          colors: ['white','red','blue','cyan','magenta','yellow','green','orange'],
+          colors: ['off','white','red','blue','cyan','magenta','yellow','green','orange'],
           status: ['on','off'],
           leds: ['1','2','3','4','5','6','7','8','9','all'],
           ir: ['1','2','3','4','5','6','7','8','9'],
@@ -552,12 +869,13 @@
           gaps: ['Gap1','Gap2','Gap3','Gap4'],
           axis: ['x','y'],
           axis3d: ['x','y','z'],
-          sounds: ['alert','claps','booooo','laugh','alarm','rimshot'],
+          sounds: ['moan','purr',"angry","approve","disapprove","discomfort","doubtful","laugh","likes","mumble","ouch","thinking","various"],
           colorchan: ['red','green','blue'],
+          sensors: ['all','acceleration','brighness','claps','face','fling','gaps','obstacles','pan','orientation','tap','tilt'],
         },
     };
 
 
     // Register the extension
-    ScratchExtensions.register('Robobo Extension', descriptor, ext);
+    ScratchExtensions.register('Robobo Extension v0.2.0', descriptor, ext);
 })({});

@@ -18,9 +18,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-//Remote library version 0.1.2.1
+//Remote library version 0.2.0
 //Constructor of the remote control object
-function Remote(ip){
+function Remote(ip,passwd){
   this.ip = ip;
   this.port = 40404;
   //WebSocket to stablish the connection
@@ -33,10 +33,25 @@ function Remote(ip){
   this.laststatusmap = new Map();
   //Map of callbacks registered by the extension
   this.callbackmap = new Map();
+  //Map of blocking callbacks
+  this.blockingcallbackmap = new Map();
   //First execution mark
   this.firstime = true;
+  //Connection state
+  this.connectionState = Remote.ConnectionStateEnum.DISCONNECTED;
+  //Connection password
+  this.password = passwd;
+  //Last block id
+  this.lastblock = 0;
 //END OF REMOTE OBJECT
 };
+
+Remote.ConnectionStateEnum = {
+  CONNECTING: 0,
+  CONNECTED: 1,
+  RECONNECTING: 2,
+  DISCONNECTED: 3
+}
 
 Remote.prototype = {
 
@@ -46,29 +61,114 @@ Remote.prototype = {
     //END OF REGISTERCALLBACK FUNCTION
   },
   connect :function() {
+    if (this.ws != undefined){
+      console.log("Closing previous connection");
+      this.ws.close();
+      (this.callbackmap.get("onConnectionChanges"))(1);
+
+    }
+
+    this.connectionState = Remote.ConnectionStateEnum.CONNECTING;
+
     this.ws = new WebSocket("ws://"+this.ip+":"+this.port);
 
     this.ws.onopen = function() {
       console.log("Connection Stablished");
+      (this.callbackmap.get("onConnectionChanges"))(2);
+      this.sendMessage("PASSWORD: "+this.password);
+      this.connectionState = Remote.ConnectionStateEnum.CONNECTED;
+    }.bind(this);
 
-
-    }
 
     this.ws.addEventListener('message', function(evt) {
       var received_msg = evt.data;
       this.handleMessage(received_msg);
-
     }.bind(this));
 
-    this.ws.onclose = function() {
+    this.ws.onclose = function(event) {
+      var error = false;
+      if(this.connectionState != Remote.ConnectionStateEnum.RECONNECTING){
+        var reason;
+
+          // See http://tools.ietf.org/html/rfc6455#section-7.4.1
+          if (event.code == 1000)
+              reason = "";
+          else if(event.code == 1001)
+              reason = "";
+          else if(event.code == 1002)
+              reason = "Protocol Error";
+          else if(event.code == 1003)
+              reason = "Invalid data";
+          else if(event.code == 1004)
+              reason = "";
+          else if(event.code == 1005)
+              reason = "";
+          else if(event.code == 1006){
+             reason = "Lost connection";
+             error = true;
+           }
+          else if(event.code == 1007)
+              reason = "";
+          else if(event.code == 1008)
+              reason = "";
+          else if(event.code == 1009)
+             reason = "";
+          else if(event.code == 1010) // Note that this status code is not used by the server, because it can fail the WebSocket handshake instead.
+              reason = "";
+          else if(event.code == 1011)
+              reason = "";
+          else if(event.code == 1015)
+              reason = "Failure to perform a TLS handshake";
+          else
+              reason = "Unknown reason";
+          alert('Connection closed\n'+reason);
+      }
+      if (error){
+        (this.callbackmap.get("onConnectionChanges"))(0);
+      }else{
+        (this.callbackmap.get("onConnectionChanges"))(1);
+      }
+      this.reconnecting = false;
       console.log("Connection Closed");
-    }
+      this.connectionState = Remote.ConnectionStateEnum.DISCONNECTED;
+    }.bind(this);
+
+    this.ws.onerror = function(error){
+      this.connectionState = Remote.ConnectionStateEnum.DISCONNECTED;
+      (this.callbackmap.get("onConnectionChanges"))(0);
+      alert("Websocket Error");
+    }.bind(this);
+
+
 
     //END OF CONNECT FUNCTION
   },
 
-  closeConnection: function() {
-    this.ws.close()
+  //Waits until the connection is established with the server
+
+
+  waitForConnection : function() {
+
+    var startTime = new Date().getTime();
+    while(true) {
+      var currentTime = new Date().getTime();
+      if (startTime+1000 < currentTime) {
+
+        break;
+      }
+    }
+
+  },
+
+  isConnected : function() {
+    return this.connectionState == Remote.ConnectionStateEnum.CONNECTED;
+  },
+
+  closeConnection: function(reconnect) {
+    if (reconnect) {
+      this.connectionState = Remote.ConnectionStateEnum.RECONNECTING;
+    }
+    this.ws.close();
     //END OF CLOSECONNECTION METHOD
   },
 
@@ -77,6 +177,13 @@ Remote.prototype = {
     this.ws.send(message);
 
     //END OF SENDMESSAGE FUNCTION
+  },
+
+  fireError: function (err) {
+    console.log("ERROR "+ err);
+    this.statusmap.set("error",err);
+
+    (this.callbackmap.get("onError"))();
   },
 
   handleMessage: function(message) {
@@ -123,16 +230,50 @@ Remote.prototype = {
     //END OF MOVETIME FUNCTION
   },
 
+  convertSpeedWheels: function (speed) {
+    convertedSpeed = speed*2.5;
+    if (Math.abs(speed)<10) {
+      return 0;
+    }else {
+      return Math.round(convertedSpeed);
+    }
+  },
+
   moveWheelsSeparated: function(lSpeed,rSpeed,time) {
+    lS = ''+convertSpeedWheels(parseInt(lSpeed));
+    rS = ''+convertSpeedWheels(parseInt(rSpeed));
+
     var message = JSON.stringify({
         "name": "MOVETWOWHEELS",
         "parameters": {
-            lspeed: lSpeed,
-            rspeed: rSpeed,
+            lspeed: lS,
+            rspeed: rS,
             time:time
         },
         "id": this.commandid
     });
+    this.sendMessage(message);
+    //END OF MOVETWOWHEELS FUNCTION
+  },
+
+  moveWheelsSeparatedWait: function(lSpeed,rSpeed,time,callback) {
+    console.log("moveWheelsSeparatedWait "+lSpeed+" "+rSpeed+" "+time);
+
+    lastblock = lastblock+1;
+    blockingcallbackmap.set(lastblock+"",callback);
+
+    var message = JSON.stringify({
+        "name": "TWOWHEELSBLOCKING",
+        "parameters": {
+            lspeed: lSpeed,
+            rspeed: rSpeed,
+            time:time,
+            blockid: lastblock
+
+        },
+        "id": this.commandid
+    });
+    console.log("Message: "+message)
     this.sendMessage(message);
     //END OF MOVETWOWHEELS FUNCTION
   },
@@ -173,9 +314,19 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.statusmap.set("panPos",pos);
+    if (vel > 0){
+      this.statusmap.set("panPos",pos);
+    }
     this.sendMessage(message);
     //END OF MOVEPAN FUNCTION
+  },
+
+  getPan:function() {
+    return this.statusmap.get("panPos")
+  },
+
+  getTilt:function() {
+    return this.statusmap.get("tiltPos")
   },
 
   movePanByDegrees (degrees, speed) {
@@ -207,7 +358,9 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    this.statusmap.set("tiltPos",parseInt(pos));
+    if (vel > 0){
+      this.statusmap.set("tiltPos",parseInt(pos));
+    }
     this.sendMessage(message);
     //END OF MOVETILT FUNCTION
   },
@@ -400,7 +553,8 @@ Remote.prototype = {
     //END OF GETORIENTATION FUNCTION
   },
 
-  getMeasuredColor:function(channel) {
+  checkMeasuredColor:function(channel) {
+
     if (channel=="red") {
       return this.statusmap.get("colorr");
 
@@ -418,11 +572,18 @@ Remote.prototype = {
     return this.statusmap.get("facedist");
   },
 
-  getObstacle : function () {
-    return this.statusmap.get("obstacle");
+  getObstacle : function (ir) {
+    return this.statusmap.get("obstacle_"+ir);
   },
 
   //ENDVISION
+
+  getError : function () {
+    return this.statusmap.get("error");
+    //END OF GETCOLOR FUNCTION
+  },
+
+
 
 
   manageStatus : function (msg) {
@@ -454,9 +615,12 @@ Remote.prototype = {
           }else{
             var now = parseInt(msg.value[key]);
             if (parseInt(msg.value[key])>130) {
-              this.statusmap.set("obstacle",parseInt(key.slice(-1)));
+              this.statusmap.set("obstacle_"+parseInt(key.slice(-1)),true);
 
               this.callbackmap.get("onObstacle")();
+            } else {
+              this.statusmap.set("obstacle_"+parseInt(key.slice(-1)),false);
+
             }
             var then = this.laststatusmap.get(key);
             //console.log(key+" now: "+now);
@@ -496,8 +660,16 @@ Remote.prototype = {
     else if (msg.name == "NEWFACE") {
       this.statusmap.set("facex",parseInt(msg.value["coordx"]));
       this.statusmap.set("facey",parseInt(msg.value["coordy"]));
-      this.statusmap.set("facedist",parseInt(msg.value["distance"]));
-      (this.callbackmap.get("onNewFace"))();
+
+      if (parseInt(msg.value["distance"])>45){
+        this.statusmap.set("facedist","close");
+      }else if (parseInt(msg.value["distance"])<25){
+        this.statusmap.set("facedist","far");
+      } else {
+        this.statusmap.set("facedist","mid");
+      }
+
+
     }
 
     else if (msg.name == "FALLSTATUS"){
@@ -572,8 +744,8 @@ Remote.prototype = {
 
     }
 
-    else if (msg.name == "COLORMEASURED") {
-      console.log(msg);
+    else if (msg.name == "MEASUREDCOLOR") {
+      //console.log(msg);
       this.statusmap.set("colorr",parseInt(msg.value["R"]));
       this.statusmap.set("colorg",parseInt(msg.value["G"]));
       this.statusmap.set("colorb",parseInt(msg.value["B"]));
@@ -585,8 +757,38 @@ Remote.prototype = {
       (this.callbackmap.get("onAccelChanged"))();
     }
 
+    else if (msg.name == "DIE") {
+      console.log("Die message");
+      this.closeConnection(false);
+    }
+
+    else if (msg.name == "FOUNDFACE") {
+      //console.log("FOUNDFACE");
+      (this.callbackmap.get("onNewFace"))();
+    }
+
+    else if (msg.name == "LOSTFACE") {
+      //console.log("LOSTFACE");
+      (this.callbackmap.get("onLostFace"))();
+    }
+
+    else if (msg.name == "ONERROR") {
+      console.log("ERROR "+ msg.value['error']);
+      this.statusmap.set("error",msg.value['error']);
+
+      (this.callbackmap.get("onError"))();
+    }
+    else if (msg.name == "ONPHRASE") {
+      console.log('ONPHRASE '+msg.value['text']);
+      (this.callbackmap.get("onPhrase"))(msg.value['text']);
+    }
+    else if (msg.name == "UNLOCK") {
+      console.log('UNLOCK '+msg.value['id']);
+      (this.blockingcallbackmap.get(msg.value['id']))();
+    }
+
     else {
-      console.log('Lost status'+ msg.name);
+      console.log('Lost status '+ msg.name);
     }
     //END MANAGESTATUS FUNCTION
   },
