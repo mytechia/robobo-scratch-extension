@@ -718,7 +718,7 @@
 
   ext.dummyFun = function () {
     return false;
-  }
+  };
 
 
 
