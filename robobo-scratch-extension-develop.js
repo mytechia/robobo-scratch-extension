@@ -876,5 +876,5 @@
 
 
     // Register the extension
-    ScratchExtensions.register('Robobo Extension', descriptor, ext);
+    ScratchExtensions.register('Robobo Extension v0.1.4', descriptor, ext);
 })({});
