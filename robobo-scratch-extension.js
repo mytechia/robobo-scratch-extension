@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-//Scratch extension version 0.2.0
+//Scratch extension version 0.2.0 
 (function(ext) {
     var rem;
     var commandid = 0;
