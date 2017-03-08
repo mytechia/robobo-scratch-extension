@@ -230,24 +230,24 @@ Remote.prototype = {
     //END OF MOVETIME FUNCTION
   },
 
-/*  convertSpeedWheels: function (speed) {
+  convertSpeedWheels: function (speed) {
     convertedSpeed = speed*2.5;
     if (Math.abs(speed)<10) {
       return 0;
     }else {
       return Math.round(convertedSpeed);
     }
-  },*/
+  },
 
   moveWheelsSeparated: function(lSpeed,rSpeed,time) {
-  //  ls = ''+convertSpeedWheels(parseInt(lSpeed));
-  //  rs = ''+convertSpeedWheels(parseInt(rSpeed));
+    lS = ''+convertSpeedWheels(parseInt(lSpeed));
+    rS = ''+convertSpeedWheels(parseInt(rSpeed));
 
     var message = JSON.stringify({
         "name": "MOVETWOWHEELS",
         "parameters": {
-            lspeed: lSpeed,
-            rspeed: rSpeed,
+            lspeed: lS,
+            rspeed: rS,
             time:time
         },
         "id": this.commandid
