@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-//Scratch extension version 0.2.0 
+//Scratch extension version 0.2.0
 (function(ext) {
     var rem;
     var commandid = 0;
@@ -47,7 +47,7 @@
 
     var blockCallback = undefined;
 
-    $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib.js", function(){});
+    $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib-develop.js", function(){});
 
 
     // Cleanup function when the extension is unloaded
@@ -171,7 +171,7 @@
     ext.disconnect = function () {
       rem.closeConnection(false);
 
-    }
+    };
 
     //Speech production function
     ext.talkRobobo = function(text){
@@ -238,7 +238,7 @@
     };
 
     //Pan movement function (absolute)
-    ext.movePanRobobo = function(degrees, speed){
+    ext.movePanRoboboT = function(degrees, speed){
       rem.movePan(degrees,speed);
     };
 
@@ -496,10 +496,12 @@
 
 
     //Emergency stop
-    ext.stop = function () {
-      ext.movePanRobobo(180,0);
-      ext.moveTiltRobobo(90,0);
-      ext.moveRoboboWheels(1,1,1);
+    ext.stopFun = function () {
+
+      rem.moveWheelsSeparated(1,1,1);
+      //ext.movePanRobobo(180,0);
+      //ext.moveTiltRobobo(90,0);
+
     };
 
     //Hat function that tracks brightness changes
@@ -730,12 +732,12 @@
 
           [' ', 'connect to ROBOBO at %s with password %s ','connectToRobobo','192.168.0.110',''],
           [' ', 'end connection','disconnect'],
-          [' ', 'stop all motors','stop'],
+          [' ', 'stop all motors','stopFun'],
 
           ['h', 'ROB ACTUATION BLOCKS','dummyFun'],
 
-          [' ', 'move wheels at speed L %s R %s for %s %m.mtype','moveRoboboWheels','30','30','1','seconds'],
-          [' ', 'move pan to %s at speed %s','movePanRobobo','180','5'],
+          ['w', 'move wheels at speed R %s L %s for %s %m.mtype','newMovement','30','30','1','seconds'],
+          [' ', 'move pan to %s at speed %s','movePanRoboboT','180','5'],
           [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
 
@@ -788,6 +790,7 @@
 
           ['r', 'brightness','readBrightnessLevel'],//v
           ['r', 'OBO battery level','readOboBatteryLevel'],//v
+
 
 
 

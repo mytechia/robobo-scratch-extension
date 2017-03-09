@@ -239,16 +239,23 @@ Remote.prototype = {
     }
   },
 
-  convertSpeedPanTilt: function (speed) {
+  convertSpeedPan: function (speed) {
     convertedSpeed = speed*1.4;
 
-      return Math.round(convertedSpeed);
+      return Math.floor(convertedSpeed);
+
+  },
+
+  convertSpeedTilt: function (speed) {
+    convertedSpeed = speed*0.9;
+
+      return Math.floor(convertedSpeed);
 
   },
 
   moveWheelsSeparated: function(lSpeed,rSpeed,time) {
-    lS = ''+convertSpeedWheels(parseInt(lSpeed));
-    rS = ''+convertSpeedWheels(parseInt(rSpeed));
+    lS = ''+this.convertSpeedWheels(parseInt(lSpeed));
+    rS = ''+this.convertSpeedWheels(parseInt(rSpeed));
 
     var message = JSON.stringify({
         "name": "MOVETWOWHEELS",
@@ -300,6 +307,7 @@ Remote.prototype = {
   },
 
 
+
   turnInPlace: function(degrees) {
     var message = JSON.stringify({
         "name": "TURNINPLACE",
@@ -313,7 +321,7 @@ Remote.prototype = {
   },
 
   movePan: function(pos, vel) {
-    s = ''+ convertSpeedPanTilt(parseInt(vel));
+    s = ''+ this.convertSpeedPan(parseInt(vel));
 
     var message = JSON.stringify({
         "name": "MOVEPAN",
@@ -360,7 +368,7 @@ Remote.prototype = {
   },
 
   moveTilt: function (pos, vel) {
-    s = ''+ convertSpeedPanTilt(parseInt(vel));
+    s = ''+ this.convertSpeedTilt(parseInt(vel));
 
     var message = JSON.stringify({
         "name": "MOVETILT",
