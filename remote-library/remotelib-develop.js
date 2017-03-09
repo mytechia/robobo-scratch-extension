@@ -319,7 +319,7 @@ Remote.prototype = {
         "name": "MOVEPAN",
         "parameters": {
             pos: pos,
-            speed:val
+            speed:vel
         },
         "id": this.commandid
     });
