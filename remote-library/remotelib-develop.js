@@ -361,13 +361,13 @@ Remote.prototype = {
   },
 
   moveTilt: function (pos, vel) {
-    s = ''+ this.convertSpeedPanTilt(parseInt(vel));
+    //s = ''+ this.convertSpeedPanTilt(parseInt(vel));
 
     var message = JSON.stringify({
         "name": "MOVETILT",
         "parameters": {
             pos: pos,
-            speed:s
+            speed:vel
         },
         "id": this.commandid
     });
