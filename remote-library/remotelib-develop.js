@@ -242,7 +242,7 @@ Remote.prototype = {
   convertSpeedPanTilt: function (speed) {
     convertedSpeed = speed*1.4;
 
-      return Math.round(convertedSpeed);
+      return Math.floor(convertedSpeed);
 
   },
 
