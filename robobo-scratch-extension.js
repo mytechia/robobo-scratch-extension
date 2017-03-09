@@ -731,10 +731,10 @@
 
           [' ', 'connect to ROBOBO at %s with password %s ','connectToRobobo','192.168.0.110',''],
           [' ', 'end connection','disconnect'],
-          [' ', 'stop all motors','stopFun'],
 
           ['h', 'ROB ACTUATION BLOCKS','dummyFun'],
 
+          [' ', 'stop all motors','stopFun'],
           ['w', 'move wheels at speed R %s L %s for %s %m.mtype','newMovement','30','30','1','seconds'],
           [' ', 'move pan to %s at speed %s','movePanRoboboT','180','5'],
           [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
