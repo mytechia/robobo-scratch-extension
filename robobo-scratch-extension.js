@@ -495,12 +495,11 @@
 
 
 
-    //Emergency stop
     ext.stopFun = function () {
 
-      rem.moveWheelsSeparated(1,1,1);
-      //ext.movePanRobobo(180,0);
-      //ext.moveTiltRobobo(90,0);
+      rem.moveWheelsSeparated(10,10,0);
+      ext.movePanRoboboT(180,0);
+      ext.moveTiltRoboboT(90,0);
 
     };
 
