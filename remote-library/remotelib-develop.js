@@ -230,7 +230,7 @@ Remote.prototype = {
     //END OF MOVETIME FUNCTION
   },
 
-  /*convertSpeedWheels: function (speed) {
+  convertSpeedWheels: function (speed) {
     convertedSpeed = speed*2.5;
     if (Math.abs(speed)<10) {
       return 0;
@@ -244,17 +244,17 @@ Remote.prototype = {
 
       return Math.round(convertedSpeed);
 
-  },*/
+  },
 
   moveWheelsSeparated: function(lSpeed,rSpeed,time) {
-    //lS = ''+convertSpeedWheels(parseInt(lSpeed));
-    //rS = ''+convertSpeedWheels(parseInt(rSpeed));
+    lS = ''+convertSpeedWheels(parseInt(lSpeed));
+    rS = ''+convertSpeedWheels(parseInt(rSpeed));
 
     var message = JSON.stringify({
         "name": "MOVETWOWHEELS",
         "parameters": {
-            lspeed: lSpeed,
-            rspeed: rSpeed,
+            lspeed: lS,
+            rspeed: rS,
             time:time
         },
         "id": this.commandid
@@ -314,13 +314,13 @@ Remote.prototype = {
   },
 
   movePan: function(pos, vel) {
-    //s = ''+ convertSpeedPanTilt(parseInt(vel));
+    s = ''+ convertSpeedPanTilt(parseInt(vel));
 
     var message = JSON.stringify({
         "name": "MOVEPAN",
         "parameters": {
             pos: pos,
-            speed:vel
+            speed:s
         },
         "id": this.commandid
     });
@@ -361,13 +361,13 @@ Remote.prototype = {
   },
 
   moveTilt: function (pos, vel) {
-  //  s = ''+ convertSpeedPanTilt(parseInt(vel));
+    s = ''+ convertSpeedPanTilt(parseInt(vel));
 
     var message = JSON.stringify({
         "name": "MOVETILT",
         "parameters": {
             pos: pos,
-            speed:vel
+            speed:s
         },
         "id": this.commandid
     });
