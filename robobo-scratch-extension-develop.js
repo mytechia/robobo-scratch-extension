@@ -736,7 +736,7 @@
 
           ['h', 'ROB ACTUATION BLOCKS','dummyFun'],
 
-          [' ', 'move wheels at speed R %s L %s for %s %m.mtype','newMovement','30','30','1','seconds'],
+          ['w', 'move wheels at speed R %s L %s for %s %m.mtype','newMovement','30','30','1','seconds'],
           [' ', 'move pan to %s at speed %s','movePanRobobo','180','5'],
           [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
