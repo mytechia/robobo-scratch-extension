@@ -300,6 +300,7 @@ Remote.prototype = {
   },
 
 
+
   turnInPlace: function(degrees) {
     var message = JSON.stringify({
         "name": "TURNINPLACE",
