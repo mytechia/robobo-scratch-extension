@@ -239,8 +239,15 @@ Remote.prototype = {
     }
   },
 
-  convertSpeedPanTilt: function (speed) {
+  convertSpeedPan: function (speed) {
     convertedSpeed = speed*1.4;
+
+      return Math.floor(convertedSpeed);
+
+  },
+
+  convertSpeedTilt: function (speed) {
+    convertedSpeed = speed*0.9;
 
       return Math.floor(convertedSpeed);
 
@@ -314,7 +321,7 @@ Remote.prototype = {
   },
 
   movePan: function(pos, vel) {
-    s = ''+ this.convertSpeedPanTilt(parseInt(vel));
+    s = ''+ this.convertSpeedPan(parseInt(vel));
 
     var message = JSON.stringify({
         "name": "MOVEPAN",
@@ -361,13 +368,13 @@ Remote.prototype = {
   },
 
   moveTilt: function (pos, vel) {
-    //s = ''+ this.convertSpeedPanTilt(parseInt(vel));
+    s = ''+ this.convertSpeedTilt(parseInt(vel));
 
     var message = JSON.stringify({
         "name": "MOVETILT",
         "parameters": {
             pos: pos,
-            speed:vel
+            speed:s
         },
         "id": this.commandid
     });
