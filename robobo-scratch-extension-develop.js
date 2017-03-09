@@ -171,7 +171,7 @@
     ext.disconnect = function () {
       rem.closeConnection(false);
 
-    }
+    };
 
     //Speech production function
     ext.talkRobobo = function(text){
@@ -496,10 +496,11 @@
 
 
     //Emergency stop
-    ext.stop = function () {
-      ext.movePanRobobo(180,0);
-      ext.moveTiltRobobo(90,0);
+    ext.stopFun = function () {
+
       rem.moveWheelsSeparated(1,1,1);
+      //ext.movePanRobobo(180,0);
+      //ext.moveTiltRobobo(90,0);
 
     };
 
@@ -731,7 +732,7 @@
 
           [' ', 'connect to ROBOBO at %s with password %s ','connectToRobobo','192.168.0.110',''],
           [' ', 'end connection','disconnect'],
-          [' ', 'stop all motors','stop'],
+          [' ', 'stop all motors','stopFun'],
 
           ['h', 'ROB ACTUATION BLOCKS','dummyFun'],
 
