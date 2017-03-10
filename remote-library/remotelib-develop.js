@@ -331,9 +331,9 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    if (vel > 0){
-      this.statusmap.set("panPos",pos);
-    }
+    //if (vel > 0){
+    //  this.statusmap.set("panPos",pos);
+    //}
     this.sendMessage(message);
     //END OF MOVEPAN FUNCTION
   },
@@ -362,7 +362,7 @@ Remote.prototype = {
     }
     console.log(newpos);
 
-    this.statusmap.set("panPos",parseInt(newpos));
+    //this.statusmap.set("panPos",parseInt(newpos));
     this.movePan(newpos, speed);
     //END OF MOVEPANBYDEGREES FUNCTION
   },
@@ -378,9 +378,9 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    if (vel > 0){
-      this.statusmap.set("tiltPos",parseInt(pos));
-    }
+    //if (vel > 0){
+    //  this.statusmap.set("tiltPos",parseInt(pos));
+    //}
     this.sendMessage(message);
     //END OF MOVETILT FUNCTION
   },
@@ -399,7 +399,7 @@ Remote.prototype = {
       newpos = 26;
     }
     console.log(newpos);
-    this.statusmap.set("tiltPos",newpos);
+    //this.statusmap.set("tiltPos",newpos);
     this.moveTilt(newpos, speed);
     //END OF MOVETILTBYDEGREES FUNCTION
   },
@@ -603,6 +603,15 @@ Remote.prototype = {
     //END OF GETCOLOR FUNCTION
   },
 
+  getPanPosition : function () {
+    return this.statusmap.get("panPos");
+    //END OF GETCOLOR FUNCTION
+  },
+
+  getTiltPosition : function () {
+    return this.statusmap.get("tiltPos");
+    //END OF GETCOLOR FUNCTION
+  },
 
 
 
@@ -807,9 +816,19 @@ Remote.prototype = {
       (this.blockingcallbackmap.get(msg.value['id']))();
     }
 
+    else if (msg.name == "PANSTATUS") {
+      (this.callbackmap.get("panPos"))(msg.value['panPos']);
+    }
+
+    else if (msg.name == "TILTSTATUS") {
+      (this.callbackmap.get("tiltPos"))(msg.value['tiltPos']);
+    }
+
     else {
       console.log('Lost status '+ msg.name);
     }
+
+
     //END MANAGESTATUS FUNCTION
   },
 

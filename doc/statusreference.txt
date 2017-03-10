@@ -198,3 +198,19 @@ name:
 
 value:
   blockid: integer (>0)
+
+21. (v2.0.1)
+
+name:
+  PANSTATUS
+
+value:
+  panPos: integer (0:360)
+
+21. (v2.0.1)
+
+name:
+  TILTSTATUS
+
+value:
+  panPos: integer (0:360)
