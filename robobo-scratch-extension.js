@@ -498,8 +498,8 @@
     ext.stopFun = function () {
 
       rem.moveWheelsSeparated(10,10,0);
-      ext.movePanRoboboT(180,0);
-      ext.moveTiltRoboboT(90,0);
+      //ext.movePanRoboboT(180,0);
+      //ext.moveTiltRoboboT(90,0);
 
     };
 
