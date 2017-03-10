@@ -47,7 +47,7 @@
 
     var blockCallback = undefined;
 
-    $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib-develop.js", function(){});
+    $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib.js", function(){});
 
 
     // Cleanup function when the extension is unloaded
