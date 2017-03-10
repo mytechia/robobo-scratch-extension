@@ -817,10 +817,13 @@ Remote.prototype = {
     }
 
     else if (msg.name == "PANSTATUS") {
+      console.log("PANSTATUS "+msg.value['panPos']);
       this.callbackmap.set("panPos",msg.value['panPos']);
     }
 
     else if (msg.name == "TILTSTATUS") {
+      console.log("TILTSTATUS "+msg.value['panPos']);
+
       this.callbackmap.set("tiltPos",msg.value['tiltPos']);
     }
 
