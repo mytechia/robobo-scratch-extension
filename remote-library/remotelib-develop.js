@@ -818,13 +818,13 @@ Remote.prototype = {
 
     else if (msg.name == "PANSTATUS") {
       console.log("PANSTATUS "+msg.value['panPos']);
-      this.callbackmap.set("panPos",msg.value['panPos']);
+      this.statusmap.set("panPos",msg.value['panPos']);
     }
 
     else if (msg.name == "TILTSTATUS") {
-      console.log("TILTSTATUS "+msg.value['panPos']);
+      console.log("TILTSTATUS "+msg.value['tiltPos']);
 
-      this.callbackmap.set("tiltPos",msg.value['tiltPos']);
+      this.statusmap.set("tiltPos",msg.value['tiltPos']);
     }
 
     else {
