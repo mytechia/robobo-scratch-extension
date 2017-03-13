@@ -34,7 +34,7 @@ function Remote(ip,passwd){
   //Map of callbacks registered by the extension
   this.callbackmap = new Map();
   //Map of blocking callbacks
-  this.blockingcallbackmap = new Map();
+  //this.blockingcallbackmap = new Map();
   //First execution mark
   this.firstime = true;
   //Connection state
@@ -43,6 +43,13 @@ function Remote(ip,passwd){
   this.password = passwd;
   //Last block id
   this.lastblock = 0;
+  //Wheel stop callback
+  this.wheelsCallback = undefined;
+  //Tilt stop callback
+  this.tiltCallback = undefined;
+  //Pan stop callback
+  this.panCallback = undefined;
+
 //END OF REMOTE OBJECT
 };
 
@@ -274,8 +281,12 @@ Remote.prototype = {
     console.log("moveWheelsSeparatedWait "+lSpeed+" "+rSpeed+" "+time);
 
     this.lastblock = this.lastblock+1;
-    this.blockingcallbackmap.set(this.lastblock+"",callback);
+    //this.blockingcallbackmap.set(this.lastblock+"",callback);
+    if (this.wheelsCallback != undefined){
+      this.wheelsCallback();
+    }
 
+    this.wheelsCallback = callback;
     var message = JSON.stringify({
         "name": "TWOWHEELSBLOCKING",
         "parameters": {
@@ -813,7 +824,9 @@ Remote.prototype = {
     }
     else if (msg.name == "UNLOCK") {
       console.log('UNLOCK '+msg.value['blockid']);
-      (this.blockingcallbackmap.get(msg.value['blockid']))();
+      //(this.blockingcallbackmap.get(""+msg.value['blockid']))();
+      this.wheelsCallback();
+      this.wheelsCallback = undefined;
     }
 
     else if (msg.name == "PANSTATUS") {
