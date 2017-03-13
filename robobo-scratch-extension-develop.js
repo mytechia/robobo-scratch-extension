@@ -645,16 +645,16 @@
     };
 
 
-    ext.newMovement = function(rSpeed,lSpeed,quantity,mode,callback){
+    ext.newMovementT = function(rSpeed,lSpeed,quantity,mode,callback){
       if (mode == 'non-stop'){
         rem.moveWheelsSeparated(rSpeed,lSpeed,2147483647)
         callback();
       }else if (mode=='seconds') {
         rem.moveWheelsSeparatedWait(lSpeed,rSpeed,quantity,callback);
       }else if (mode=='degrees') {
-
+        callback();
       }else if (mode=='centimeters') {
-
+        callback();
       }
     };
 
@@ -754,7 +754,7 @@
 
           ['h', 'ROB ACTUATION BLOCKS','dummyFun'],
 
-          ['w', 'move wheels at speed R %s L %s for %s %m.mtype','newMovement','30','30','1','seconds'],
+          ['w', 'move wheels at speed R %s L %s for %s %m.mtype','newMovementT','30','30','1','seconds'],
           [' ', 'move pan to %s at speed %s','movePanRoboboT','180','5'],
           [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
