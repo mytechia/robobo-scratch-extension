@@ -595,12 +595,7 @@
         }, (time*1000)-100);
     };
 
-    //Two wheels movement function
-    ext.moveRoboboWheelsWaitNew = function(lSpeed,rSpeed,time,callback){
-      console.log("moveRoboboWheelsWaitNew "+lSpeed+" "+rSpeed+" "+time);
-      rem.moveWheelsSeparatedWait(lSpeed,rSpeed,time,callback);
 
-    };
 
 
     ext.blockFun = function(callback){
@@ -625,7 +620,15 @@
       return value;
     };
 
-    ext.newMovement = function(rSpeed,lSpeed,quantity,mode,callback){
+
+    //Two wheels movement function
+    ext.moveRoboboWheelsWaitNew = function(lSpeed,rSpeed,time,callback){
+      console.log("moveRoboboWheelsWaitNew "+lSpeed+" "+rSpeed+" "+time);
+      rem.moveWheelsSeparatedWait(lSpeed,rSpeed,time,callback);
+
+    };
+
+    ext.oldMovement = function(rSpeed,lSpeed,quantity,mode,callback){
       if (mode == 'non-stop'){
         rem.moveWheelsSeparated(rSpeed,lSpeed,2147483647)
         callback();
@@ -640,6 +643,21 @@
 
       }
     };
+
+
+    ext.newMovement = function(rSpeed,lSpeed,quantity,mode,callback){
+      if (mode == 'non-stop'){
+        rem.moveWheelsSeparated(rSpeed,lSpeed,2147483647)
+        callback();
+      }else if (mode=='seconds') {
+        rem.moveWheelsSeparatedWait(lSpeed,rSpeed,quantity,callback);
+      }else if (mode=='degrees') {
+
+      }else if (mode=='centimeters') {
+
+      }
+    };
+
 
     ext.resetSensor = function(sensor) {
     //  sensors: [''obstacles','pan','orientation','tap','tilt'],

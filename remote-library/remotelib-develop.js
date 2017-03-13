@@ -273,8 +273,8 @@ Remote.prototype = {
   moveWheelsSeparatedWait: function(lSpeed,rSpeed,time,callback) {
     console.log("moveWheelsSeparatedWait "+lSpeed+" "+rSpeed+" "+time);
 
-    lastblock = lastblock+1;
-    blockingcallbackmap.set(lastblock+"",callback);
+    this.lastblock = this.lastblock+1;
+    this.blockingcallbackmap.set(this.lastblock+"",callback);
 
     var message = JSON.stringify({
         "name": "TWOWHEELSBLOCKING",
