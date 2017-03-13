@@ -812,8 +812,8 @@ Remote.prototype = {
       (this.callbackmap.get("onPhrase"))(msg.value['text']);
     }
     else if (msg.name == "UNLOCK") {
-      console.log('UNLOCK '+msg.value['id']);
-      (this.blockingcallbackmap.get(msg.value['id']))();
+      console.log('UNLOCK '+msg.value['blockid']);
+      (this.blockingcallbackmap.get(msg.value['blockid']))();
     }
 
     else if (msg.name == "PANSTATUS") {
