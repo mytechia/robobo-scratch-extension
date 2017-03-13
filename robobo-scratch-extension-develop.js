@@ -164,8 +164,6 @@
 
         rem.waitForConnection();
 
-        window.open("http://mytechia.github.io/robobo-scratch-extension/robobo-sensors.html?ip="+ip);
-
     };
 
     //Close connection
