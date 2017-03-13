@@ -817,12 +817,12 @@ Remote.prototype = {
     }
 
     else if (msg.name == "PANSTATUS") {
-      console.log("PANSTATUS "+msg.value['panPos']);
+      //console.log("PANSTATUS "+msg.value['panPos']);
       this.statusmap.set("panPos",msg.value['panPos']);
     }
 
     else if (msg.name == "TILTSTATUS") {
-      console.log("TILTSTATUS "+msg.value['tiltPos']);
+      //console.log("TILTSTATUS "+msg.value['tiltPos']);
 
       this.statusmap.set("tiltPos",msg.value['tiltPos']);
     }
