@@ -282,7 +282,7 @@ Remote.prototype = {
             lspeed: lSpeed,
             rspeed: rSpeed,
             time:time,
-            blockid: lastblock
+            blockid: this.lastblock
 
         },
         "id": this.commandid
