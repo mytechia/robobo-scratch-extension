@@ -80,6 +80,27 @@ parameters:
   blockid: integer (>0)
 
 
+
+  14.(v0.2.1)
+
+  name:
+    MOVEPANBLOCKING
+
+  parameters:
+    pos: integer (0:360)
+    speed : integer (0:10)
+    blockid: integer (>0)
+
+  15.(v0.2.1)
+
+  name:
+    MOVETILTBLOCKING
+
+  parameters:
+    pos: integer (0:180)
+    speed: integer (0:10)
+    blockid: integer (>0)
+
 ----------------------------------HRI COMMANDS----------------------------------
 
 7.(v0.1.0)

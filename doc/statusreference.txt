@@ -214,3 +214,20 @@ name:
 
 value:
   panPos: integer (0:360)
+
+
+22.(v2.0.1)
+
+name:
+  UNLOCKTILT
+
+value:
+  blockid: integer (>0)
+
+23.(v2.0.1)
+
+name:
+  UNLOCKPAN
+
+value:
+  blockid: integer (>0)

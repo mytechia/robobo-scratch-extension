@@ -658,6 +658,30 @@
     };
 
 
+
+    //Pan movement function (absolute)
+    ext.movePanRoboboNew = function(degrees, speed, block, callback){
+      if (block=="blocking"){
+        rem.movePan(degrees,speed,callback);
+
+      }else{
+        rem.movePan(degrees,speed);
+        callback()
+      }
+    };
+
+    //Tilt movement function (absolute)
+    ext.moveTiltRoboboNew = function(degrees,speed, block, callback)){
+      if (block=="blocking"){
+        rem.moveTilt(degrees,speed,callback);
+      }else{
+        rem.moveTilt(degrees,speed);
+        callback();
+      }
+    };
+
+
+
     ext.resetSensor = function(sensor) {
     //  sensors: [''obstacles','pan','orientation','tap','tilt'],
     if (sensor == 'all'){
@@ -754,8 +778,10 @@
           ['h', 'ROB ACTUATION BLOCKS','dummyFun'],
 
           ['w', 'move wheels at speed R %s L %s for %s %m.mtype','newMovementT','30','30','1','seconds'],
-          [' ', 'move pan to %s at speed %s','movePanRoboboT','180','5'],
-          [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
+          ['w', 'move pan to %s at speed %s %m.block','movePanRoboboNew','180','5','non-blocking'],
+          ['w', 'move tilt to %s at speed %s %m.block','moveTiltRoboboNew','90','5','non-blocking'],
+        //  [' ', 'move pan to %s at speed %s','movePanRoboboT','180','5'],
+        //  [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
 
 
@@ -892,6 +918,7 @@
           sounds: ['moan','purr',"angry","approve","disapprove","discomfort","doubtful","laugh","likes","mumble","ouch","thinking","various"],
           colorchan: ['red','green','blue'],
           sensors: ['all','acceleration','brighness','claps','face','fling','gaps','obstacles','pan','orientation','tap','tilt'],
+          block: ['blocking','non-blocking'],
         },
     };
 

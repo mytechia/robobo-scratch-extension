@@ -349,6 +349,33 @@ Remote.prototype = {
     //END OF MOVEPAN FUNCTION
   },
 
+  movePanWait: function(pos, vel, callback) {
+    s = ''+ this.convertSpeedPan(parseInt(vel));
+
+    this.lastblock = this.lastblock+1;
+    //this.blockingcallbackmap.set(this.lastblock+"",callback);
+    if (this.panCallback != undefined){
+      this.panCallback();
+    }
+    this.panCallback = callback;
+
+
+    var message = JSON.stringify({
+        "name": "MOVEPANBLOCKING",
+        "parameters": {
+            pos: pos,
+            speed:s
+            blockid:this.lastblock
+        },
+        "id": this.commandid
+    });
+    //if (vel > 0){
+    //  this.statusmap.set("panPos",pos);
+    //}
+    this.sendMessage(message);
+    //END OF MOVEPAN FUNCTION
+  },
+
   getPan:function() {
     return this.statusmap.get("panPos")
   },
@@ -383,6 +410,31 @@ Remote.prototype = {
 
     var message = JSON.stringify({
         "name": "MOVETILT",
+        "parameters": {
+            pos: pos,
+            speed:s
+        },
+        "id": this.commandid
+    });
+    //if (vel > 0){
+    //  this.statusmap.set("tiltPos",parseInt(pos));
+    //}
+    this.sendMessage(message);
+    //END OF MOVETILT FUNCTION
+  },
+
+  moveTiltWait: function (pos, vel, callback) {
+    s = ''+ this.convertSpeedTilt(parseInt(vel));
+
+    this.lastblock = this.lastblock+1;
+    //this.blockingcallbackmap.set(this.lastblock+"",callback);
+    if (this.tiltCallback != undefined){
+      this.tiltCallback();
+    }
+    this.tiltCallback = callback;
+
+    var message = JSON.stringify({
+        "name": "MOVETILTBLOCKING",
         "parameters": {
             pos: pos,
             speed:s
@@ -827,6 +879,18 @@ Remote.prototype = {
       //(this.blockingcallbackmap.get(""+msg.value['blockid']))();
       this.wheelsCallback();
       this.wheelsCallback = undefined;
+    }
+    else if (msg.name == "UNLOCKTILT") {
+      console.log('UNLOCKTILT '+msg.value['blockid']);
+      //(this.blockingcallbackmap.get(""+msg.value['blockid']))();
+      this.tiltCallback();
+      this.tiltCallback = undefined;
+    }
+    else if (msg.name == "UNLOCKPAN") {
+      console.log('UNLOCK '+msg.value['blockid']);
+      //(this.blockingcallbackmap.get(""+msg.value['blockid']))();
+      this.panCallback();
+      this.panCallback = undefined;
     }
 
     else if (msg.name == "PANSTATUS") {
