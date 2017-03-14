@@ -359,13 +359,15 @@ Remote.prototype = {
     }
     this.panCallback = callback;
 
+    lb = this.lastblock
+
 
     var message = JSON.stringify({
         "name": "MOVEPANBLOCKING",
         "parameters": {
             pos: pos,
-            speed:s
-            blockid:this.lastblock
+            speed:s,
+            blockid:lb
         },
         "id": this.commandid
     });
@@ -432,12 +434,13 @@ Remote.prototype = {
       this.tiltCallback();
     }
     this.tiltCallback = callback;
-
+    var lb = this.lastblock;
     var message = JSON.stringify({
         "name": "MOVETILTBLOCKING",
         "parameters": {
             pos: pos,
-            speed:s
+            speed:s,
+            blockid:lb
         },
         "id": this.commandid
     });
