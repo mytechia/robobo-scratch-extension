@@ -666,12 +666,12 @@
 
       }else{
         rem.movePan(degrees,speed);
-        callback()
+        callback();
       }
     };
 
     //Tilt movement function (absolute)
-    ext.moveTiltRoboboNew = function(degrees,speed, block, callback)){
+    ext.moveTiltRoboboNew = function(degrees,speed, block, callback){
       if (block=="blocking"){
         rem.moveTilt(degrees,speed,callback);
       }else{
