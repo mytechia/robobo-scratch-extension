@@ -773,7 +773,7 @@ Remote.prototype = {
         //console.log(key);
           this.statusmap.set(key,(msg.value[key] == "true"));
           if(this.statusmap.get(key)){
-            console.log("OnFall");
+            //console.log("OnFall");
             (this.callbackmap.get("onFall"))(key);
           }
       }
