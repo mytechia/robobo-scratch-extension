@@ -662,7 +662,7 @@
     //Pan movement function (absolute)
     ext.movePanRoboboNew = function(degrees, speed, block, callback){
       if (block=="blocking"){
-        rem.movePan(degrees,speed,callback);
+        rem.movePanWait(degrees,speed,callback);
 
       }else{
         rem.movePan(degrees,speed);
@@ -673,7 +673,7 @@
     //Tilt movement function (absolute)
     ext.moveTiltRoboboNew = function(degrees,speed, block, callback){
       if (block=="blocking"){
-        rem.moveTilt(degrees,speed,callback);
+        rem.moveTiltWait(degrees,speed,callback);
       }else{
         rem.moveTilt(degrees,speed);
         callback();
