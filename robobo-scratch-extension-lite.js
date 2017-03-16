@@ -837,8 +837,8 @@
           [' ','reset sensor %m.sensors','resetSensor','all'],
 
 
-          ['r', 'pan position','readPan'],//v
-          ['r', 'tilt position','readTilt'],//v
+        //  ['r', 'pan position','readPan'],//v
+        //  ['r', 'tilt position','readTilt'],//v
 
           ['r', 'obstacle at sensor %m.ir','readObstacle'],//v
         //  ['h', 'when obstacle is detected','detectedObstacle'],//v
