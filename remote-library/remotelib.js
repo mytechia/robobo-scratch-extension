@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-//Remote library version 0.2.0
+//Remote library version 0.1.3-dev
 //Constructor of the remote control object
 function Remote(ip,passwd){
   this.ip = ip;
@@ -34,7 +34,7 @@ function Remote(ip,passwd){
   //Map of callbacks registered by the extension
   this.callbackmap = new Map();
   //Map of blocking callbacks
-  this.blockingcallbackmap = new Map();
+  //this.blockingcallbackmap = new Map();
   //First execution mark
   this.firstime = true;
   //Connection state
@@ -43,6 +43,13 @@ function Remote(ip,passwd){
   this.password = passwd;
   //Last block id
   this.lastblock = 0;
+  //Wheel stop callback
+  this.wheelsCallback = undefined;
+  //Tilt stop callback
+  this.tiltCallback = undefined;
+  //Pan stop callback
+  this.panCallback = undefined;
+
 //END OF REMOTE OBJECT
 };
 
@@ -273,16 +280,20 @@ Remote.prototype = {
   moveWheelsSeparatedWait: function(lSpeed,rSpeed,time,callback) {
     console.log("moveWheelsSeparatedWait "+lSpeed+" "+rSpeed+" "+time);
 
-    lastblock = lastblock+1;
-    blockingcallbackmap.set(lastblock+"",callback);
+    this.lastblock = this.lastblock+1;
+    //this.blockingcallbackmap.set(this.lastblock+"",callback);
+    if (this.wheelsCallback != undefined){
+      this.wheelsCallback();
+    }
 
+    this.wheelsCallback = callback;
     var message = JSON.stringify({
         "name": "TWOWHEELSBLOCKING",
         "parameters": {
             lspeed: lSpeed,
             rspeed: rSpeed,
             time:time,
-            blockid: lastblock
+            blockid: this.lastblock
 
         },
         "id": this.commandid
@@ -331,9 +342,38 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    if (vel > 0){
-      this.statusmap.set("panPos",pos);
+    //if (vel > 0){
+    //  this.statusmap.set("panPos",pos);
+    //}
+    this.sendMessage(message);
+    //END OF MOVEPAN FUNCTION
+  },
+
+  movePanWait: function(pos, vel, callback) {
+    s = ''+ this.convertSpeedPan(parseInt(vel));
+
+    this.lastblock = this.lastblock+1;
+    //this.blockingcallbackmap.set(this.lastblock+"",callback);
+    if (this.panCallback != undefined){
+      this.panCallback();
     }
+    this.panCallback = callback;
+
+    lb = this.lastblock
+
+
+    var message = JSON.stringify({
+        "name": "MOVEPANBLOCKING",
+        "parameters": {
+            pos: pos,
+            speed:s,
+            blockid:lb
+        },
+        "id": this.commandid
+    });
+    //if (vel > 0){
+    //  this.statusmap.set("panPos",pos);
+    //}
     this.sendMessage(message);
     //END OF MOVEPAN FUNCTION
   },
@@ -362,7 +402,7 @@ Remote.prototype = {
     }
     console.log(newpos);
 
-    this.statusmap.set("panPos",parseInt(newpos));
+    //this.statusmap.set("panPos",parseInt(newpos));
     this.movePan(newpos, speed);
     //END OF MOVEPANBYDEGREES FUNCTION
   },
@@ -378,9 +418,35 @@ Remote.prototype = {
         },
         "id": this.commandid
     });
-    if (vel > 0){
-      this.statusmap.set("tiltPos",parseInt(pos));
+    //if (vel > 0){
+    //  this.statusmap.set("tiltPos",parseInt(pos));
+    //}
+    this.sendMessage(message);
+    //END OF MOVETILT FUNCTION
+  },
+
+  moveTiltWait: function (pos, vel, callback) {
+    s = ''+ this.convertSpeedTilt(parseInt(vel));
+
+    this.lastblock = this.lastblock+1;
+    //this.blockingcallbackmap.set(this.lastblock+"",callback);
+    if (this.tiltCallback != undefined){
+      this.tiltCallback();
     }
+    this.tiltCallback = callback;
+    var lb = this.lastblock;
+    var message = JSON.stringify({
+        "name": "MOVETILTBLOCKING",
+        "parameters": {
+            pos: pos,
+            speed:s,
+            blockid:lb
+        },
+        "id": this.commandid
+    });
+    //if (vel > 0){
+    //  this.statusmap.set("tiltPos",parseInt(pos));
+    //}
     this.sendMessage(message);
     //END OF MOVETILT FUNCTION
   },
@@ -399,7 +465,7 @@ Remote.prototype = {
       newpos = 26;
     }
     console.log(newpos);
-    this.statusmap.set("tiltPos",newpos);
+    //this.statusmap.set("tiltPos",newpos);
     this.moveTilt(newpos, speed);
     //END OF MOVETILTBYDEGREES FUNCTION
   },
@@ -603,6 +669,15 @@ Remote.prototype = {
     //END OF GETCOLOR FUNCTION
   },
 
+  getPanPosition : function () {
+    return this.statusmap.get("panPos");
+    //END OF GETCOLOR FUNCTION
+  },
+
+  getTiltPosition : function () {
+    return this.statusmap.get("tiltPos");
+    //END OF GETCOLOR FUNCTION
+  },
 
 
 
@@ -698,7 +773,7 @@ Remote.prototype = {
         //console.log(key);
           this.statusmap.set(key,(msg.value[key] == "true"));
           if(this.statusmap.get(key)){
-            console.log("OnFall");
+            //console.log("OnFall");
             (this.callbackmap.get("onFall"))(key);
           }
       }
@@ -803,13 +878,40 @@ Remote.prototype = {
       (this.callbackmap.get("onPhrase"))(msg.value['text']);
     }
     else if (msg.name == "UNLOCK") {
-      console.log('UNLOCK '+msg.value['id']);
-      (this.blockingcallbackmap.get(msg.value['id']))();
+      console.log('UNLOCK '+msg.value['blockid']);
+      //(this.blockingcallbackmap.get(""+msg.value['blockid']))();
+      this.wheelsCallback();
+      this.wheelsCallback = undefined;
+    }
+    else if (msg.name == "UNLOCKTILT") {
+      console.log('UNLOCKTILT '+msg.value['blockid']);
+      //(this.blockingcallbackmap.get(""+msg.value['blockid']))();
+      this.tiltCallback();
+      this.tiltCallback = undefined;
+    }
+    else if (msg.name == "UNLOCKPAN") {
+      console.log('UNLOCK '+msg.value['blockid']);
+      //(this.blockingcallbackmap.get(""+msg.value['blockid']))();
+      this.panCallback();
+      this.panCallback = undefined;
+    }
+
+    else if (msg.name == "PANSTATUS") {
+      //console.log("PANSTATUS "+msg.value['panPos']);
+      this.statusmap.set("panPos",msg.value['panPos']);
+    }
+
+    else if (msg.name == "TILTSTATUS") {
+      //console.log("TILTSTATUS "+msg.value['tiltPos']);
+
+      this.statusmap.set("tiltPos",msg.value['tiltPos']);
     }
 
     else {
       console.log('Lost status '+ msg.name);
     }
+
+
     //END MANAGESTATUS FUNCTION
   },
 
