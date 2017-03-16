@@ -495,11 +495,18 @@
 
 
     //Emergency stop
-    ext.stopFun = function () {
-
+    ext.stopFun = function (what) {
+      if (what == 'all'){
       rem.moveWheelsSeparated(10,10,0);
       ext.movePanRoboboT(180,0);
       ext.moveTiltRoboboT(90,0);
+    }else if (what == 'wheels') {
+      rem.moveWheelsSeparated(10,10,0);
+    }else if (what == 'pan') {
+      ext.movePanRoboboT(180,0);
+    }else if (what == 'tilt') {
+      ext.moveTiltRoboboT(90,0);
+    }
 
     };
 
@@ -763,6 +770,37 @@
     return false;
   };
 
+  ext.rangeFun = function (input,type,r1,r2) {
+    if (type == 'between'){
+      if(r1<r2){
+        if ((input>r1)&&(input<r2)){
+          return true;
+        }else {
+          return false;
+        }
+      }else {
+        if ((input>r2)&&(input<r1)){
+          return true;
+        }else {
+          return false;
+        }
+      }
+    }else {
+      f(r1<r2){
+        if ((input>r1)&&(input<r2)){
+          return true;
+        }else {
+          return false;
+        }
+      }else {
+        if ((input>r2)&&(input<r1)){
+          return true;
+        }else {
+          return false;
+        }
+      }
+    }
+  };
 
 
 
@@ -773,7 +811,8 @@
 
           [' ', 'connect to ROBOBO at %s with password %s ','connectToRobobo','192.168.0.110',''],
           [' ', 'end connection','disconnect'],
-          [' ', 'stop all motors','stopFun'],
+          [' ', 'stop %m.stop motors','stopFun','all'],
+          ['r', 'is %s %m.range %s - %s','rangeFun','','between','',''],
 
           ['h', 'ROB ACTUATION BLOCKS','dummyFun'],
 
@@ -919,6 +958,8 @@
           colorchan: ['red','green','blue'],
           sensors: ['all','acceleration','brighness','claps','face','fling','gaps','obstacles','pan','orientation','tap','tilt'],
           block: ['blocking','non-blocking'],
+          range: ['between', 'out'],
+          stop: ['all','wheels','pan','tilt'],
         },
     };
 
