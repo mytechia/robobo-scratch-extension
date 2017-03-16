@@ -771,6 +771,9 @@
   };
 
   ext.rangeFun = function (input,type,r1,r2) {
+    input = parseInt(input);
+    r1 = parseInt(r1);
+    r2 = parseInt(r2);
     if (type == 'between'){
       if(r1<r2){
         if ((input>r1)&&(input<r2)){
