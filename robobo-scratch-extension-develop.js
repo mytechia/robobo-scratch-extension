@@ -786,7 +786,7 @@
         }
       }
     }else {
-      f(r1<r2){
+      if(r1<r2){
         if ((input>r1)&&(input<r2)){
           return true;
         }else {
