@@ -134,13 +134,13 @@
       connectionStatus = status;
     }
     //Connection Block
-    ext.connectToRobobo = function(ip,passwd) {
+    ext.connectToRobobo = function(ip) {
         if (rem != undefined){
           console.log("Closing previous connection");
           rem.closeConnection(true);
 
         }
-        rem = new Remote(ip,passwd);
+        rem = new Remote(ip,'');
         this.started = false;
 
         rem.connect();
@@ -812,7 +812,7 @@
         blocks: [
           ['h', 'CONNECTION BLOCKS','dummyFun'],
 
-          [' ', 'connect to ROBOBO at %s with password %s ','connectToRobobo','192.168.0.110',''],
+          [' ', 'connect to ROBOBO at %s ','connectToRobobo','192.168.0.110'],
           [' ', 'end connection','disconnect'],
           [' ', 'stop %m.stop motors','stopFun','all'],
           ['r', 'is %s %m.range %s - %s','rangeFun','','between','',''],
