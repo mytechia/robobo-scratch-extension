@@ -815,6 +815,8 @@
           [' ', 'connect to ROBOBO at %s ','connectToRobobo','192.168.0.110'],
           [' ', 'end connection','disconnect'],
           [' ', 'stop %m.stop motors','stopFun','all'],
+
+          ['h', 'ROBOBO OPERATORS','dummyFun'],
           ['r', 'is %s %m.range %s - %s','rangeFun','','between','',''],
 
           ['h', 'ROB ACTUATION BLOCKS','dummyFun'],
