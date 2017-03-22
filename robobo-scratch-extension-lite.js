@@ -816,8 +816,7 @@
           [' ', 'end connection','disconnect'],
           [' ', 'stop %m.stop motors','stopFun','all'],
 
-          ['h', 'ROBOBO OPERATORS','dummyFun'],
-          ['r', 'is %s %m.range %s - %s','rangeFun','','between','',''],
+
 
           ['h', 'ROB ACTUATION BLOCKS','dummyFun'],
 
@@ -878,6 +877,8 @@
           ['r', 'brightness','readBrightnessLevel'],//v
           ['r', 'OBO battery level','readOboBatteryLevel'],//v
 
+          ['h', 'ROBOBO OPERATORS','dummyFun'],
+          ['r', 'is %s %m.range %s - %s','rangeFun','','between','',''],
 
 
 
