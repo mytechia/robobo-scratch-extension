@@ -745,7 +745,6 @@
       obstacle = false;
 
     }else if (sensor == 'pan') {
-
     }else if (sensor == 'tilt') {
 
     }else if (sensor == 'orientation') {
@@ -814,12 +813,12 @@
 
           [' ', 'connect to ROBOBO at %s ','connectToRobobo','192.168.0.110'],
           [' ', 'end connection','disconnect'],
-          [' ', 'stop %m.stop motors','stopFun','all'],
+          
 
 
 
           ['h', 'ROB ACTUATION BLOCKS','dummyFun'],
-
+          [' ', 'stop %m.stop motors','stopFun','all'],
           ['w', 'move wheels at speed R %s L %s for %s %m.mtype','newMovementT','30','30','1','seconds'],
           ['w', 'move pan to %s at speed %s %m.block','movePanRoboboNew','180','5','non-blocking'],
           ['w', 'move tilt to %s at speed %s %m.block','moveTiltRoboboNew','90','5','non-blocking'],
