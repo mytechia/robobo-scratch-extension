@@ -707,6 +707,7 @@
       lastphrase = '';
       rem.statusmap.set("facex",0);
       rem.statusmap.set("facey",0);
+      rem.statusmap.set("facedist","far");
       rem.statusmap.set("flingangle",0);
       rem.statusmap.set('Gap1',false);
       rem.statusmap.set('Gap2',false);
@@ -731,6 +732,8 @@
     }else if (sensor == 'face') {
       rem.statusmap.set("facex",0);
       rem.statusmap.set("facey",0);
+      rem.statusmap.set("facedist","far");
+
     }else if (sensor == 'fling') {
       rem.statusmap.set("flingangle",0);
 
