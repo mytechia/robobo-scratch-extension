@@ -50,6 +50,17 @@ function Remote(ip,passwd){
   //Pan stop callback
   this.panCallback = undefined;
 
+  this.panSpeedLimit = 40;
+  this.tiltSpeedLimit = 10;
+
+  this.wheelsSpeedLimit = 250;
+
+  this.panInferiorLimit = 26;
+  this.panSuperiorLimit = 339;
+
+  this.tiltInferiorLimit = 26;
+  this.tiltSuperiorLimit = 109;
+
 //END OF REMOTE OBJECT
 };
 
@@ -241,22 +252,32 @@ Remote.prototype = {
     convertedSpeed = speed*2.5;
     if (Math.abs(speed)<10) {
       return 0;
-    }else {
+    }else if (wheelsSpeedLimit > speed) {
       return Math.round(convertedSpeed);
+    }else{
+      return wheelsSpeedLimit;
     }
   },
 
   convertSpeedPan: function (speed) {
     convertedSpeed = speed*1.4;
 
-      return Math.floor(convertedSpeed);
+      if (convertSpeed > panSpeedLimit){
+        return Math.floor(convertedSpeed);
+      }else{
+        return panSpeedLimit;
+      }
 
   },
 
   convertSpeedTilt: function (speed) {
     convertedSpeed = speed*0.9;
 
-      return Math.floor(convertedSpeed);
+      if (convertedSpeed > tiltSpeedLimit){
+        return Math.floor(convertedSpeed);
+      }else{
+        return tiltSpeedLimit;
+      }
 
   },
 
