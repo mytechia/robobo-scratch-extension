@@ -262,7 +262,7 @@ Remote.prototype = {
   convertSpeedPan: function (speed) {
     convertedSpeed = speed*1.4;
 
-      if (convertSpeed > panSpeedLimit){
+      if (convertedSpeed > panSpeedLimit){
         return Math.floor(convertedSpeed);
       }else{
         return panSpeedLimit;
