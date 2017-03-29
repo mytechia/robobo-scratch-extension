@@ -252,7 +252,7 @@ Remote.prototype = {
     convertedSpeed = speed*2.5;
     if (Math.abs(speed)<10) {
       return 0;
-    }else if (this.wheelsSpeedLimit > speed) {
+    }else if (this.wheelsSpeedLimit > convertedSpeed) {
       return Math.round(convertedSpeed);
     }else{
       return this.wheelsSpeedLimit;
@@ -262,7 +262,7 @@ Remote.prototype = {
   convertSpeedPan: function (speed) {
     convertedSpeed = speed*1.4;
 
-      if (convertedSpeed > this.panSpeedLimit){
+      if (convertedSpeed < this.panSpeedLimit){
         return Math.floor(convertedSpeed);
       }else{
         return this.panSpeedLimit;
@@ -273,7 +273,7 @@ Remote.prototype = {
   convertSpeedTilt: function (speed) {
     convertedSpeed = speed*0.9;
 
-      if (convertedSpeed > this.tiltSpeedLimit){
+      if (convertedSpeed < this.tiltSpeedLimit){
         return Math.floor(convertedSpeed);
       }else{
         return this.tiltSpeedLimit;
