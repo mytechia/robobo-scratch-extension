@@ -379,7 +379,7 @@ Remote.prototype = {
       pos = this.panSuperiorLimit;
     }
 
-    if (pos > this.panInferiorLimit){
+    if (pos < this.panInferiorLimit){
       pos = this.panInferiorLimit;
     }
 
@@ -418,7 +418,7 @@ Remote.prototype = {
     return this.statusmap.get("tiltPos")
   },
 
-  movePanByDegrees (degrees, speed) {
+  movePanByDegrees: function (degrees, speed) {
 
     console.log("movePanByDegrees");
     var actual = this.statusmap.get("panPos");
@@ -463,7 +463,7 @@ Remote.prototype = {
       pos = this.tiltSuperiorLimit;
     }
 
-    if (pos > this.tiltInferiorLimit){
+    if (pos < this.tiltInferiorLimit){
       pos = this.tiltInferiorLimit;
     }
 
