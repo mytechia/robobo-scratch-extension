@@ -140,6 +140,7 @@ Remote.prototype = {
           else
               reason = "Unknown reason";
           alert('Connection closed\n'+reason);
+          console.log("Code: "+event.code );
       }
       if (error){
         (this.callbackmap.get("onConnectionChanges"))(0);
