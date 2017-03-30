@@ -375,6 +375,14 @@ Remote.prototype = {
 
   movePanWait: function(pos, vel, callback) {
     s = ''+ this.convertSpeedPan(parseInt(vel));
+        if (pos > this.panSuperiorLimit){
+      pos = this.panSuperiorLimit;
+    }
+
+    if (pos > this.panInferiorLimit){
+      pos = this.panInferiorLimit;
+    }
+
 
     this.lastblock = this.lastblock+1;
     //this.blockingcallbackmap.set(this.lastblock+"",callback);
@@ -451,6 +459,13 @@ Remote.prototype = {
 
   moveTiltWait: function (pos, vel, callback) {
     s = ''+ this.convertSpeedTilt(parseInt(vel));
+    if (pos > this.tiltSuperiorLimit){
+      pos = this.tiltSuperiorLimit;
+    }
+
+    if (pos > this.tiltInferiorLimit){
+      pos = this.tiltInferiorLimit;
+    }
 
     this.lastblock = this.lastblock+1;
     //this.blockingcallbackmap.set(this.lastblock+"",callback);
@@ -475,7 +490,7 @@ Remote.prototype = {
     //END OF MOVETILT FUNCTION
   },
 
-  moveTiltByDegrees (degrees, speed) {
+  moveTiltByDegrees: function (degrees, speed) {
     console.log("moveTiltByDegrees");
     var actual = this.statusmap.get("tiltPos");
     if (actual==undefined){
