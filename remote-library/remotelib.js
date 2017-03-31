@@ -21,7 +21,7 @@
 //Remote library version 0.1.3-dev
 //Constructor of the remote control object
 function Remote(ip,passwd){
-  this.ip = ip;
+  this.ip = ip.trim();
   this.port = 40404;
   //WebSocket to stablish the connection
   this.ws = undefined;
@@ -379,7 +379,7 @@ Remote.prototype = {
       pos = this.panSuperiorLimit;
     }
 
-    if (pos < this.panInferiorLimit){
+    if (pos > this.panInferiorLimit){
       pos = this.panInferiorLimit;
     }
 
@@ -418,7 +418,7 @@ Remote.prototype = {
     return this.statusmap.get("tiltPos")
   },
 
-  movePanByDegrees: function (degrees, speed) {
+  movePanByDegrees: fu (degrees, speed) {
 
     console.log("movePanByDegrees");
     var actual = this.statusmap.get("panPos");
