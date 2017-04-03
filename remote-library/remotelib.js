@@ -418,7 +418,7 @@ Remote.prototype = {
     return this.statusmap.get("tiltPos")
   },
 
-  movePanByDegrees: fu (degrees, speed) {
+  movePanByDegrees: function (degrees, speed) {
 
     console.log("movePanByDegrees");
     var actual = this.statusmap.get("panPos");
