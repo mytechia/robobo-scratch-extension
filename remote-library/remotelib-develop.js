@@ -358,6 +358,13 @@ Remote.prototype = {
   movePan: function(pos, vel) {
     s = ''+ this.convertSpeedPan(parseInt(vel));
 
+        if (pos > this.panSuperiorLimit){
+      pos = this.panSuperiorLimit;
+    }
+
+    if (pos < this.panInferiorLimit){
+      pos = this.panInferiorLimit;
+    }
     var message = JSON.stringify({
         "name": "MOVEPAN",
         "parameters": {
@@ -379,7 +386,7 @@ Remote.prototype = {
       pos = this.panSuperiorLimit;
     }
 
-    if (pos > this.panInferiorLimit){
+    if (pos < this.panInferiorLimit){
       pos = this.panInferiorLimit;
     }
 
