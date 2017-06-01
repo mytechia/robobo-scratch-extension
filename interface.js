@@ -78,6 +78,10 @@
 
           ['r', 'face distance','readFaceDist'],//v
           ['r', 'face position at %m.axis axis','readFaceCoord','x'],//v
+          ['r', '%m.shape at %m.axis axis','readFaceCoord','blob','x'],//v
+          ['r', '%m.shape area','readFaceCoord','blob'],//v
+
+
         //  ['h', 'when face is detected','newFaceFun'],//v
         //  ['h', 'when face is lost','lostFace'],//v
 
@@ -88,7 +92,7 @@
           ['r', 'orientation at %m.orientation axis','readOrientation','yaw'],//v
 
           ['r', 'fling angle','readFlingAngle'],//v
-          ['r', 'tap position at %m.axis axis','readTapCoord','x'],//v
+          ['r', 'tap at %m.body','readTapCoord','eye'],//v
         //  ['h', 'when tap detected','newTap'],//v
         //  ['h', 'when fling detected','newFling'],//v
 
@@ -185,7 +189,9 @@
           sensors: ['all','acceleration','brighness','claps','face','fling','gaps','obstacles','pan','orientation','tap','tilt'],
           block: ['blocking','non-blocking'],
           range: ['between', 'out'],
+          body: ['eye','mouth','forehead','left','right'],
           stop: ['all','wheels','pan','tilt'],
+          shape: ['ball','square','blob']
         },
     };
 
