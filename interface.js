@@ -41,6 +41,7 @@
           ['w', 'move tilt to %s at speed %s %m.block','moveTiltRoboboNew','90','5','blocking'],
           ['w', 'pan to %s and move tilt to %s at speed %s %m.block','moveTiltRoboboNew','180', '90','5','blocking'],
           ['w', 'turn %s degrees at speed %s %m.block','moveTiltRoboboNew','180','5','blocking'],
+          ['w', 'play note %d.note for %n seconds', 'playNote', 60, 0.5],
 
         //  [' ', 'move pan to %s at speed %s','movePanRoboboT','180','5'],
         //  [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
@@ -56,7 +57,7 @@
           ['h', 'ROB SENSING BLOCKS','dummyFun'],
           [' ','reset sensor %m.sensors','resetSensor','all'],
 
-          ['w', 'play note %d.note for %n seconds', 'playNote', 60, 0.5],
+          ['r', 'Read musical note','readObstacle'],//v
 
         //  ['r', 'pan position','readPan'],//v
         //  ['r', 'tilt position','readTilt'],//v
@@ -78,7 +79,7 @@
 
           ['r', 'face distance','readFaceDist'],//v
           ['r', 'face position at %m.axis axis','readFaceCoord','x'],//v
-          ['r', '%m.shape at %m.axis axis','readFaceCoord','blob','x'],//v
+          ['r', '%m.shape position at %m.axis axis','readFaceCoord','blob','x'],//v
           ['r', '%m.shape area','readFaceCoord','blob'],//v
 
 
@@ -101,8 +102,8 @@
           ['r', 'brightness','readBrightnessLevel'],//v
           ['r', 'OBO battery level','readOboBatteryLevel'],//v
 
-          ['h', 'ROBOBO OPERATORS','dummyFun'],
-          ['r', 'is %s %m.range %s - %s','rangeFun','','between','',''],
+          //['h', 'ROBOBO OPERATORS','dummyFun'],
+          //['r', 'is %s %m.range %s - %s','rangeFun','','between','',''],
 
 
 
