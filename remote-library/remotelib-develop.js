@@ -959,7 +959,7 @@ Remote.prototype = {
 
       this.statusmap.set("tiltPos",msg.value['tiltPos']);
     }
-    else if (msg.name == "BLOBCOLOR") {
+    else if (msg.name == "COLORBLOB") {
       
       this.statusmap.set("blobPosx"+msg.value['color'],msg.value['posx']);
       this.statusmap.set("blobPosy"+msg.value['color'],msg.value['posy']);
