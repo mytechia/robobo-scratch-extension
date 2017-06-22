@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-//Scratch extension version 0.1.3-dev
+//Scratch extension version 0.2.1-dev
 (function(ext) {
     var rem;
     var commandid = 0;
@@ -134,13 +134,13 @@
       connectionStatus = status;
     }
     //Connection Block
-    ext.connectToRobobo = function(ip,passwd) {
+    ext.connectToRobobo = function(ip) {
         if (rem != undefined){
           console.log("Closing previous connection");
           rem.closeConnection(true);
 
         }
-        rem = new Remote(ip,passwd);
+        rem = new Remote(ip,'');
         this.started = false;
 
         rem.connect();
@@ -653,7 +653,7 @@
 
     ext.newMovementT = function(rSpeed,lSpeed,quantity,mode,callback){
       if (mode == 'non-stop'){
-        rem.moveWheelsSeparated(rSpeed,lSpeed,2147483647)
+        rem.moveWheelsSeparated(lSpeed,rSpeed,2147483647);
         callback();
       }else if (mode=='seconds') {
         rem.moveWheelsSeparatedWait(lSpeed,rSpeed,quantity,callback);
@@ -733,6 +733,7 @@
       rem.statusmap.set("facex",0);
       rem.statusmap.set("facey",0);
       rem.statusmap.set("facedist","far");
+
     }else if (sensor == 'fling') {
       rem.statusmap.set("flingangle",0);
 
@@ -747,7 +748,6 @@
       obstacle = false;
 
     }else if (sensor == 'pan') {
-
     }else if (sensor == 'tilt') {
 
     }else if (sensor == 'orientation') {
@@ -807,6 +807,13 @@
     }
   };
 
+  ext.readBlobCoord = function(color, axis){
+    return rem.getBlobCoord(color,axis);
+  }
+
+    ext.readBlobSize = function(color){
+    return rem.getBlobSize(color);
+  }
 
 
     // Block and block menu descriptions
@@ -814,16 +821,14 @@
         blocks: [
           ['h', 'CONNECTION BLOCKS','dummyFun'],
 
-          [' ', 'connect to ROBOBO at %s with password %s ','connectToRobobo','192.168.0.110',''],
+          [' ', 'connect to ROBOBO at %s ','connectToRobobo','192.168.0.110'],
           [' ', 'end connection','disconnect'],
-          [' ', 'stop %m.stop motors','stopFun','all'],
-          ['r', 'is %s %m.range %s - %s','rangeFun','','between','',''],
 
           ['h', 'ROB ACTUATION BLOCKS','dummyFun'],
-
+          [' ', 'stop %m.stop motors','stopFun','all'],
           ['w', 'move wheels at speed R %s L %s for %s %m.mtype','newMovementT','30','30','1','seconds'],
-          ['w', 'move pan to %s at speed %s %m.block','movePanRoboboNew','180','5','non-blocking'],
-          ['w', 'move tilt to %s at speed %s %m.block','moveTiltRoboboNew','90','5','non-blocking'],
+          ['w', 'move pan to %s at speed %s %m.block','movePanRoboboNew','180','5','blocking'],
+          ['w', 'move tilt to %s at speed %s %m.block','moveTiltRoboboNew','90','5','blocking'],
         //  [' ', 'move pan to %s at speed %s','movePanRoboboT','180','5'],
         //  [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
@@ -839,14 +844,14 @@
           [' ','reset sensor %m.sensors','resetSensor','all'],
 
 
-          ['r', 'pan position','readPan'],//v
-          ['r', 'tilt position','readTilt'],//v
+        //  ['r', 'pan position','readPan'],//v
+        //  ['r', 'tilt position','readTilt'],//v
 
           ['r', 'obstacle at sensor %m.ir','readObstacle'],//v
-          ['h', 'when obstacle is detected','detectedObstacle'],//v
+        //  ['h', 'when obstacle is detected','detectedObstacle'],//v
 
           ['r', 'gap at %m.gaps','readGap','Gap1'],//v
-          ['h', 'when gap is detected at %m.gaps','changedGaps','Gap1'],//v
+        //  ['h', 'when gap is detected at %m.gaps','changedGaps','Gap1'],//v
 
           ['r', 'ROB battery level','readBatteryLevel'],//v
 
@@ -859,25 +864,30 @@
 
           ['r', 'face distance','readFaceDist'],//v
           ['r', 'face position at %m.axis axis','readFaceCoord','x'],//v
-          ['h', 'when face is detected','newFaceFun'],//v
-          ['h', 'when face is lost','lostFace'],//v
+        //  ['h', 'when face is detected','newFaceFun'],//v
+        //  ['h', 'when face is lost','lostFace'],//v
 
           ['r', 'color at %m.colorchan channel','measureColor'],//v
           ['r', 'read clap counter','readClap'],//v
+
+          ['r', 'read %m.blobcolor blob position at %m.axis axis','readBlobCoord','blob','x'],//v
+          ['r', 'read %m.blobcolor area','readBlobSize','blob'],//v
 
 
           ['r', 'orientation at %m.orientation axis','readOrientation','yaw'],//v
 
           ['r', 'fling angle','readFlingAngle'],//v
           ['r', 'tap position at %m.axis axis','readTapCoord','x'],//v
-          ['h', 'when tap detected','newTap'],//v
-          ['h', 'when fling detected','newFling'],//v
+        //  ['h', 'when tap detected','newTap'],//v
+        //  ['h', 'when fling detected','newFling'],//v
 
           ['r', 'acceleration at %m.axis3d axis','readAcceleration','x'],//v
 
           ['r', 'brightness','readBrightnessLevel'],//v
           ['r', 'OBO battery level','readOboBatteryLevel'],//v
 
+          ['h', 'ROBOBO OPERATORS','dummyFun'],
+          ['r', 'is %s %m.range %s - %s','rangeFun','','between','',''],
 
 
 
@@ -965,10 +975,11 @@
           block: ['blocking','non-blocking'],
           range: ['between', 'out'],
           stop: ['all','wheels','pan','tilt'],
+          blobcolor: ['red','green','blue','custom'],
         },
     };
 
 
     // Register the extension
-    ScratchExtensions.register('Robobo Extension v0.2.0 Developer', descriptor, ext);
+    ScratchExtensions.register('Robobo Extension v0.2.1 Lite', descriptor, ext);
 })({});

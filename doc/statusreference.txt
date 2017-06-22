@@ -231,3 +231,14 @@ name:
 
 value:
   blockid: integer (>0)
+
+24. (v2.1.0)
+
+name:
+  COLORBLOB
+
+value:
+  posx: integer (>0)
+  posy: integer (>0)
+  size: integer (>0)
+  color: string

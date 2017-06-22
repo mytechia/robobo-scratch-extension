@@ -357,8 +357,7 @@ Remote.prototype = {
 
   movePan: function(pos, vel) {
     s = ''+ this.convertSpeedPan(parseInt(vel));
-
-        if (pos > this.panSuperiorLimit){
+    if (pos > this.panSuperiorLimit){
       pos = this.panSuperiorLimit;
     }
 
@@ -382,7 +381,7 @@ Remote.prototype = {
 
   movePanWait: function(pos, vel, callback) {
     s = ''+ this.convertSpeedPan(parseInt(vel));
-        if (pos > this.panSuperiorLimit){
+    if (pos > this.panSuperiorLimit){
       pos = this.panSuperiorLimit;
     }
 
@@ -725,6 +724,14 @@ Remote.prototype = {
     //END OF GETCOLOR FUNCTION
   },
 
+  getBlobCoord : function(color, axis){
+    return this.statusmap.get("blobPos"+axis+color);
+  },
+
+  getBlobSize : function(color){
+    return this.statusmap.get("blobSize"+color);
+  },
+
 
 
   manageStatus : function (msg) {
@@ -951,6 +958,14 @@ Remote.prototype = {
       //console.log("TILTSTATUS "+msg.value['tiltPos']);
 
       this.statusmap.set("tiltPos",msg.value['tiltPos']);
+    }
+    else if (msg.name == "BLOBCOLOR") {
+      
+      this.statusmap.set("blobPosx"+msg.value['color'],msg.value['posx']);
+      this.statusmap.set("blobPosy"+msg.value['color'],msg.value['posy']);
+      this.statusmap.set("blobSize"+msg.value['color'],msg.value['size']);
+
+
     }
 
     else {
