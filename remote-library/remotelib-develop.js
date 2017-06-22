@@ -960,7 +960,7 @@ Remote.prototype = {
       this.statusmap.set("tiltPos",msg.value['tiltPos']);
     }
     else if (msg.name == "COLORBLOB") {
-      
+      console.log(msg.value['color']+'  '+msg.value['posx']+'  '+msg.value['posy']+'  '+msg.value['size']);
       this.statusmap.set("blobPosx"+msg.value['color'],msg.value['posx']);
       this.statusmap.set("blobPosy"+msg.value['color'],msg.value['posy']);
       this.statusmap.set("blobSize"+msg.value['color'],msg.value['size']);
