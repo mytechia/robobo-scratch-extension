@@ -870,8 +870,8 @@
           ['r', 'color at %m.colorchan channel','measureColor'],//v
           ['r', 'read clap counter','readClap'],//v
 
-          ['r', 'read %m.blobcolor blob position at %m.axis axis','readBlobCoord','blob','x'],//v
-          ['r', 'read %m.blobcolor area','readBlobSize','blob'],//v
+          ['r', 'read %m.blobcolor blob position at %m.axis axis','readBlobCoord','green','x'],//v
+          ['r', 'read %m.blobcolor area','readBlobSize','green'],//v
 
 
           ['r', 'orientation at %m.orientation axis','readOrientation','yaw'],//v
@@ -886,8 +886,8 @@
           ['r', 'brightness','readBrightnessLevel'],//v
           ['r', 'OBO battery level','readOboBatteryLevel'],//v
 
-          ['h', 'ROBOBO OPERATORS','dummyFun'],
-          ['r', 'is %s %m.range %s - %s','rangeFun','','between','',''],
+//          ['h', 'ROBOBO OPERATORS','dummyFun'],
+//          ['r', 'is %s %m.range %s - %s','rangeFun','','between','',''],
 
 
 
