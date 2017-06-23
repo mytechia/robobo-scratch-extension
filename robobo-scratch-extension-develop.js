@@ -811,8 +811,51 @@
     return rem.getBlobCoord(color,axis);
   }
 
-    ext.readBlobSize = function(color){
+  ext.readBlobSize = function(color){
     return rem.getBlobSize(color);
+  }
+
+  ext.playNote = function(note, time){
+    console.log('Note: '+note+' time '+time);
+  }
+
+
+
+  ext.irSensorToIndex = function(irname){
+      switch (irname){
+        case "Front-C":
+          return
+          break;
+
+        case "Front-L":
+          return
+          break;
+
+        case "Front-LL":
+          return
+          break;
+
+        case "Front-R":
+          return
+          break;
+
+        case "Front-RR":
+          return
+          break;
+
+        case "Back-C":
+          return
+          break;
+
+        case "Back-L":
+          return
+          break;
+
+        case "Back-R":
+          return
+          break;
+
+      }
   }
 
 
@@ -832,6 +875,8 @@
         //  [' ', 'move pan to %s at speed %s','movePanRoboboT','180','5'],
         //  [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
+          ['w', 'play note %d.note for %n seconds', 'playNote', 60, 0.5],
+
 
 
 
@@ -963,10 +1008,10 @@
           emotions: ['happy','laughting','sad','angry','surprised','normal'],
           colors: ['off','white','red','blue','cyan','magenta','yellow','green','orange'],
           status: ['on','off'],
-          leds: ['1','2','3','4','5','6','7','8','9','all'],
-          ir: ['1','2','3','4','5','6','7','8','9'],
-          falls: ['Fall1','Fall2','Fall3','Fall4'],
-          gaps: ['Gap1','Gap2','Gap3','Gap4'],
+          leds: ['Front-C','Front-L','Front-LL','Front-R','Front-RR','Back-L','Back-R','all'],
+          ir: ['Front-C','Front-L','Front-LL','Front-R','Front-RR','Back-C','Back-L','Back-R'],
+          falls: ['Fall FL','Fall FR','Fall BL','Fall FL'],
+          gaps: ['Gap FL','Gap FR','Gap BL','Gap BR'],
           axis: ['x','y'],
           axis3d: ['x','y','z'],
           sounds: ['moan','purr',"angry","approve","disapprove","discomfort","doubtful","laugh","likes","mumble","ouch","thinking","various"],
