@@ -172,11 +172,6 @@
 
     };
 
-    //Speech production function
-    ext.talkRobobo = function(text){
-        rem.talk(text);
-
-    };
 
     ext._getStatus = function() {
       switch (connectionStatus) {
@@ -205,26 +200,7 @@
         console.log('moveRobobo by '+mtype);
         rem.moveWheelsByTime(wheel,quantity,speed);
       }else if (mtype=='centimeters'){
-        console.log('moveRobobo by '+mtype);
-
-        console.log('Quantity:'+ Math.round(
-          (
-            (
-
-               ((parseInt(quantity)*10)-(0.2745*parseInt(speed))-0.6127)/0.54
-            )
-          )
-        )
-      );
-        rem.moveWheelsByDegree(wheel,Math.round(
-          (
-            (
-              //(parseInt(quantity*10)+1.1)/0.5503
-             ((parseInt(quantity)*10)-(0.2745*parseInt(speed))-0.6127)/0.54
-            )
-          )
-        ),speed
-      );
+        //TODO RELLENAR ESTO
       }
 
     };
@@ -296,6 +272,7 @@
 
     //Hat function that checks for ir changes
     ext.changedIr = function(irname) {
+      irname = irSensorToIndex(irname);
       if (lastIrChange == irname){
         return true;
       }else {
@@ -771,41 +748,7 @@
   ext.dummyFun = function () {
     return false;
   };
-
-  ext.rangeFun = function (input,type,r1,r2) {
-    input = parseInt(input);
-    r1 = parseInt(r1);
-    r2 = parseInt(r2);
-    if (type == 'between'){
-      if(r1<r2){
-        if ((input>r1)&&(input<r2)){
-          return true;
-        }else {
-          return false;
-        }
-      }else {
-        if ((input>r2)&&(input<r1)){
-          return true;
-        }else {
-          return false;
-        }
-      }
-    }else {
-      if(r1<r2){
-        if ((input<r1)||(input>r2)){
-          return true;
-        }else {
-          return false;
-        }
-      }else {
-        if ((input<r2)||(input>r1)){
-          return true;
-        }else {
-          return false;
-        }
-      }
-    }
-  };
+ 
 
   ext.readBlobCoord = function(color, axis){
     return rem.getBlobCoord(color,axis);
@@ -828,35 +771,35 @@
   ext.irSensorToIndex = function(irname){
       switch (irname){
         case "Front-C":
-          return
+          return "3";
           break;
 
         case "Front-L":
-          return
+          return "2";
           break;
 
         case "Front-LL":
-          return
+          return "1";
           break;
 
         case "Front-R":
-          return
+          return "4";
           break;
 
         case "Front-RR":
-          return
+          return "5";
           break;
 
         case "Back-C":
-          return
+          return "7";
           break;
 
         case "Back-L":
-          return
+          return "8";
           break;
 
         case "Back-R":
-          return
+          return "6";
           break;
 
       }
@@ -865,31 +808,31 @@
 ext.irSensorToIndex = function(led){
       switch (led){
         case "Front-C":
-          return
+          return "3";
           break;
 
         case "Front-L":
-          return
+          return "2";
           break;
 
         case "Front-LL":
-          return
+          return "1";
           break;
 
         case "Front-R":
-          return
+          return "4";
           break;
 
         case "Front-RR":
-          return
+          return "5";
           break;
 
         case "Back-L":
-          return
+          return "7";
           break;
 
         case "Back-R":
-          return
+          return "6";
           break;
 
       }
@@ -909,18 +852,11 @@ ext.irSensorToIndex = function(led){
           ['w', 'move wheels at speed R %s L %s for %s %m.mtype','newMovementT','30','30','1','seconds'],
           ['w', 'move pan to %s at speed %s %m.block','movePanRoboboNew','180','5','blocking'],
           ['w', 'move tilt to %s at speed %s %m.block','moveTiltRoboboNew','90','5','blocking'],
-        //  [' ', 'move pan to %s at speed %s','movePanRoboboT','180','5'],
-        //  [' ', 'move tilt to %s at speed %s','moveTiltRobobo','90','5'],
+
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
           ['w', 'play note %d.note for %n seconds', 'playNote', 60, 0.5],
 
 
-
-
-//          move wheels L 'X' and R 'Y' for 'Z' 'non-stop|seconds|degrees|centimeters'
-//          ['w', 'move wheels L %s and R %s for %s %m.mtype','newMovement','50','50','1','seconds'],
-//          [' ', 'move pan %s degrees at speed %s','movePanRoboboDegree','5','5'],//v
-//          [' ', 'move tilt %s degrees at speed %s','moveTiltRoboboDegree','5','5'],//v
 
           ['h', 'ROB SENSING BLOCKS','dummyFun'],
           [' ','reset sensor %m.sensors','resetSensor','all'],
@@ -946,8 +882,8 @@ ext.irSensorToIndex = function(led){
 
           ['r', 'face distance','readFaceDist'],//v
           ['r', 'face position at %m.axis axis','readFaceCoord','x'],//v
-        //  ['h', 'when face is detected','newFaceFun'],//v
-        //  ['h', 'when face is lost','lostFace'],//v
+          ['h', 'when face is detected','newFaceFun'],//v
+          ['h', 'when face is lost','lostFace'],//v
 
           ['r', 'color at %m.colorchan channel','measureColor'],//v
           ['r', 'read clap counter','readClap'],//v
@@ -960,60 +896,12 @@ ext.irSensorToIndex = function(led){
 
           ['r', 'fling angle','readFlingAngle'],//v
           ['r', 'tap position at %m.axis axis','readTapCoord','x'],//v
-        //  ['h', 'when tap detected','newTap'],//v
-        //  ['h', 'when fling detected','newFling'],//v
 
           ['r', 'acceleration at %m.axis3d axis','readAcceleration','x'],//v
 
           ['r', 'brightness','readBrightnessLevel'],//v
           ['r', 'OBO battery level','readOboBatteryLevel'],//v
 
-//          ['h', 'ROBOBO OPERATORS','dummyFun'],
-//          ['r', 'is %s %m.range %s - %s','rangeFun','','between','',''],
-
-
-
-          //NEW RESET BLOCK
-
-
-          //BLOCKS-TO-BE-REMOVED
-//          [' ', 'move wheel %m.wheels by %s %m.mtype at speed %s','moveRobobo','both','1','seconds','50'],
-//          [' ', 'move wheel left at speed %s and wheel right at speed %s for %s seconds','moveRoboboWheels','50','50','1000'],
-//          [' ', 'set left motor to %m.motorDirectionBis and right motor to %m.motorDirectionBis at speed %s','setMotorsOn','forward','forward','100'],
-//          ['w', '(blocking) move wheel left at speed %s and wheel right at speed %s for %s seconds and wait','moveRoboboWheelsWait','50','50','1'],
-
-          //END BLOCKS-TO-BE-REMOVED
-
-
-
-
-
-          //BLOCKS-TO-BE-REMOVED
-//          [' ', 'set led %m.leds %m.status','changeLedStatus','all', 'off'],
-          //END BLOCKS-TO-BE-REMOVED
-
-
-
-
-
-          //BLOCKS-TO-BE-REMOVED
-//          [' ', 'reset last voice order','resetPhrase'],//v
-//          ['r', 'read last voice order','readPhrase'],//v
-//          ['h', 'when voice order detected','detectedVoice'],//v
-          //END BLOCKS-TO-BE-REMOVED
-
-
-
-
-          //BLOCKS-TO-BE-REMOVED
-//          ['h', 'when acceleration detected','newAcceleration'],//v
-          //END BLOCKS-TO-BE-REMOVED
-
-
-
-          //BLOCKS-TO-BE-REMOVED
-//          ['h', 'when a brightness change is detected','changedBrightness'],//v
-          //END BLOCKS-TO-BE-REMOVED
 
 
           //BLOCKS-TO-BE-REMOVED
@@ -1029,10 +917,7 @@ ext.irSensorToIndex = function(led){
           //BLOCKS-TO-BE-REMOVED
 //          ['r', 'read error','readErrorFun'],//v
 //          ['h', 'on error','errorFun'],//v
-          //END BLOCKS-TO-BE-REMOVED
 
-          //[' ', 'unblock','unblockFun'],
-          //['w', 'block','blockFun'],
 
 
         ],
