@@ -567,6 +567,19 @@ Remote.prototype = {
     //END OF CHANGECOLOR FUNCTION
   },
 
+  playNote : function (index, time) {
+    var message = JSON.stringify({
+        "name": "PLAYNOTE",
+        "parameters": {
+            index:index,
+            time:time
+        },
+        "id": this.commandid
+    });
+    this.sendMessage(message);
+    //END OF CHANGECOLOR FUNCTION
+  },
+
   //ENDHRI
 
   //SENSING

@@ -815,7 +815,11 @@
     return rem.getBlobSize(color);
   }
 
-  ext.playNote = function(note, time){
+  ext.playNote = function(note, time, callback){
+    rem.playNote(note, time)
+    window.setTimeout(function() {
+              callback();
+          }, (time)-50);
     console.log('Note: '+note+' time '+time);
   }
 
