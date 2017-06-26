@@ -564,7 +564,7 @@ Remote.prototype = {
         "id": this.commandid
     });
     this.sendMessage(message);
-    //END OF CHANGECOLOR FUNCTION
+    //END OF PLAYEMOTION FUNCTION
   },
 
   playNote : function (index, time) {
@@ -577,7 +577,7 @@ Remote.prototype = {
         "id": this.commandid
     });
     this.sendMessage(message);
-    //END OF CHANGECOLOR FUNCTION
+    //END OF PLAYNOTE FUNCTION
   },
 
   //ENDHRI

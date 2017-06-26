@@ -862,6 +862,39 @@
       }
   }
 
+ext.irSensorToIndex = function(led){
+      switch (led){
+        case "Front-C":
+          return
+          break;
+
+        case "Front-L":
+          return
+          break;
+
+        case "Front-LL":
+          return
+          break;
+
+        case "Front-R":
+          return
+          break;
+
+        case "Front-RR":
+          return
+          break;
+
+        case "Back-L":
+          return
+          break;
+
+        case "Back-R":
+          return
+          break;
+
+      }
+  }
+
 
     // Block and block menu descriptions
     var descriptor = {
