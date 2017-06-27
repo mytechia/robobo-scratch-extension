@@ -242,3 +242,14 @@ value:
   posy: integer (>0)
   size: integer (>0)
   color: string
+
+
+25. (v2.1.0)
+
+name:
+  NEWNOTE
+
+value:
+  name: String
+  index: integer
+  octave: integer

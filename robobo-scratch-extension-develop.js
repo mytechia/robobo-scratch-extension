@@ -177,13 +177,10 @@
       switch (connectionStatus) {
         case 0:
           return {status: 0, msg: 'Error'};
-          break;
         case 1:
           return {status: 1, msg: 'Device not connected'};
-          break;
         case 2:
           return {status: 2, msg: 'Device connected'};
-          break;
       }
 
 
@@ -772,35 +769,34 @@
       switch (irname){
         case "Front-C":
           return "3";
-          break;
 
         case "Front-L":
           return "2";
-          break;
+
 
         case "Front-LL":
           return "1";
-          break;
+
 
         case "Front-R":
           return "4";
-          break;
+
 
         case "Front-RR":
           return "5";
-          break;
+
 
         case "Back-C":
           return "7";
-          break;
+
 
         case "Back-L":
           return "8";
-          break;
+
 
         case "Back-R":
           return "6";
-          break;
+
 
       }
   }
@@ -809,31 +805,24 @@ ext.irSensorToIndex = function(led){
       switch (led){
         case "Front-C":
           return "3";
-          break;
 
         case "Front-L":
           return "2";
-          break;
 
         case "Front-LL":
           return "1";
-          break;
 
         case "Front-R":
           return "4";
-          break;
 
         case "Front-RR":
           return "5";
-          break;
 
         case "Back-L":
           return "7";
-          break;
 
         case "Back-R":
           return "6";
-          break;
 
       }
   }

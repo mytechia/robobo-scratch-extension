@@ -19,7 +19,7 @@
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 //Remote library version 0.1.3-dev
-//Constructor of the remote control object
+//Constructor of the remote control object 
 function Remote(ip,passwd){
   this.ip = ip.trim();
   this.port = 40404;
@@ -980,6 +980,17 @@ Remote.prototype = {
 
 
     }
+
+    else if (msg.name == "NEWNOTE") {
+      console.log(msg.value['name']+'  '+msg.value['index']+'  '+msg.value['octave']);
+    
+
+
+    }
+
+
+    
+    
 
     else {
       console.log('Lost status '+ msg.name);
