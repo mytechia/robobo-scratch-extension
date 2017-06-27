@@ -983,7 +983,7 @@ Remote.prototype = {
 
     else if (msg.name == "NEWNOTE") {
       console.log(msg.value['name']+'  '+msg.value['index']+'  '+msg.value['octave']);
-    
+      (this.callbackmap.get("onNewNote"))();
 
 
     }

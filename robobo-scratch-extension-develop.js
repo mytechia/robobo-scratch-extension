@@ -27,6 +27,7 @@
     var lostface = false;
     var error = false;
     var voice = false;
+    var newNote = false;
 
     var connectionStatus = 1;
 
@@ -119,6 +120,10 @@
       obstacle = true;
 
     }
+    ext.onNewNote = function () {
+      newNote= true;
+
+    }
 
     ext.onError = function () {
       error = true;
@@ -161,6 +166,8 @@
         rem.registerCallback("onError", ext.onError);
         rem.registerCallback("onPhrase", ext.onVoice);
         rem.registerCallback("onConnectionChanges", ext.onConnectionChanges);
+        rem.registerCallback("onNewNote", ext.onNewNote);
+
 
         rem.waitForConnection();
 
@@ -361,6 +368,7 @@
         return false;
       }
     };
+
 
     //Reporter function that checks falls
     ext.readFall = function (fall) {
@@ -661,6 +669,16 @@
       }
     };
 
+     //Hat function that checks for new faces
+    ext.newNoteFun = function() {
+      if (newNote){
+        newNote = false;
+        return true;
+      }else {
+        return false;
+      }
+    };
+
 
 
     ext.resetSensor = function(sensor) {
@@ -844,7 +862,7 @@ ext.irSensorToIndex = function(led){
 
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
           ['w', 'play note %d.note for %n seconds', 'playNote', 60, 0.5],
-
+          ['h', 'when note detected','newNoteFun'],
 
 
           ['h', 'ROB SENSING BLOCKS','dummyFun'],
