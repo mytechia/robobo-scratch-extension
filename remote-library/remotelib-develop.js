@@ -744,6 +744,9 @@ Remote.prototype = {
   getBlobSize : function(color){
     return this.statusmap.get("blobSize"+color);
   },
+  getLastNote : function(){
+    return this.statusmap.get("lastNote");
+  },
 
 
 
@@ -983,8 +986,9 @@ Remote.prototype = {
 
     else if (msg.name == "NEWNOTE") {
       console.log(msg.value['name']+'  '+msg.value['index']+'  '+msg.value['octave']);
-      (this.callbackmap.get("onNewNote"))();
+      this.statusmap.set("lastNote",msg.value['name']);
 
+      (this.callbackmap.get("onNewNote"))();
 
     }
 

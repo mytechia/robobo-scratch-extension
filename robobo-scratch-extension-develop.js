@@ -773,6 +773,10 @@
     return rem.getBlobSize(color);
   }
 
+  ext.readLastNote = function(){
+    return rem.getLastNote();
+  }
+
   ext.playNote = function(note, time, callback){
     rem.playNote(note, time)
     window.setTimeout(function() {
@@ -863,6 +867,8 @@ ext.irSensorToIndex = function(led){
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
           ['w', 'play note %d.note for %n seconds', 'playNote', 60, 0.5],
           ['h', 'when note detected','newNoteFun'],
+          ['r', 'read last note','readLastNote'],
+
 
 
           ['h', 'ROB SENSING BLOCKS','dummyFun'],
