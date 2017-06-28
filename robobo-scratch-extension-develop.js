@@ -49,6 +49,7 @@
     var blockCallback = undefined;
 
     $.getScript("https://mytechia.github.io/robobo-scratch-extension/remote-library/remotelib-develop.js", function(){});
+    $.getScript("https://mytechia.github.io/robobo-scratch-extension/utilities.js", function(){});
 
 
     // Cleanup function when the extension is unloaded
@@ -449,6 +450,13 @@
     ext.readTapCoord = function (axis) {
       var value = 0;
       value = rem.getTapCoord(axis);
+      return value;
+    };
+
+    //Reporter function to get the detected face zone
+    ext.readTapZone = function () {
+      var value = 0;
+      value = coodsToZone(rem.getTapCoord("x"),rem.getTapCoord("y"));
       return value;
     };
 
@@ -909,6 +917,8 @@ ext.irSensorToIndex = function(led){
 
           ['r', 'fling angle','readFlingAngle'],//v
           ['r', 'tap position at %m.axis axis','readTapCoord','x'],//v
+          ['r', 'tap zone','readTapZone'],//v
+
 
           ['r', 'acceleration at %m.axis3d axis','readAcceleration','x'],//v
 
