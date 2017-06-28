@@ -34,6 +34,7 @@ function rangeFun(input,type,r1,r2) {
   };
 
 function coordsToZone(x, y){
+    
     if (y<17){
         return "forehead";
     }else if (rangeFun(y,"between",17,56) && rangeFun(x,"between", 15, 85)){

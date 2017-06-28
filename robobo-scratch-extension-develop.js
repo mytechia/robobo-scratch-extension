@@ -456,7 +456,7 @@
     //Reporter function to get the detected face zone
     ext.readTapZone = function () {
       var value = 0;
-      value = coodsToZone(rem.getTapCoord("x"),rem.getTapCoord("y"));
+      value = coordsToZone(rem.getTapCoord("x"),rem.getTapCoord("y"));
       return value;
     };
 
