@@ -991,6 +991,10 @@ Remote.prototype = {
       (this.callbackmap.get("onNewNote"))();
 
     }
+       else if (msg.name == "ENDOFSPEECH") {
+      console.log("END OF SPEECH");
+      
+    }
 
 
     
