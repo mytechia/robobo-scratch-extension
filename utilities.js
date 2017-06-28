@@ -45,5 +45,7 @@ function coordsToZone(x, y){
         return "left";
     }else if (rangeFun(x,"between",85,100)){
         return "right";
+    }else if (rangeFun(y,"between",77,100) && rangeFun(x,"between", 15, 85)){
+        return "chin";
     }
 }
