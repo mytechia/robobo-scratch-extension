@@ -180,6 +180,12 @@
 
     };
 
+    //Speech production function
+    ext.talkRobobo = function(text){
+        rem.talk(text);
+
+    };
+
 
     ext._getStatus = function() {
       switch (connectionStatus) {

@@ -253,3 +253,11 @@ value:
   name: String
   index: integer
   octave: integer
+
+26. (v2.1.0)
+
+name:
+  ENDOFSPEECH
+
+value:
+  none
