@@ -49,6 +49,8 @@ function Remote(ip,passwd){
   this.tiltCallback = undefined;
   //Pan stop callback
   this.panCallback = undefined;
+  //Speech synthesis callback
+  this.talkCallback = undefined;
 
   this.panSpeedLimit = 40;
   this.tiltSpeedLimit = 10;
@@ -518,7 +520,12 @@ Remote.prototype = {
   //ENDMOVEMENT
 
   //HRI
-  talk : function (speech) {
+  talk : function (speech, callback) {
+    if (this.talkCallback != undefined){
+      this.talkCallback();
+    }
+
+    this.talkCallback = callback;
     var message = JSON.stringify({
         "name": "TALK",
         "parameters": {
@@ -993,6 +1000,8 @@ Remote.prototype = {
     }
        else if (msg.name == "ENDOFSPEECH") {
       console.log("END OF SPEECH");
+      this.talkCallback();
+      this.talkCallback = undefined;
       
     }
 

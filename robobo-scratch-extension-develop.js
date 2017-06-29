@@ -181,8 +181,8 @@
     };
 
     //Speech production function
-    ext.talkRobobo = function(text){
-        rem.talk(text);
+    ext.talkRobobo = function(text, callback){
+        rem.talk(text, callback);
 
     };
 
@@ -902,7 +902,7 @@ ext.irSensorToIndex = function(led){
 
           ['h', 'OBO ACTUATION BLOCKS','dummyFun'],
           [' ', 'set emotion to %m.emotions','changeEmotion','normal'],
-          [' ', 'say %s','talkRobobo','hello world'],
+          ['w', 'say %s','talkRobobo','hello world'],
           [' ', 'play %m.sounds sound','playSound', 'moan'],
 
           ['h', 'OBO SENSING BLOCKS','dummyFun'],
