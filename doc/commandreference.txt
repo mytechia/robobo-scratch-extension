@@ -152,3 +152,14 @@ name:
 parameters:
   none
 
+17.(v0.2.1)
+
+  name:
+    CONFIGUREBLOB
+
+  parameters:
+    red: boolean
+    green: boolean
+    blue: boolean
+    custom: boolean
+

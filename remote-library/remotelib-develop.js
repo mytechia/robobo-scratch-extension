@@ -606,6 +606,21 @@ Remote.prototype = {
     //END OF BRIGHTNESSCHANGED FUNCTION
   },
 
+  configureBlobDetection: function (red, green, blue, custom) {
+    var message = JSON.stringify({
+        "name": "CONFIGUREBLOB",
+        "parameters": {
+            "red":red,
+            "green":green,
+            "blue":blue,
+            "custom":custom
+        },
+        "id": this.commandid
+    });
+    this.sendMessage(message);
+    //END OF CHANGECOLOR FUNCTION
+  },
+
   consultIR : function (irnumber) {
     console.log("ASDF");
 

@@ -862,6 +862,9 @@ ext.irSensorToIndex = function(led){
 
       }
   }
+  ext.configBlob = function(r,g,b,c){
+    rem.configureBlobDetection(r,g,b,c);
+  }
 
 
     // Block and block menu descriptions
@@ -887,6 +890,7 @@ ext.irSensorToIndex = function(led){
 
           ['h', 'ROB SENSING BLOCKS','dummyFun'],
           [' ','reset sensor %m.sensors','resetSensor','all'],
+          [' ','Configure blob detection R:%m.boolean G:%m.boolean B:%m.boolean C:%m.boolean','configBlob','false','true','false','false'],
 
 
         //  ['r', 'pan position','readPan'],//v
@@ -972,6 +976,7 @@ ext.irSensorToIndex = function(led){
           range: ['between', 'out'],
           stop: ['all','wheels','pan','tilt'],
           blobcolor: ['red','green','blue','custom'],
+          boolean: ['true','false']
         },
     };
 
