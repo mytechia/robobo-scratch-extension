@@ -739,7 +739,7 @@ Remote.prototype = {
   },
 
   getObstacle : function (ir) {
-    
+
     return this.statusmap.get(ir);
   },
 
@@ -1014,13 +1014,13 @@ Remote.prototype = {
       (this.callbackmap.get("onNewNote"))();
 
     }
-       else if (msg.name == "ENDOFSPEECH") {
+    else if (msg.name == "ENDOFSPEECH") {
       console.log("END OF SPEECH");
       this.talkCallback();
       this.talkCallback = undefined;
       
     }
-       else if (msg.name == "WHEELSTATUS") {
+    else if (msg.name == "WHEELSTATUS") {
       this.statusmap.set("encoderPosR",msg.value['encoderPosR']);
       this.statusmap.set("encoderPosL",msg.value['encoderPosL']);
       this.statusmap.set("encoderSpeedR",msg.value['encoderSpeedR']);
@@ -1029,13 +1029,19 @@ Remote.prototype = {
 
       
     }
-        else if (msg.name == "OBSTACLES") {
-      for (var key in msg.value) {
-              this.statusmap.set(key,msg.value[key]);
-      }
+    else if (msg.name == "OBSTACLES") {
 
-
+      obstacle = false;
       
+      for (var key in msg.value) {
+        this.statusmap.set(key,msg.value[key]);
+        if (msg.value[key]=="true"){
+          obstacle = true;
+        }
+      }
+      if (obstacle){
+        this.callbackmap.get("onObstacle")();
+      }
     }
 
 
