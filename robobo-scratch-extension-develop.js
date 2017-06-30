@@ -801,67 +801,7 @@
 
 
 
-  ext.irSensorToIndex = function(irname){
-      switch (irname){
-        case "Front-C":
-          return "3";
 
-        case "Front-L":
-          return "2";
-
-
-        case "Front-LL":
-          return "1";
-
-
-        case "Front-R":
-          return "4";
-
-
-        case "Front-RR":
-          return "5";
-
-
-        case "Back-C":
-          return "7";
-
-
-        case "Back-L":
-          return "8";
-
-
-        case "Back-R":
-          return "6";
-
-
-      }
-  }
-
-ext.irSensorToIndex = function(led){
-      switch (led){
-        case "Front-C":
-          return "3";
-
-        case "Front-L":
-          return "2";
-
-        case "Front-LL":
-          return "1";
-
-        case "Front-R":
-          return "4";
-
-        case "Front-RR":
-          return "5";
-
-        case "Back-L":
-          return "7";
-
-        case "Back-R":
-          return "6";
-
-      }
-  }
   ext.configBlob = function(r,g,b,c){
     rem.configureBlobDetection(r,g,b,c);
   }

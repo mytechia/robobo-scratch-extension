@@ -790,7 +790,7 @@ Remote.prototype = {
 
     else if (msg.name == "IRSTATUS"){
 
-      for (var key in msg.value) {
+      /*for (var key in msg.value) {
         //console.log(key);
 
 
@@ -825,7 +825,7 @@ Remote.prototype = {
 
         //  console.log(msg.value[key]);
 
-      }
+      }*/
       this.firstime = false;
     }
 
@@ -1017,6 +1017,23 @@ Remote.prototype = {
       console.log("END OF SPEECH");
       this.talkCallback();
       this.talkCallback = undefined;
+      
+    }
+       else if (msg.name == "WHEELSTATUS") {
+      this.statusmap.set("encoderPosR",msg.value['encoderPosR']);
+      this.statusmap.set("encoderPosL",msg.value['encoderPosL']);
+      this.statusmap.set("encoderSpeedR",msg.value['encoderSpeedR']);
+      this.statusmap.set("encoderSpeedL",msg.value['encoderSpeedL']);
+
+
+      
+    }
+        else if (msg.name == "OBSTACLES") {
+      for (var key in msg.value) {
+              this.statusmap.set(key,msg.value[key]);
+      }
+
+
       
     }
 
