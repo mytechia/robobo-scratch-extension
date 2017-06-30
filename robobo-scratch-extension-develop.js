@@ -806,6 +806,10 @@
     rem.configureBlobDetection(r,g,b,c);
   }
 
+  ext.readWheel = function(wheel,type){
+    return rem.getWheel(wheel,type);
+  }
+
 
     // Block and block menu descriptions
     var descriptor = {
@@ -832,6 +836,7 @@
           [' ','reset sensor %m.sensors','resetSensor','all'],
           [' ','Configure blob detection R:%m.boolean G:%m.boolean B:%m.boolean C:%m.boolean','configBlob','false','true','false','false'],
 
+          ['r', 'read %m.indvidualwheel wheel %m.wheelmenu','readWheel','right','position'],//v
 
         //  ['r', 'pan position','readPan'],//v
         //  ['r', 'tilt position','readTilt'],//v
@@ -898,6 +903,7 @@
           motorDirection: ['forward', 'backward'],
           motorDirectionBis: ['forward', 'backward','off'],
           wheels: ['right', 'left','both'],
+          individualwheel: ['right', 'left'],
           mtype: ['non-stop','seconds'],
           orientation: ['yaw','pitch','roll'],
           emotions: ['happy','laughting','sad','angry','surprised','normal'],
@@ -916,7 +922,8 @@
           range: ['between', 'out'],
           stop: ['all','wheels','pan','tilt'],
           blobcolor: ['red','green','blue','custom'],
-          boolean: ['true','false']
+          boolean: ['true','false'],
+          wheelmenu: ['position','speed']
         },
     };
 

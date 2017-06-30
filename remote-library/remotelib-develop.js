@@ -770,6 +770,24 @@ Remote.prototype = {
   getLastNote : function(){
     return this.statusmap.get("lastNote");
   },
+  getWheel : function(wheel, type){
+      if (type == "speed"){
+        if (wheel == "right"){
+              this.statusmap.get("encoderSpeedR");
+        }else{
+                this.statusmap.get("encoderSpeedL");
+
+        }
+      }else{
+        if (wheel == "right"){
+          this.statusmap.get("encoderPosR");
+
+        }else{
+          this.statusmap.get("encoderPosL");
+
+        }
+      }
+  },
 
 
 
@@ -1032,7 +1050,7 @@ Remote.prototype = {
     else if (msg.name == "OBSTACLES") {
 
       obstacle = false;
-      
+
       for (var key in msg.value) {
         this.statusmap.set(key,msg.value[key]);
         if (msg.value[key]=="true"){
