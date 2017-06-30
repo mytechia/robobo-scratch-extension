@@ -739,7 +739,7 @@ Remote.prototype = {
   },
 
   getObstacle : function (ir) {
-    return this.statusmap.get("obstacle_"+ir);
+    return this.statusmap.get(ir);
   },
 
   //ENDVISION
