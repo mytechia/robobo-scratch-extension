@@ -739,6 +739,7 @@ Remote.prototype = {
   },
 
   getObstacle : function (ir) {
+    
     return this.statusmap.get(ir);
   },
 
