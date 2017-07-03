@@ -1061,6 +1061,17 @@ Remote.prototype = {
         this.callbackmap.get("onObstacle")();
       }
     }
+    else if (msg.name == "LEDSTATUS") {
+      this.statusmap.set(msg.value['id']+"R",msg.value['R']);
+      this.statusmap.set(msg.value['id']+"G",msg.value['G']);
+      this.statusmap.set(msg.value['id']+"B",msg.value['B']);
+ 
+    }
+    else if (msg.name == "EMOTIONSTATUS") {
+      this.statusmap.set("emotion",msg.value['emotion']);
+
+ 
+    }
 
 
     

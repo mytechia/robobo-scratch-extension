@@ -278,13 +278,30 @@ name:
   OBSTACLES
   
 value:
+  Back-C: boolean
+  Back-L: boolean
+  Back-R: boolean
+  Front-C: boolean
+  Front-L: boolean
+  Front-LL: boolean
+  Front-R: boolean
+  Front-RR: boolean
 
-Back-C: boolean
-Back-L: boolean
-Back-R: boolean
-Front-C: boolean
-Front-L: boolean
-Front-LL: boolean
-Front-R: boolean
-Front-RR: boolean
+29. (2.1.0)
 
+name:
+  LEDSTATUS
+
+value:
+  id: string
+  R: integer
+  G:integer
+  B:integer
+
+30. (2.1.0)
+
+name:
+  EMOTIONSTATUS
+
+value:
+  emotion: string
