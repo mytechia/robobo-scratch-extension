@@ -735,7 +735,7 @@
           ['r', 'tilt position','readTilt'],
 
           //['r', 'distance at sensor %m.ir','readObstacle','Front-C'], --> not visible until calibration is ready
-          ['r', 'raw value at sensor %m.ir','readObstacle','Front-C'],
+          ['r', 'value at sensor %m.ir','readObstacle','Front-C'],
 
           ['r', 'base battery level','readBatteryLevel'],
 
