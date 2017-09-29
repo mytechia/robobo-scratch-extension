@@ -545,22 +545,23 @@ Remote.prototype = {
 
   /** Returns the last known position of the specified wheel */
   getWheel : function(wheel, type){
+    var value;
     if (type == "speed"){
       if (wheel == "right"){
-            this.statusmap.get("encoderSpeedR");
+          value = this.statusmap.get("wheelSpeedR");
       }else{
-              this.statusmap.get("encoderSpeedL");
+          value = this.statusmap.get("wheelSpeedL");
 
       }
     }else{
       if (wheel == "right"){
-        this.statusmap.get("encoderPosR");
+        value = this.statusmap.get("wheelPosR");
 
       }else{
-        this.statusmap.get("encoderPosL");
-
+        value = this.statusmap.get("wheelPosL");
       }
     }
+    return value;
   },
 
   /** Returns the last know color of the specified led */
@@ -1158,13 +1159,10 @@ Remote.prototype = {
       
     }
     else if (msg.name == "WHEELSTATUS") {
-      this.statusmap.set("encoderPosR",msg.value['encoderPosR']);
-      this.statusmap.set("encoderPosL",msg.value['encoderPosL']);
-      this.statusmap.set("encoderSpeedR",msg.value['encoderSpeedR']);
-      this.statusmap.set("encoderSpeedL",msg.value['encoderSpeedL']);
-
-
-      
+      this.statusmap.set("wheelPosR",msg.value['wheelPosR']);
+      this.statusmap.set("wheelPosL",msg.value['wheelPosL']);
+      this.statusmap.set("wheelSpeedR",msg.value['wheelSpeedR']);
+      this.statusmap.set("wheelSpeedL",msg.value['wheelSpeedL']);
     }
     else if (msg.name == "OBSTACLES") {
 
