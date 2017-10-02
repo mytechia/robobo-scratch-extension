@@ -796,7 +796,7 @@
           individualwheel: ['right', 'left'],
           mtype: ['non-stop','seconds'],
           orientation: ['yaw','pitch','roll'],
-          emotions: ['happy','laughting','sad','angry','surprised','normal'],
+          emotions: ['happy','laugthing','sad','angry','surprised','normal'],
           colors: ['off','white','red','blue','cyan','magenta','yellow','green','orange'],
           status: ['on','off'],
           leds: ['Front-C','Front-L','Front-LL','Front-R','Front-RR','Back-L','Back-R','all'],
