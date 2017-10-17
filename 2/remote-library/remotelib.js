@@ -19,12 +19,16 @@
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-//Javascript remote control library for the Robobo educational robot - Version 0.9.1
+//Javascript remote control library for the Robobo educational robot - Version 0.9.1-dev
 
-//Constructor of the remote control object 
+//Constructor of the remote control object
 function Remote(ip,passwd){
   this.ip = ip.trim();
   this.port = 40404;
+
+  //Last keep-alive message timestamp
+  this.lastKeepAliveTime = 0;
+  this.maxKeepAlivePeriod = 1000*1*60; //1 minutes
 
   //WebSocket to stablish the connection
   this.ws = undefined;
@@ -71,14 +75,16 @@ function Remote(ip,passwd){
   //defaults and limits
   this.panSpeedLimit = 40;
   this.tiltSpeedLimit = 10;
-  
+
   this.wheelsSpeedLimit = 250;
-  
+
   this.panInferiorLimit = 26;
   this.panSuperiorLimit = 339;
 
   this.tiltInferiorLimit = 26;
   this.tiltSuperiorLimit = 109;
+
+  this.minIRValue = 20;
 
 //END OF REMOTE OBJECT
 };
@@ -116,6 +122,7 @@ Remote.prototype = {
       console.log("Connection Stablished");
       (this.callbackmap.get("onConnectionChanges"))(2);
       this.sendMessage("PASSWORD: "+this.password);
+      this.keepAlive();
       this.connectionState = Remote.ConnectionStateEnum.CONNECTED;
     }.bind(this);
 
@@ -127,7 +134,8 @@ Remote.prototype = {
 
     this.ws.onclose = function(event) {
       var error = false;
-      if(this.connectionState != Remote.ConnectionStateEnum.RECONNECTING){
+      if(this.connectionState != Remote.ConnectionStateEnum.RECONNECTING && 
+        this.connectionState != Remote.ConnectionStateEnum.DISCONNECTED){
         var reason;
 
           // See http://tools.ietf.org/html/rfc6455#section-7.4.1
@@ -135,17 +143,20 @@ Remote.prototype = {
               reason = "";
           else if(event.code == 1001)
               reason = "";
-          else if(event.code == 1002)
+          else if(event.code == 1002) {
               reason = "Protocol Error";
-          else if(event.code == 1003)
+              error = true;
+          }
+          else if(event.code == 1003) {
               reason = "Invalid data";
+              error = true;
+          }
           else if(event.code == 1004)
               reason = "";
           else if(event.code == 1005)
               reason = "";
           else if(event.code == 1006){
-             reason = "Lost connection";
-             error = true;
+             reason = "Lost connection";             
            }
           else if(event.code == 1007)
               reason = "";
@@ -157,27 +168,33 @@ Remote.prototype = {
               reason = "";
           else if(event.code == 1011)
               reason = "";
-          else if(event.code == 1015)
+          else if(event.code == 1015) {
               reason = "Failure to perform a TLS handshake";
-          else
+              error = true;
+          }
+          else {
               reason = "Unknown reason";
-          alert('Connection closed\n'+reason);
-          console.log("Code: "+event.code );
-      }
-      if (error){
-        (this.callbackmap.get("onConnectionChanges"))(0);
-      }else{
-        (this.callbackmap.get("onConnectionChanges"))(1);
-      }
+              error = true;
+          }
+
+
+          if (error){
+            (this.callbackmap.get("onConnectionChanges"))(0);
+          }else{
+            (this.callbackmap.get("onConnectionChanges"))(1);
+          }
+
+      }      
+
       this.reconnecting = false;
-      console.log("Connection Closed");
+      console.log("Connection closed because: "+event.code);
       this.connectionState = Remote.ConnectionStateEnum.DISCONNECTED;
     }.bind(this);
 
     this.ws.onerror = function(error){
       this.connectionState = Remote.ConnectionStateEnum.DISCONNECTED;
       (this.callbackmap.get("onConnectionChanges"))(0);
-      alert("Websocket Error");
+      console.log("Error in websocket connection to Robobo: "+error);
     }.bind(this);
 
   }, //ENDOF connect
@@ -193,7 +210,7 @@ Remote.prototype = {
       }
     }
 
-  }, //ENDOF waitForConnection 
+  }, //ENDOF waitForConnection
 
   /** Checks whether the connection is established or not */
   isConnected : function() {
@@ -205,7 +222,7 @@ Remote.prototype = {
     if (reconnect) {
       this.connectionState = Remote.ConnectionStateEnum.RECONNECTING;
     }
-    this.ws.close();    
+    this.ws.close();
   }, //ENDOF closeConnection
 
   /** Sends a message to the remote Robobo */
@@ -221,7 +238,9 @@ Remote.prototype = {
     console.log("ERROR "+ err);
     this.statusmap.set("error",err);
 
-    (this.callbackmap.get("onError"))();
+    if (this.callbackmap.get("onError") != null) {
+      (this.callbackmap.get("onError"))();
+    }    
   },//ENDOF fireError
 
   /** Handles and processes an incoming message from the remote Robobo */
@@ -289,7 +308,7 @@ Remote.prototype = {
         "id": this.commandid
     });
     this.sendMessage(message);
-    
+
   },//ENDOF moveWheelsSeparated
 
 
@@ -318,7 +337,7 @@ Remote.prototype = {
         "id": this.commandid
     });
     this.sendMessage(message);
-    
+
   },//ENDOF moveWheelsSeparatedWait
 
 
@@ -334,7 +353,7 @@ Remote.prototype = {
         "id": this.commandid
     });
     this.sendMessage(message);
-    
+
   },//ENDOF motorsOn
 
 
@@ -374,11 +393,11 @@ Remote.prototype = {
     //  this.statusmap.set("panPos",pos);
     //}
     this.sendMessage(message);
-    
+
   }, //ENDOF movePan
 
 
-  /** Commands the robot to move the PAN to the specified position 
+  /** Commands the robot to move the PAN to the specified position
    * and waits until the movement finishes */
   movePanWait: function(pos, vel, callback) {
     s = ''+ vel;
@@ -413,7 +432,7 @@ Remote.prototype = {
     //  this.statusmap.set("panPos",pos);
     //}
     this.sendMessage(message);
-    
+
   },//ENDOF movePanWait
 
   /** Returns the current PAN position */
@@ -465,11 +484,11 @@ Remote.prototype = {
     //  this.statusmap.set("tiltPos",parseInt(pos));
     //}
     this.sendMessage(message);
-    
+
   },//ENDOF moveTilt
 
 
-  /** Commands the robot to move the TILT to an specified position 
+  /** Commands the robot to move the TILT to an specified position
    * and waits until the robot ends the movement */
   moveTiltWait: function (pos, vel, callback) {
     s = ''+ vel;
@@ -501,7 +520,7 @@ Remote.prototype = {
     //  this.statusmap.set("tiltPos",parseInt(pos));
     //}
     this.sendMessage(message);
-    
+
   },//ENDOF moveTiltWait
 
 
@@ -524,12 +543,21 @@ Remote.prototype = {
     this.moveTilt(newpos, speed);
 
   },//ENDOF moveTiltByDegrees
-  
+
 
   /** Returns the last value detected by the infrared senseor specified by 'irnumber' */
   getIRValue : function (irnumber) {
     return this.statusmap.get("IRSensorStatus"+irnumber);
   },//ENDOF getIRValue
+
+  /** Sets the value of an IR sensor using its key from IRSTATUS */
+  setIRValue : function(key, value) {
+    if (value <= this.minIRValue) { //limit the minimun value
+      value = 0;
+    }
+
+    this.statusmap.set(key,value);
+  }, //ENDOF setIRValue
 
 
   /** Returns the last value detected by the infrared senseor specified by 'irnumber' */
@@ -599,7 +627,7 @@ Remote.prototype = {
   /** Returns the last known Robobo emotion */
   getEmotion : function (){
     return this.statusmap.get("emotion");
-  },  
+  },
 
 
   /** Commands the robot to play a prerecorded sound */
@@ -612,7 +640,7 @@ Remote.prototype = {
         "id": this.commandid
     });
     this.sendMessage(message);
-    
+
   },//ENDOF playEmotionSound
 
   /***************************************/
@@ -640,7 +668,7 @@ Remote.prototype = {
         "id": this.commandid
     });
     this.sendMessage(message);
-    
+
   },//ENDOF talk
 
 
@@ -678,6 +706,24 @@ Remote.prototype = {
     return this.statusmap.get("lastNote");
   },//ENDOF getLastNote
 
+
+  processClapStatus : function() {
+
+    claps = this.statusmap.get("claps");
+    if (claps == null) claps = 0;
+    claps++;
+
+    this.statusmap.set("claps", claps);    
+
+    this.callCallback("onNewClap");
+
+  },
+
+  getClaps : function() {
+    return this.statusmap.get("claps");
+  },
+  
+
   /*********************************************/
   /* ENDOF SOUND-BASED INTERACTION FUNCTIONS   *
   /*********************************************/
@@ -699,7 +745,7 @@ Remote.prototype = {
     }else{
       return this.statusmap.get("roll");
     }
-    
+
   },//ENDOF getOrientation
 
 
@@ -714,7 +760,7 @@ Remote.prototype = {
     }else{
       return this.statusmap.get("zaccel");
     }
-    
+
   },//ENDOF getAcceleration
 
   /** Commands the robot to return the last known ambient light value */
@@ -742,7 +788,7 @@ Remote.prototype = {
     //END OF CHECKBATT FUNCTION
   },
 
-  
+
   /***************************************/
   /* ENDOF SMARTPHONE SENSORS FUNCTIONS  *
   /***************************************/
@@ -766,7 +812,7 @@ Remote.prototype = {
         "id": this.commandid
     });
     this.sendMessage(message);
-    
+
   },//ENDOF configureBlobDetection
 
 
@@ -778,7 +824,7 @@ Remote.prototype = {
     }else{
       return this.statusmap.get("facey");
     }
-    
+
   },//ENDOF getFaceCoord
 
   getBlobCoord : function(color, axis){
@@ -816,8 +862,20 @@ Remote.prototype = {
     }else{
       return this.statusmap.get("tapy");
     }
-    
+
   },//ENDOF getTapCoord
+
+  getTapZone : function() {
+    x = this.getTapCoord("x");
+    y = this.getTapCoord("y");
+
+    if (x!=null && y!=null) {
+      return this.coordsToZone(x, y);
+    }
+    else {
+      return this.coordsToZone(0,0);
+    }
+  },
 
   /** Returns the last angle of a fling gesture in the smartphone screen */
   checkFlingAngle : function () {
@@ -835,6 +893,29 @@ Remote.prototype = {
   /**********************************************/
   /* UTILITY FUNCTIONS                          *
   /**********************************************/
+
+  /** Commands the robot to not enter in sleep mode*/
+  keepAliveMsg : function () {
+    var message = JSON.stringify({
+        "name": "KEEP-ALIVE",
+        "parameters": {},
+        "id": this.commandid
+    });
+    this.sendMessage(message);
+
+  }, //ENDOF keepAliveMsg
+
+  /** Sends a keep alive message if, and only if, have elapsed
+   * more than this.maxKeepAlivePeriod millisends since the last
+   * keep alive message sent.
+   */
+  keepAlive : function() {
+    newKeepAliveTime = this.timestamp();
+    if ((newKeepAliveTime - this.lastKeepAliveTime) > this.maxKeepAlivePeriod) {
+      this.lastKeepAliveTime = newKeepAliveTime;
+      this.keepAliveMsg();
+    }
+  }, //ENDOF keepAlive
 
   resetFaceSensor : function() {
     //face sensor
@@ -893,23 +974,29 @@ Remote.prototype = {
     this.statusmap.set("lastNote",0);
   },
 
+  resetClapSensor : function() {
+    this.statusmap.set("claps", 0);
+  },
+
   resetSensors : function () {
 
     this.resetFaceSensor();
-    
+
     this.resetFlingSensor();
 
     this.resetTapSensor();
 
     this.resetOrientationSensor();
-    
+
     this.resetAccelerationSensor();
 
     this.resetIRs();
 
     this.resetBlobSensor();
-    
+
     this.resetNoteSensor();
+
+    this.resetClapSensor();
 
   },
 
@@ -917,6 +1004,31 @@ Remote.prototype = {
     return this.statusmap.get("error");
     //END OF GETCOLOR FUNCTION
   },
+
+  timestamp : function() {
+    return (new Date()).getTime();
+  },
+
+  /** Tranforms TAP coords to "face zones" */
+ coordsToZone : function(x, y){
+  
+    if (y == 0 && x == 0) {
+      return "none";
+    }else if (y<17){
+        return "forehead";
+    }else if (rangeFun(y,"between",17,56) && rangeFun(x,"between", 15, 85)){
+        return "eye";
+    }else if (rangeFun(y,"between",65,77) && rangeFun(x,"between", 25, 75)){
+        return "mouth";
+    }else if (rangeFun(x,"between",0,15)){
+        return "left";
+    }else if (rangeFun(x,"between",85,100)){
+        return "right";
+    }else if (rangeFun(y,"between",77,100) && rangeFun(x,"between", 15, 85)){
+        return "chin";
+    }
+  },
+
 
   /**********************************************/
   /* ENDOF UTILITY FUNCTIONS                    *
@@ -937,11 +1049,17 @@ Remote.prototype = {
     //END OF GETCOLOR FUNCTION
   },
 
+  callCallback : function(callbackName) {
+    if (this.callbackmap.get(callbackName) != null) {
+      this.callbackmap.get(callbackName)();
+    }
+  },
+
 
   /******************************/
   /* MESSAGE PROCESSING         *
   /******************************/
-  
+
   /** Manages the processing of each different status message received from the remote robot */
   manageStatus : function (msg) {
 
@@ -960,13 +1078,11 @@ Remote.prototype = {
     }
 
     else if (msg.name == "IRSTATUS"){
+        for (var key in msg.value) {
+            this.setIRValue(key,msg.value[key]);
+        }
+    }
 
-
-      for (var key in msg.value) {
-            this.statusmap.set(key,msg.value[key]);  
-          }
-      }
-    
 
     else if (msg.name == "BATTLEV") {
       this.statusmap.set("batterylevel",parseInt(msg.value["level"]));
@@ -975,7 +1091,7 @@ Remote.prototype = {
       }
     }
 
-    else if (msg.name == "OBOBATTLEV") {
+    else if (msg.name == "BAT_PHONE") {
       this.statusmap.set("obobatterylevel",parseInt(msg.value["level"]));
       if (parseInt(msg.value["level"])<20){
         this.callbackmap.get("onLowOboBatt")();
@@ -1036,22 +1152,16 @@ Remote.prototype = {
       this.statusmap.set("flingtime",parseInt(msg.value["time"]));
       this.statusmap.set("flingdistance",parseInt(msg.value["distance"]));
 
-      (this.callbackmap.get("onNewFling"))();
+      this.callCallback("onNewFling");
     }
 
     else if (msg.name == "CLAP") {
-      //TODO --> add null calback check
-      (this.callbackmap.get("onNewClap"))();
+      this.processClapStatus();
     }
 
-    else if (msg.name == "BRIGHTNESS") {
+    else if (msg.name == "AMBIENTLIGHT") {
       this.statusmap.set("brightness",parseInt(msg.value["level"]));
 
-    }
-
-    else if (msg.name == "BRIGHTNESSCHANGED") {
-
-      (this.callbackmap.get("onBrightnessChanged"))();
     }
 
     else if (msg.name == "ORIENTATION") {
@@ -1063,9 +1173,9 @@ Remote.prototype = {
 
     else if (msg.name == "ACCELERATION") {
       //console.log(msg);
-      this.statusmap.set("xaccel",parseInt(msg.value["xaccel"]));
-      this.statusmap.set("yaccel",parseInt(msg.value["yaccel"]));
-      this.statusmap.set("zaccel",parseInt(msg.value["zaccel"]));
+      this.statusmap.set("xaccel",parseFloat(msg.value["xaccel"]));
+      this.statusmap.set("yaccel",parseFloat(msg.value["yaccel"]));
+      this.statusmap.set("zaccel",parseFloat(msg.value["zaccel"]));
 
     }
 
@@ -1075,11 +1185,6 @@ Remote.prototype = {
       this.statusmap.set("colorg",parseInt(msg.value["G"]));
       this.statusmap.set("colorb",parseInt(msg.value["B"]));
 
-    }
-
-    else if (msg.name == "ACCELCHANGED") {
-
-      (this.callbackmap.get("onAccelChanged"))();
     }
 
     else if (msg.name == "DIE") {
@@ -1156,7 +1261,7 @@ Remote.prototype = {
       console.log("END OF SPEECH");
       this.talkCallback();
       this.talkCallback = undefined;
-      
+
     }
     else if (msg.name == "WHEELSTATUS") {
       this.statusmap.set("wheelPosR",msg.value['wheelPosR']);
@@ -1183,12 +1288,12 @@ Remote.prototype = {
       this.statusmap.set(msg.value['id']+"R",msg.value['R']);
       this.statusmap.set(msg.value['id']+"G",msg.value['G']);
       this.statusmap.set(msg.value['id']+"B",msg.value['B']);
- 
+
     }
     else if (msg.name == "EMOTIONSTATUS") {
       this.statusmap.set("emotion",msg.value['emotion']);
 
- 
+
     }
 
 

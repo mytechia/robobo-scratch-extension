@@ -19,9 +19,9 @@
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-//Scratch extension for the Robobo education robot - Version 0.9.1
+//Scratch extension for the Robobo education robot - Version 1.0.0
 (function(ext) {
-    
+
     var rem; //remote connection to the robot
 
     var commandid = 0;
@@ -49,7 +49,6 @@
     var fling = false;
     var accelchange = false;
     var obstacle = false;
-    var clapnumber = 0;
     var lastphrase = '';
 
     var blockCallback = undefined;
@@ -120,7 +119,6 @@
     //Callback for taps
     ext.onNewClap = function () {
       clap = true;
-      clapnumber = clapnumber + 1;
     }
     //Callback for brightness
     ext.onBrightnessChanged = function () {
@@ -152,10 +150,23 @@
     //Callback for connection status
     ext.onConnectionChanges = function (status) {
       connectionStatus = status;
+
+      if (connectionStatus == 0) {//error
+        alert("Error connecting with Robobo!");
+        disconnectMonitor();
+      }else if (connectionStatus == 1) {//disconected
+        alert("Robobo has been disconected!");
+        disconnectMonitor();
+      }else {
+        //else --> connection succesfull
+        reconnectMonitor();
+      }
+
+
     }
 
 
-    
+
     //BLOCKs FUNCTIONS
 
     //CONNECTION BLOCKS
@@ -192,12 +203,20 @@
 
         rem.waitForConnection();
 
+
+        //open monitor
+        roboboMonitorIp = ip;
+        connectMonitor();
+        if (!rem.isConnected()) {
+            disconnectMonitor();
+        }
+
     };
 
     //BLOCK - Close connection
     ext.disconnect = function () {
       rem.closeConnection(false);
-
+      closeMonitor();
     };
 
 
@@ -207,18 +226,18 @@
     ext.stopFun = function (what) {
         if (what == 'all'){
         rem.moveWheelsSeparated(10,10,0);
-        ext.movePanRoboboT(180,0);
-        ext.moveTiltRoboboT(90,0);
+        ext.movePanRobobo(180,0);
+        ext.moveTiltRobobo(90,0);
       }else if (what == 'wheels') {
         rem.moveWheelsSeparated(10,10,0);
       }else if (what == 'pan') {
-        ext.movePanRoboboT(180,0);
+        ext.movePanRobobo(180,0);
       }else if (what == 'tilt') {
-        ext.moveTiltRoboboT(90,0);
+        ext.moveTiltRobobo(90,0);
       }
     };
 
-    //BLOCK - Move wheels at speed 
+    //BLOCK - Move wheels at speed
     ext.newMovementT = function(rSpeed,lSpeed,quantity,mode,callback){
       if (mode == 'non-stop'){
         rem.moveWheelsSeparated(lSpeed,rSpeed,2147483647); //TODO -> use rem.motorsOn
@@ -280,33 +299,32 @@
         fling = false;
         accelchange = false;
         obstacle = false;
-        clapnumber = 0;
         lastphrase = '';
         ext.obstacle = false;
-  
+
         rem.resetSensors();
-  
+
       }else if (sensor == 'brightness') {
         brightnessChange = false;
-  
+
       }else if (sensor == 'claps') {
-        clapnumber = 0;
-  
+        rem.resetClapSensor();
+
       }else if (sensor == 'face') {
         rem.resetFaceSensor();
-  
+
       }else if (sensor == 'fling') {
         rem.resetFlingSensor();
-  
+
       }else if (sensor == 'pan') {
       }else if (sensor == 'tilt') {
-  
+
       }else if (sensor == 'orientation') {
         rem.resetOrientationSensor();
-  
+
       }else if (sensor == 'tap') {
         rem.resetTapSensor();
-  
+
       }else if (sensor == 'acceleration') {
         rem.resetAccelerationSensor();
       }else if (sensor == "IR"){
@@ -316,17 +334,19 @@
       }else if (sensor == "note") {
         rem.resetNoteSensor();
       }
-  
-  
+
+
     };
 
     //BLOCK - Read wheel
     ext.readWheel = function(wheel,type){
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       return rem.getWheel(wheel,type);
     }
 
     //BLOCK - Read pan
     ext.readPan = function () {
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       var value = 0;
       value = rem.getPan()
       return value;
@@ -334,6 +354,7 @@
 
     //BLOCK - Read tilt
     ext.readTilt = function () {
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       var value = 0;
       value = rem.getTilt();
       return value;
@@ -341,6 +362,7 @@
 
     //BLOCK - raw value at sensor --> Reads IR value
     ext.readObstacle = function (ir) {
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       var value = 0;
       value = rem.getObstacle(ir);
       return value;
@@ -348,12 +370,13 @@
 
     //BLOCK - Base battery level --> Reporter function to get the ROB battery level
     ext.readBatteryLevel = function () {
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       var value = 0;
       value = rem.checkBatt();
       return value;
     };
 
-  
+
 
 
     //SMARTPHONE ACTUATION BLOCKS
@@ -377,11 +400,11 @@
 
     //BLOCK - Play note
     ext.playNote = function(note, time, callback){
-      
+
       tt = Math.round(time*1000);
-  
+
       if (tt >= 50 && tt <=5000) { //do not accept more than 5 seconds or less than 50ms
-  
+
         rem.playNote(note, Math.round(time*1000))
         window.setTimeout(function() {
                   callback();
@@ -394,6 +417,7 @@
 
     //BLOCK - Smarpthone battery level --> Reporter function to get the OBO battery level
     ext.readOboBatteryLevel = function () {
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       var value = 0;
       value = rem.checkOboBatt();
       return value;
@@ -401,6 +425,7 @@
 
     //BLOCK - Face positoin at --> Reporter function to get the detected face coordinates
     ext.readFaceCoord = function (axis) {
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       var value = 0;
       value = rem.getFaceCoord(axis);
       return value;
@@ -408,6 +433,7 @@
 
     //BLOCK - Face distance --> Reporter function to get the detected face distance
     ext.readFaceDist= function () {
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       var value = 0;
       value = rem.getFaceDist();
       return value;
@@ -415,6 +441,7 @@
 
     //BLOCK - Brightness --> Reporter function to get the ROB battery level
     ext.readBrightnessLevel = function () {
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       var value = 0;
       value = rem.getBrightness();
       return value;
@@ -422,6 +449,7 @@
 
     //BLOCK - When face is detected --> Hat function that checks for new faces
     ext.newFaceFun = function() {
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       if (newface){
         newface = false;
         return true;
@@ -432,6 +460,7 @@
 
     //BLOCK - When face is lost --> Hat function that checks for new facesd
     ext.lostFace = function() {
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       if (lostface){
         lostface = false;
         return true;
@@ -442,13 +471,13 @@
 
     //BLOCK - Clap counter
     ext.readClap = function () {
-      var value = 0;
-      value = clapnumber;
-      return value;
+      rem.keepAlive(); //keep the robot alive to receive stats updates
+      return rem.getClaps();
     };
 
-    //BLOCK - When note detected 
+    //BLOCK - When note detected
     ext.newNoteFun = function() {
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       if (newNote){
         newNote = false;
         return true;
@@ -459,31 +488,36 @@
 
     //BLOCK - Last note
     ext.readLastNote = function(){
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       return rem.getLastNote();
     }
 
-    //BLOCK - Blob position at 
+    //BLOCK - Blob position at
     ext.readBlobCoord = function(color, axis){
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       return rem.getBlobCoord(color,axis);
     }
-  
-    //BLOCK - Blob area 
+
+    //BLOCK - Blob area
     ext.readBlobSize = function(color){
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       return rem.getBlobSize(color);
     }
-  
-    //BLOCK - Active blob colors 
+
+    //BLOCK - Active blob colors
     ext.configBlob = function(r,g,b,c){
       rem.configureBlobDetection(r,g,b,c);
     }
 
     //BLOCK - Fling angle
     ext.readFlingAngle = function () {
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       return rem.checkFlingAngle();
     };
 
     //BLOCK - Tap position at...
     ext.readTapCoord = function (axis) {
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       var value = 0;
       value = rem.getTapCoord(axis);
       return value;
@@ -491,13 +525,13 @@
 
     //BLOCK - Tap zone
     ext.readTapZone = function () {
-      var value = 0;
-      value = coordsToZone(rem.getTapCoord("x"),rem.getTapCoord("y"));
-      return value;
+      rem.keepAlive(); //keep the robot alive to receive stats updates
+      return rem.getTapZone();
     };
 
     //BLOCK - Orientation at ...
     ext.readOrientation = function (axis) {
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       var value = 0;
       value = rem.getOrientation(axis);
       return value;
@@ -505,6 +539,7 @@
 
     //BLOCK - Acceleration at ...
     ext.readAcceleration = function (axis) {
+      rem.keepAlive(); //keep the robot alive to receive stats updates
       var value = 0;
       value = rem.getAcceleration(axis);
       return value;
@@ -515,7 +550,7 @@
     //AUXILIARY FUNCTIONS
 
     //Pan movement function (absolute)
-    ext.movePanRoboboT = function(degrees, speed){
+    ext.movePanRobobo = function(degrees, speed){
       rem.movePan(degrees,speed);
     };
 
@@ -534,7 +569,7 @@
       rem.moveTiltByDegrees(degrees,speed);
     };
 
-    
+
     //Function to turn on and off the leds
     ext.changeLedStatus = function(led,status){
       rem.setLedColor(led,status);
@@ -573,7 +608,7 @@
       value = rem.getIRValue(ir);
       return value;
     };
-    
+
 
     //Hat function that checks ROB the battery
     ext.lowBatt = function() {
@@ -633,7 +668,7 @@
         return false;
       }
     };
-    
+
 
     //Hat function that tracks brightness changes
     ext.changedBrightness = function() {
@@ -662,7 +697,7 @@
 
 
     ext.resetClap = function () {
-      clapnumber = 0;
+      rem.resetClapSensor();
     };
 
     //Hat function that checks for errors
@@ -697,7 +732,158 @@
     ext.dummyFun = function () {
       return false;
     };
- 
+
+
+    // MONITOR WINDOW BEHAVIOR
+
+    // Variables required in the monitor panel
+    var monitorWindow;
+    var monitorDiv;
+    var monitorIFrame;
+    var roboboMonitorIp;
+    var monitorIFrame = undefined;
+    var monitorDiv = undefined;
+    var showMonitorButton = undefined;
+    var monitorDivWidth = 240;
+
+    //function createMonitorDiv() {
+    var mainWindowWidth = window.innerWidth;
+    var monitorHeaderHeight = 30;  // 5 is the padding
+    var monitorDivTop = 90;
+    var monitorDivBottom = 2;
+    var monitorDivHeight = window.innerHeight*0.90 -  monitorDivTop - monitorDivBottom;
+
+    monitorDiv = document.createElement("DIV");
+    monitorDiv.style.position = "absolute";
+    monitorDiv.style.width = monitorDivWidth + "px";
+    monitorDiv.style.height = monitorDivHeight + "px";
+    monitorDiv.style.right = "3px";
+    monitorDiv.style.top = monitorDivTop + "px";
+    monitorDiv.style.bottom = monitorDivBottom+"px";
+    monitorDiv.style.padding="0";
+    monitorDiv.style.border="1px solid #bcbdbe";
+    monitorDiv.style.borderRadius="10px";
+    monitorDiv.style.backgroundColor = "#ffffff";
+    monitorDiv.style.visibility = "hidden";
+
+    // Header
+    var headerDiv = document.createElement("DIV");
+    headerDiv.style.width = monitorDivWidth + "px";
+    headerDiv.style.backgroundColor = "#dddede";
+    // 5 is the top padding
+    headerDiv.style.height = monitorHeaderHeight+ "px";
+    headerDiv.style.textAlign = "center";
+    headerDiv.style.fontFamily="Helvetica, Arial, sans-serif";
+    headerDiv.style.fontSize = "12px";
+    headerDiv.style.lineHeight="30px";
+    headerDiv.style.borderRadius="10px 10px 0 0 ";
+
+
+    var hideIcon = document.createElement("DIV");
+    hideIcon.style.width = "20px";
+    hideIcon.style.height = "20px";
+    hideIcon.style.position = "absolute";
+    hideIcon.style.left = "5px";
+    hideIcon.style.top = "5px";
+    hideIcon.style.background = "url('http://firmware.theroboboproject.com/monitor/img/plegar-monitor.png') center";
+    hideIcon.style.zIndex = 120;
+    hideIcon.style.cursor="pointer";
+    hideIcon.addEventListener("click", hideDiv);
+    headerDiv.appendChild(hideIcon);
+
+
+    var headerText = document.createTextNode("ROBOBO MONITOR");
+    headerDiv.appendChild(headerText);
+    monitorDiv.appendChild(headerDiv);
+
+    // Content
+    var contentDiv = document.createElement("DIV");
+    contentDiv.style.width = monitorDivWidth + "px";
+    contentDiv.style.height= (monitorDivHeight - monitorHeaderHeight) + "px";
+
+
+    monitorIFrame = document.createElement("IFRAME")
+    monitorIFrame.src="http://firmware.theroboboproject.com/monitor/robobo-monitor.html?status=disconnected";
+    //monitorIFrame.src="http://pruebas.local/monitor/robobo-monitor.html";
+    monitorIFrame.style.width ="99%";
+    monitorIFrame.style.height="99%";
+    monitorIFrame.style.display="block";
+    monitorIFrame.style.margin = "0";
+    monitorIFrame.style.top="0";
+    monitorIFrame.style.left="0";
+    monitorIFrame.style.border = "0";
+    contentDiv.appendChild(monitorIFrame);
+    monitorDiv.appendChild(contentDiv);
+
+    document.body.appendChild(monitorDiv);
+
+    // button showed when div is hidden
+
+    showMonitorButton= document.createElement("DIV");
+    showMonitorButton.style.position = "absolute";
+    showMonitorButton.style.top = monitorDivTop + "px";
+    showMonitorButton.style.right = "10px";
+    showMonitorButton.style.width = "30px";
+    showMonitorButton.style.height = "150px";
+    showMonitorButton.style.backgroundColor = "#3ca6ff";
+    showMonitorButton.style.borderRadius="10px 0px 0px 10px";
+    showMonitorButton.style.border="1px solid #eeeeee";
+    showMonitorButton.style.visibility = "visible";
+    showMonitorButton.style.cursor="pointer";
+    showMonitorButton.addEventListener("click", showDiv);
+
+    buttonTxtDiv = document.createElement("DIV");
+    buttonTxtDiv.style.fontFamily="Helvetica, Arial, sans-serif";
+    buttonTxtDiv.style.fontSize = "12px";
+    buttonTxtDiv.style.lineHeight="30px";
+    buttonTxtDiv.style.textAlign="center";
+    buttonTxtDiv.style.width = "150px";
+    buttonTxtDiv.style.height = "30px";
+    buttonTxtDiv.style.color = "#ffffff";
+    buttonTxtDiv.style.transform="rotate(-90deg)";
+    buttonTxtDiv.style.transformOrigin="75px 75px";
+    buttonTxtDiv.style.float = "left";
+
+    var buttonTxt = document.createTextNode("ROBOBO MONITOR");
+    buttonTxtDiv.appendChild(buttonTxt);
+    showMonitorButton.appendChild(buttonTxtDiv);
+
+    document.body.appendChild(showMonitorButton);
+    //}
+
+
+    function disconnectMonitor() {
+      monitorIFrame.src="http://firmware.theroboboproject.com/monitor/robobo-monitor.html?status=disconnected";
+    }
+
+    function reconnectMonitor() {
+      monitorIFrame.src="http://firmware.theroboboproject.com/monitor/robobo-monitor.html?ip="+roboboMonitorIp;
+      showDiv();
+    }
+
+    function connectMonitor(ip) {
+      if (monitorDiv == undefined) {
+          createMonitorDiv(ip);
+       }else {
+         reconnectMonitor();
+       }
+    }
+
+    function closeMonitor() {
+      disconnectMonitor();
+      monitorDiv.style.visibility = "hidden";
+      showMonitorButton.style.visibility = "visible";
+    }
+
+    function hideDiv() {
+      monitorDiv.style.visibility = "hidden";
+      showMonitorButton.style.visibility = "visible";
+    }
+
+    function showDiv() {
+      showMonitorButton.style.visibility = "hidden";
+      monitorDiv.style.visibility = "visible";
+    }
 
 
     // BLOCK AND MENU DESCRIPTIONS
@@ -707,7 +893,7 @@
           //SECTION - CONNECTION BLOCKS
           ['h', 'CONNECTION BLOCKS','dummyFun'],
 
-          [' ', 'connect to ROBOBO at %s ','connectToRobobo','192.168.0.110'],
+          [' ', 'connect to ROBOBO at %s','connectToRobobo','192.168.0.110'],
           [' ', 'end connection','disconnect'],
 
 
@@ -720,14 +906,14 @@
           ['w', 'move pan to %s at speed %s %m.block','movePanRoboboNew','180','15','blocking'],
           ['w', 'move tilt to %s at speed %s %m.block','moveTiltRoboboNew','90','15','blocking'],
 
-          [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],                    
+          [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
 
 
 
           //SECTION - ROBOBO BASE SENSING BLOCKS
           ['h', 'BASE SENSING BLOCKS','dummyFun'],
 
-          [' ', 'reset sensor %m.sensors','resetSensor','all'],          
+          [' ', 'reset sensor %m.sensors','resetSensor','all'],
 
           ['r', '%m.individualwheel wheel %m.wheelmenu','readWheel','right','position'],
 
@@ -739,7 +925,7 @@
 
           ['r', 'base battery level','readBatteryLevel'],
 
-          
+
 
           //SECTION - SMARTPHONE ACTUATION BLOCKS
           ['h', 'SMARTPHONE ACTUATION BLOCKS','dummyFun'],
@@ -771,7 +957,7 @@
           [' ', 'active blob colors R:%m.boolean G:%m.boolean B:%m.boolean C:%m.boolean','configBlob','false','true','false','false'],
 
           ['r', 'fling angle','readFlingAngle'],
-          
+
           ['r', 'tap position at %m.axis axis','readTapCoord','x'],
           ['r', 'tap zone','readTapZone'],
 
@@ -796,7 +982,7 @@
           individualwheel: ['right', 'left'],
           mtype: ['non-stop','seconds'],
           orientation: ['yaw','pitch','roll'],
-          emotions: ['happy','laughting','sad','angry','surprised','normal'],
+          emotions: ['happy','sad','angry','normal','sleeping'],
           colors: ['off','white','red','blue','cyan','magenta','yellow','green','orange'],
           status: ['on','off'],
           leds: ['Front-C','Front-L','Front-LL','Front-R','Front-RR','Back-L','Back-R','all'],
