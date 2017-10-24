@@ -12,7 +12,7 @@ More detailed instructions (in Spanish) are available at the Robobo educational 
 
 More information about the Robobo educational robot can be found at www.theroboboproject.com
 
-The current version of the extension is https://mytechia.github.io/robobo-scratch-extension/2/robobo-scratch-extension.js. This is the URL that must be used in ScratchX.
+The current version of the extension is https://mytechia.github.io/robobo-scratch-extension/2/robobo-scratch-extension.js. *This is the URL that must be used in ScratchX.*
 
 An example project, that implementas a remote control program can be found at https://mytechia.github.io/robobo-scratch-extension/examples/remotecontrol.sbx.
 
