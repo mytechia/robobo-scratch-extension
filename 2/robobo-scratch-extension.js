@@ -19,7 +19,7 @@
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-//Scratch extension for the Robobo education robot - Version 1.0.0
+//Scratch extension for the Robobo education robot - Version 2.0.0
 (function(ext) {
 
     var rem; //remote connection to the robot
@@ -53,9 +53,14 @@
 
     var blockCallback = undefined;
 
+    var panHighLimit = 160;
+    var panLowLimit = -160;
+
     //load required libraries
     $.getScript("https://mytechia.github.io/robobo-scratch-extension/2/remote-library/remotelib.js", function(){});
     $.getScript("https://mytechia.github.io/robobo-scratch-extension/2/utilities.js", function(){});
+
+    var remotelibUrl = "https://mytechia.github.io/robobo-scratch-extension/2/remote-library/remotelib.js";
 
 
     //Cleanup function when the extension is unloaded
@@ -155,7 +160,6 @@
         alert("Error connecting with Robobo!");
         disconnectMonitor();
       }else if (connectionStatus == 1) {//disconected
-        alert("Robobo has been disconected!");
         disconnectMonitor();
       }else {
         //else --> connection succesfull
@@ -251,9 +255,19 @@
       }
     };
 
+    ext.moveDegrees = function(wheel,speed,degrees,callback){
+      rem.moveWheelsByDegree(wheel,degrees,speed,callback);
+    }
+
 
     //BLOCK - Move pan --> Pan movement function (absolute)
     ext.movePanRoboboNew = function(degrees, speed, block, callback){
+      if (degrees > panHighLimit){
+        degrees = panHighLimit;
+      }
+      if (degrees < panLowLimit){
+        degrees = panLowLimit;
+      }
       if (block=="blocking"){
         rem.movePanWait(degrees,speed,callback);
 
@@ -333,7 +347,10 @@
         rem.resetBlobSensor();
       }else if (sensor == "note") {
         rem.resetNoteSensor();
+      }else if (sensor == "wheels") {
+        rem.resetEncoders();
       }
+
 
 
     };
@@ -490,6 +507,12 @@
     ext.readLastNote = function(){
       rem.keepAlive(); //keep the robot alive to receive stats updates
       return rem.getLastNote();
+    }
+
+    //BLOCK - Last note
+    ext.readLastNoteDuration = function(){
+      rem.keepAlive(); //keep the robot alive to receive stats updates
+      return rem.getLastNoteDuration();
     }
 
     //BLOCK - Blob position at
@@ -785,7 +808,7 @@
     hideIcon.style.position = "absolute";
     hideIcon.style.left = "5px";
     hideIcon.style.top = "5px";
-    hideIcon.style.background = "url('http://firmware.theroboboproject.com/monitor/img/plegar-monitor.png') center";
+    hideIcon.style.background = "url('http://monitor.theroboboproject.com/stable/img/plegar-monitor.png') center";
     hideIcon.style.zIndex = 120;
     hideIcon.style.cursor="pointer";
     hideIcon.addEventListener("click", hideDiv);
@@ -803,8 +826,7 @@
 
 
     monitorIFrame = document.createElement("IFRAME")
-    monitorIFrame.src="http://firmware.theroboboproject.com/monitor/robobo-monitor.html?status=disconnected";
-    //monitorIFrame.src="http://pruebas.local/monitor/robobo-monitor.html";
+    monitorIFrame.src="http://monitor.theroboboproject.com/stable/robobo-monitor.html?status=disconnected";
     monitorIFrame.style.width ="99%";
     monitorIFrame.style.height="99%";
     monitorIFrame.style.display="block";
@@ -853,11 +875,11 @@
 
 
     function disconnectMonitor() {
-      monitorIFrame.src="http://firmware.theroboboproject.com/monitor/robobo-monitor.html?status=disconnected";
+      monitorIFrame.src="http://monitor.theroboboproject.com/stable/robobo-monitor.html?status=disconnected";
     }
 
     function reconnectMonitor() {
-      monitorIFrame.src="http://firmware.theroboboproject.com/monitor/robobo-monitor.html?ip="+roboboMonitorIp;
+      monitorIFrame.src="http://monitor.theroboboproject.com/stable/robobo-monitor.html?ip="+roboboMonitorIp;
       showDiv();
     }
 
@@ -903,8 +925,11 @@
 
           [' ', 'stop %m.stop motors','stopFun','all'],
           ['w', 'move wheels at speed R %s L %s for %s %m.mtype','newMovementT','30','30','1','seconds'],
-          ['w', 'move pan to %s at speed %s %m.block','movePanRoboboNew','180','15','blocking'],
-          ['w', 'move tilt to %s at speed %s %m.block','moveTiltRoboboNew','90','15','blocking'],
+          //move wheels left|right|both by XX degress at speed YY
+          ['w', 'move wheels %m.wheels at speed %s by %s degrees ','moveDegrees','both','20','180'],
+          
+          ['w', 'move pan to %d at speed %n %m.block','movePanRoboboNew','180','15','blocking'],
+          ['w', 'move tilt to %d at speed %n %m.block','moveTiltRoboboNew','90','15','blocking'],
 
           [' ', 'set led %m.leds color to %m.colors','setLedColor','all','blue'],
 
@@ -951,6 +976,8 @@
 
           ['h', 'when note detected','newNoteFun'],
           ['r', 'last note','readLastNote'],
+          ['r', 'last note duration','readLastNoteDuration'],
+          
 
           ['r', '%m.blobcolor blob position at %m.axis axis','readBlobCoord','green','x'],
           ['r', '%m.blobcolor blob area','readBlobSize','green'],
@@ -982,7 +1009,7 @@
           individualwheel: ['right', 'left'],
           mtype: ['non-stop','seconds'],
           orientation: ['yaw','pitch','roll'],
-          emotions: ['happy','sad','angry','normal','sleeping'],
+          emotions: ['happy','laughing','surprised','sad','angry','normal','sleeping','tired','afraid'],
           colors: ['off','white','red','blue','cyan','magenta','yellow','green','orange'],
           status: ['on','off'],
           leds: ['Front-C','Front-L','Front-LL','Front-R','Front-RR','Back-L','Back-R','all'],
@@ -993,7 +1020,7 @@
           axis3d: ['x','y','z'],
           sounds: ['moan','purr',"angry","approve","disapprove","discomfort","doubtful","laugh","likes","mumble","ouch","thinking","various"],
           colorchan: ['red','green','blue'],
-          sensors: ['all','acceleration','blob','brighness','claps','face','fling','IR','note','pan','orientation','tap','tilt'],
+          sensors: ['all','acceleration','blob','brighness','claps','face','fling','IR','note','pan','orientation','tap','tilt','wheels'],
           block: ['blocking','non-blocking'],
           range: ['between', 'out'],
           stop: ['all','wheels','pan','tilt'],

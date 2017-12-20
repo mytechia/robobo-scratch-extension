@@ -19,7 +19,7 @@
  * along with Robobo Scratch Extension.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-//Javascript remote control library for the Robobo educational robot - Version 0.9.1-dev
+//Javascript remote control library for the Robobo educational robot - Version 2.0.0
 
 //Constructor of the remote control object
 function Remote(ip,passwd){
@@ -63,6 +63,10 @@ function Remote(ip,passwd){
   //Wheel stop callback
   this.wheelsCallback = undefined;
 
+
+  //Wheel degrees stop callback
+  this.degreesCallback = undefined;
+
   //Tilt stop callback
   this.tiltCallback = undefined;
 
@@ -78,13 +82,15 @@ function Remote(ip,passwd){
 
   this.wheelsSpeedLimit = 250;
 
-  this.panInferiorLimit = 26;
-  this.panSuperiorLimit = 339;
+  this.panInferiorLimit =  10;
+  this.panSuperiorLimit =  345;
 
-  this.tiltInferiorLimit = 26;
-  this.tiltSuperiorLimit = 109;
+  this.tiltInferiorLimit = 5;
+  this.tiltSuperiorLimit = 105;
 
   this.minIRValue = 20;
+
+  this.lostFace = true;
 
 //END OF REMOTE OBJECT
 };
@@ -260,15 +266,30 @@ Remote.prototype = {
   /*********************************/
   /* ROBOT BASE FUNCTIONS *
   /*********************************/
-
-  /** Commands the robot to move the wheel by some angle */
-  moveWheelsByDegree: function(wheel,degrees,speed) {
+  /** Resets the robot encoder count */
+  resetEncoders: function(){
     var message = JSON.stringify({
-        "name": "MOVEBYDEGREES",
+      "name": "RESET-WHEELS",
+      "parameters": {},
+      "id": this.commandid
+  });
+  this.sendMessage(message);
+  //ENDOF resetEncoders
+  },
+  
+  /** Commands the robot to move the wheel by some angle */
+  moveWheelsByDegree: function(wheel,degrees,speed,callback) {
+    this.lastblock = this.lastblock+1;    
+    lb = this.lastblock;
+    this.wheelsCallback = callback;
+    
+    var message = JSON.stringify({
+        "name": "MOVEBY-DEGREES",
         "parameters": {
             wheel: wheel,
             degrees: degrees,
-            speed:speed
+            speed:speed,
+            blockid:lb
         },
         "id": this.commandid
     });
@@ -280,7 +301,7 @@ Remote.prototype = {
   /** Commands the robot to move during some time */
   moveWheelsByTime: function(wheel,time,speed) {
     var message = JSON.stringify({
-        "name": "MOVEBYTIME",
+        "name": "MOVEBY-TIME",
         "parameters": {
             wheel: wheel,
             time: time,
@@ -299,7 +320,7 @@ Remote.prototype = {
     rS = ''+rSpeed;
 
     var message = JSON.stringify({
-        "name": "MOVETWOWHEELS",
+        "name": "MOVE",
         "parameters": {
             lspeed: lS,
             rspeed: rS,
@@ -327,7 +348,7 @@ Remote.prototype = {
 
     this.wheelsCallback = callback;
     var message = JSON.stringify({
-        "name": "TWOWHEELSBLOCKING",
+        "name": "MOVE-BLOCKING",
         "parameters": {
             lspeed: lS,
             rspeed: rS,
@@ -344,7 +365,7 @@ Remote.prototype = {
   /** Commands the robot to turn on the wheels motors at the specified speed, indefinitely */
   motorsOn: function(lMotor,rMotor,speed) {
     var message = JSON.stringify({
-        "name": "MOTORSON",
+        "name": "MOVE-FOREVER",
         "parameters": {
             lmotor: lMotor,
             rmotor: rMotor,
@@ -354,7 +375,7 @@ Remote.prototype = {
     });
     this.sendMessage(message);
 
-  },//ENDOF motorsOn
+  },//ENDOF MOVE-FOREVER
 
 
   /** Commands the robot to turn by some degrees */
@@ -374,6 +395,8 @@ Remote.prototype = {
   /** Commands the robot to move the PAN to the specified position */
   movePan: function(pos, vel) {
     s = ''+ vel;
+    pos = scratchToRoboboAngle(pos);
+    
     if (pos > this.panSuperiorLimit){
       pos = this.panSuperiorLimit;
     }
@@ -381,6 +404,7 @@ Remote.prototype = {
     if (pos < this.panInferiorLimit){
       pos = this.panInferiorLimit;
     }
+    
     var message = JSON.stringify({
         "name": "MOVEPAN",
         "parameters": {
@@ -401,6 +425,8 @@ Remote.prototype = {
    * and waits until the movement finishes */
   movePanWait: function(pos, vel, callback) {
     s = ''+ vel;
+    pos = scratchToRoboboAngle(pos);    
+    
     if (pos > this.panSuperiorLimit){
       pos = this.panSuperiorLimit;
     }
@@ -408,6 +434,7 @@ Remote.prototype = {
     if (pos < this.panInferiorLimit){
       pos = this.panInferiorLimit;
     }
+    
 
 
     this.lastblock = this.lastblock+1;
@@ -417,10 +444,10 @@ Remote.prototype = {
     }
     this.panCallback = callback;
 
-    lb = this.lastblock
+    lb = this.lastblock;
 
     var message = JSON.stringify({
-        "name": "MOVEPANBLOCKING",
+        "name": "MOVEPAN-BLOCKING",
         "parameters": {
             pos: pos,
             speed:s,
@@ -471,6 +498,8 @@ Remote.prototype = {
   /** Commands the robot to move the TILT to an specified position */
   moveTilt: function (pos, vel) {
     s = ''+ vel;
+ 
+    
 
     var message = JSON.stringify({
         "name": "MOVETILT",
@@ -491,6 +520,8 @@ Remote.prototype = {
   /** Commands the robot to move the TILT to an specified position
    * and waits until the robot ends the movement */
   moveTiltWait: function (pos, vel, callback) {
+    
+    
     s = ''+ vel;
     if (pos > this.tiltSuperiorLimit){
       pos = this.tiltSuperiorLimit;
@@ -508,7 +539,7 @@ Remote.prototype = {
     this.tiltCallback = callback;
     var lb = this.lastblock;
     var message = JSON.stringify({
-        "name": "MOVETILTBLOCKING",
+        "name": "MOVETILT-BLOCKING",
         "parameters": {
             pos: pos,
             speed:s,
@@ -550,7 +581,7 @@ Remote.prototype = {
     return this.statusmap.get("IRSensorStatus"+irnumber);
   },//ENDOF getIRValue
 
-  /** Sets the value of an IR sensor using its key from IRSTATUS */
+  /** Sets the value of an IR sensor using its key from IRS */
   setIRValue : function(key, value) {
     if (value <= this.minIRValue) { //limit the minimun value
       value = 0;
@@ -613,7 +644,7 @@ Remote.prototype = {
   /** Commands the robot to change its face/emotion */
   changeEmotion : function (emotion) {
     var message = JSON.stringify({
-        "name": "CHANGEEMOTION",
+        "name": "SET-EMOTION",
         "parameters": {
             emotion: emotion
         },
@@ -633,7 +664,7 @@ Remote.prototype = {
   /** Commands the robot to play a prerecorded sound */
   playEmotionSound : function (sound) {
     var message = JSON.stringify({
-        "name": "SOUND",
+        "name": "PLAY-SOUND",
         "parameters": {
             sound:sound
         },
@@ -674,7 +705,7 @@ Remote.prototype = {
 
   setLedColor: function (led,color) {
     var message = JSON.stringify({
-        "name": "LEDCOLOR",
+        "name": "SET-LEDCOLOR",
         "parameters": {
             led:led,
             color:color
@@ -689,7 +720,7 @@ Remote.prototype = {
   /** Commands the robot to play a musical note */
   playNote : function (index, time) {
     var message = JSON.stringify({
-        "name": "PLAYNOTE",
+        "name": "PLAY-NOTE",
         "parameters": {
             index:index,
             time:time
@@ -706,6 +737,10 @@ Remote.prototype = {
     return this.statusmap.get("lastNote");
   },//ENDOF getLastNote
 
+    /** Returns the duration of the last musical note detected by the robot */
+    getLastNoteDuration : function(){
+      return this.statusmap.get("lastNoteDuration");
+    },//ENDOF getLastNoteDuration
 
   processClapStatus : function() {
 
@@ -802,7 +837,7 @@ Remote.prototype = {
   /** Activates/deactivates the detection of each of the 4 different color-blobs supported */
   configureBlobDetection: function (red, green, blue, custom) {
     var message = JSON.stringify({
-        "name": "CONFIGUREBLOB",
+        "name": "CONFIGURE-BLOBTRACKING",
         "parameters": {
             "red":red,
             "green":green,
@@ -1077,25 +1112,51 @@ Remote.prototype = {
       console.log(this.statusmap.get("color"));
     }
 
-    else if (msg.name == "IRSTATUS"){
+    else if (msg.name == "IRS"){
         for (var key in msg.value) {
             this.setIRValue(key,msg.value[key]);
         }
     }
 
 
-    else if (msg.name == "BATTLEV") {
+    else if (msg.name == "BAT-BASE") {
       this.statusmap.set("batterylevel",parseInt(msg.value["level"]));
       if (parseInt(msg.value["level"])<20){
         this.callbackmap.get("onLowBatt")();
       }
     }
 
-    else if (msg.name == "BAT_PHONE") {
+    else if (msg.name == "BAT-PHONE") {
       this.statusmap.set("obobatterylevel",parseInt(msg.value["level"]));
       if (parseInt(msg.value["level"])<20){
         this.callbackmap.get("onLowOboBatt")();
       }
+    }
+
+    else if (msg.name == "FACE") {
+      this.statusmap.set("facex",parseInt(msg.value["coordx"]));
+      this.statusmap.set("facey",parseInt(msg.value["coordy"]));
+      if (parseInt(msg.value["distance"])==-1){
+        (this.callbackmap.get("onLostFace"))();
+        this.lostFace = true;        
+        this.statusmap.set("facedist","none");
+        
+      }else{
+        if (this.lostFace){
+          (this.callbackmap.get("onNewFace"))();
+          this.lostFace = false;        
+          
+        }
+        if (parseInt(msg.value["distance"])>45){
+          this.statusmap.set("facedist","close");
+        }else if (parseInt(msg.value["distance"])<25){
+          this.statusmap.set("facedist","far");
+        } else {
+          this.statusmap.set("facedist","mid");
+        }
+      }
+
+
     }
 
     else if (msg.name == "NEWFACE") {
@@ -1112,6 +1173,16 @@ Remote.prototype = {
 
 
     }
+    else if (msg.name == "FOUNDFACE") {
+      //console.log("FOUNDFACE");
+      (this.callbackmap.get("onNewFace"))();
+    }
+
+    else if (msg.name == "LOSTFACE") {
+      //console.log("LOSTFACE");
+      (this.callbackmap.get("onLostFace"))();
+    }
+
 
     else if (msg.name == "FALLSTATUS"){
       //console.log(msg);
@@ -1192,15 +1263,7 @@ Remote.prototype = {
       this.closeConnection(false);
     }
 
-    else if (msg.name == "FOUNDFACE") {
-      //console.log("FOUNDFACE");
-      (this.callbackmap.get("onNewFace"))();
-    }
-
-    else if (msg.name == "LOSTFACE") {
-      //console.log("LOSTFACE");
-      (this.callbackmap.get("onLostFace"))();
-    }
+    
 
     else if (msg.name == "ONERROR") {
       console.log("ERROR "+ msg.value['error']);
@@ -1212,36 +1275,41 @@ Remote.prototype = {
       console.log('ONPHRASE '+msg.value['text']);
       (this.callbackmap.get("onPhrase"))(msg.value['text']);
     }
-    else if (msg.name == "UNLOCK") {
-      console.log('UNLOCK '+msg.value['blockid']);
+    else if (msg.name == "UNLOCK-MOVE") {
+      console.log('UNLOCK-MOVE '+msg.value['blockid']);
       //(this.blockingcallbackmap.get(""+msg.value['blockid']))();
       this.wheelsCallback();
       this.wheelsCallback = undefined;
     }
-    else if (msg.name == "UNLOCKTILT") {
-      console.log('UNLOCKTILT '+msg.value['blockid']);
+    else if (msg.name == "UNLOCK-TILT") {
+      console.log('UNLOCK-TILT '+msg.value['blockid']);
       //(this.blockingcallbackmap.get(""+msg.value['blockid']))();
       this.tiltCallback();
       this.tiltCallback = undefined;
     }
-    else if (msg.name == "UNLOCKPAN") {
-      console.log('UNLOCK '+msg.value['blockid']);
+    else if (msg.name == "UNLOCK-PAN") {
+      console.log('UNLOCK-PAN '+msg.value['blockid']);
       //(this.blockingcallbackmap.get(""+msg.value['blockid']))();
       this.panCallback();
       this.panCallback = undefined;
     }
-
-    else if (msg.name == "PANSTATUS") {
-      //console.log("PANSTATUS "+msg.value['panPos']);
-      this.statusmap.set("panPos",msg.value['panPos']);
+    else if (msg.name == "UNLOCK-DEGREES") {
+      console.log("UNLOCK-DEGREES"+msg.value['blockid']);
+      //(this.blockingcallbackmap.get(""+msg.value['blockid']))();
+      this.degreesCallback();
+      this.degreesCallback = undefined;
+    }
+    else if (msg.name == "PAN") {
+      //console.log("PAN "+msg.value['panPos']);
+      this.statusmap.set("panPos",roboboToScratchAngle(parseInt(msg.value['panPos'])));
     }
 
-    else if (msg.name == "TILTSTATUS") {
-      //console.log("TILTSTATUS "+msg.value['tiltPos']);
+    else if (msg.name == "TILT") {
+      //console.log("TILT "+msg.value['tiltPos']);
 
-      this.statusmap.set("tiltPos",msg.value['tiltPos']);
+      this.statusmap.set("tiltPos",parseInt(msg.value['tiltPos']));
     }
-    else if (msg.name == "COLORBLOB") {
+    else if (msg.name == "BLOB") {
       console.log(msg.value['color']+'  '+msg.value['posx']+'  '+msg.value['posy']+'  '+msg.value['size']);
       this.statusmap.set("blobPosx"+msg.value['color'],msg.value['posx']);
       this.statusmap.set("blobPosy"+msg.value['color'],msg.value['posy']);
@@ -1250,24 +1318,26 @@ Remote.prototype = {
 
     }
 
-    else if (msg.name == "NEWNOTE") {
+    else if (msg.name == "NOTE") {
       console.log(msg.value['name']+'  '+msg.value['index']+'  '+msg.value['octave']);
       this.statusmap.set("lastNote",msg.value['name']);
+      this.statusmap.set("lastNoteDuration",msg.value['duration']);
+      
 
       (this.callbackmap.get("onNewNote"))();
 
     }
-    else if (msg.name == "ENDOFSPEECH") {
+    else if (msg.name == "UNLOCK-TALK") {
       console.log("END OF SPEECH");
       this.talkCallback();
       this.talkCallback = undefined;
 
     }
-    else if (msg.name == "WHEELSTATUS") {
-      this.statusmap.set("wheelPosR",msg.value['wheelPosR']);
-      this.statusmap.set("wheelPosL",msg.value['wheelPosL']);
-      this.statusmap.set("wheelSpeedR",msg.value['wheelSpeedR']);
-      this.statusmap.set("wheelSpeedL",msg.value['wheelSpeedL']);
+    else if (msg.name == "WHEELS") {
+      this.statusmap.set("wheelPosR",parseInt(msg.value['wheelPosR']));
+      this.statusmap.set("wheelPosL",parseInt(msg.value['wheelPosL']));
+      this.statusmap.set("wheelSpeedR",parseInt(msg.value['wheelSpeedR']));
+      this.statusmap.set("wheelSpeedL",parseInt(msg.value['wheelSpeedL']));
     }
     else if (msg.name == "OBSTACLES") {
 
@@ -1284,13 +1354,13 @@ Remote.prototype = {
       }
       */
     }
-    else if (msg.name == "LEDSTATUS") {
+    else if (msg.name == "LED") {
       this.statusmap.set(msg.value['id']+"R",msg.value['R']);
       this.statusmap.set(msg.value['id']+"G",msg.value['G']);
       this.statusmap.set(msg.value['id']+"B",msg.value['B']);
 
     }
-    else if (msg.name == "EMOTIONSTATUS") {
+    else if (msg.name == "EMOTION") {
       this.statusmap.set("emotion",msg.value['emotion']);
 
 
